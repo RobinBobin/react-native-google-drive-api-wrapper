@@ -12,6 +12,8 @@ It doesn't provide any authorization mechanism, so another package has to be use
     
     react-native link react-native-fs
 
+[react-native-fs](https://www.npmjs.com/package/react-native-fs) is a package my code depends on and it needs linking.
+
 ### <a name="usage"></a>[Usage](#cusage)
 
  1. <a name="cgdriveapiwGDrive">[GDrive](#gdriveapiwGDrive)</a>
