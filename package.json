@@ -15,7 +15,7 @@
     "url": "git+https://github.com/RobinBobin/react-native-google-drive-api-wrapper.git"
   },
   "keywords": [
-    "google drive api",
+    "google drive api"
   ],
   "author": "Ruben Shalimov <r_shalimov@inbox.ru>",
   "license": "MIT",
