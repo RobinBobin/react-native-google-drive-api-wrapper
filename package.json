@@ -1,6 +1,6 @@
 {
   "name": "react-native-google-drive-api-wrapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This wrapper facilitates the use of the google drive api.",
   "main": "GDrive.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "react-native-fs": "latest",
-    "client-side-common-utils": "latest"
+    "simple-common-utils": "latest"
   },
   "repository": {
     "type": "git",

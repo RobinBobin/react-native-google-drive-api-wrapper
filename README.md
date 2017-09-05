@@ -139,6 +139,7 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 
 Version number|Changes
 -|-
+v1.0.1|1.&nbsp;A critical bug with invalid imports fixed.2.&nbsp;`client-side-common-utils` deprecated; switched to `simple-common-utils`.
 v1.0.0|Initial release.
 
 <br><br>

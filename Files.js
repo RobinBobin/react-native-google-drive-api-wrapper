@@ -1,8 +1,10 @@
-import StaticUtils from "../StaticUtils";
-import ArrayStringifier from "../ArrayStringifier";
-import utf8 from "../utf8";
-import GDrive from "./GDrive";
 import RNFS from "react-native-fs";
+import utf8 from "utf8";
+import {
+   StaticUtils,
+   ArrayStringifier
+} from "simple-common-utils";
+import GDrive from "./GDrive";
 
 const uploadUrl = "https://www.googleapis.com/upload/drive/v3/files";
 
