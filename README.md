@@ -1,4 +1,4 @@
-This wrapper facilitates the use of the [google drive api](https://developers.google.com/drive/v3/reference/).
+﻿This wrapper facilitates the use of the [google drive api](https://developers.google.com/drive/v3/reference/).
 
 It doesn't provide any authorization mechanism, so another package has to be used. I use [react-native-google-signin](https://www.npmjs.com/package/react-native-google-signin) (thanks for the great work guys!).
 
@@ -93,7 +93,13 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 	The function returns the result of `RNFS.downloadFile(downloadFileOptions)`.
 		
 		GDrive.files.download(fileId, downloadFileOptions, queryParams);
-		
+
+ - [export()](#gdriveapiwFiles)
+
+	[Exports](#https://developers.google.com/drive/v3/reference/files/export) a google document, returning the result of `fetch()`.
+
+	    GDrive.files.export(fileId, mimeType);
+
  - [getId()<i class="icon-up"></i>](#gdriveapiwFiles)
     
 	Gets the id of the first file with the specified metadata. The function returns a `Promise`. It's rejected on failure and resolved to the file id or `undefined` (if nothing is found) on success.
@@ -139,7 +145,8 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 
 Version number|Changes
 -|-
-v1.0.1|1.&nbsp;A critical bug with invalid imports fixed.2.&nbsp;`client-side-common-utils` deprecated; switched to `simple-common-utils`.
+v1.1.1|`GDrive.files.export()` added.
+v1.0.1|1.&nbsp;A critical bug with invalid imports fixed.<br>2.&nbsp;`client-side-common-utils` deprecated; switched to `simple-common-utils`.
 v1.0.0|Initial release.
 
 <br><br>

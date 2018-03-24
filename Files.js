@@ -143,4 +143,10 @@ export default class Files {
          headers: GDrive._createHeaders()
       });
    }
+   
+   export(fileId, mimeType) {
+      return fetch(`${GDrive._urlFiles}/${fileId}/export?mimeType=${mimeType}`, {
+         headers: GDrive._createHeaders()
+      });
+   }
 }
