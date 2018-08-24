@@ -78,9 +78,10 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 
  - [get()<i class="icon-up"></i>](#gdriveapiwFiles)
 	
-    Gets the content of the specified **text** file returning the result of `fetch()` (use `download()` for binary files). For `queryParams` see "Optional query parameters" [here](https://developers.google.com/drive/v3/reference/files/get).
+    Gets a file's metadata or a text-file's content by ID. By default the metadata is returned. Use `download()` for binary files. For `queryParams` see "Optional query parameters" [here](https://developers.google.com/drive/v3/reference/files/get). If you want the content of a text-file and not its metadata add `alt: "media"` to `queryParams`.
 	
-		GDrive.files.get(fileId, { ... });
+		const queryParams = { ... };
+		GDrive.files.get(fileId, queryParams);
 		
  - [download()<i class="icon-up"></i>](#gdriveapiwFiles)
 	
