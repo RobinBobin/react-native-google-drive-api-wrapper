@@ -34,7 +34,7 @@ export default class Files {
          this.params[nameValue[0]] || nameValue[1]);
    }
    
-   createFileMultipart(media, mediaType, metadata) {
+   createFileMultipart(media, mediaType, metadata, isBase64) {
       const ddb = `--${this.params.boundary}`;
       const ending = `\n${ddb}--`;
       
@@ -57,7 +57,8 @@ export default class Files {
             method: "POST",
             headers: GDrive._createHeaders(
                `multipart/related; boundary=${this.params.boundary}`,
-               body.length),
+               body.length,
+               isBase64 ? ["Content-Transfer-Encoding", "base64"] : undefined),
             body
          });
    }
