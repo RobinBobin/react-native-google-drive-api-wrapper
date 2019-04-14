@@ -41,8 +41,8 @@ export default class Files {
       let body = `\n${ddb}\n` +
          `Content-Type: ${GDrive._contentTypeJson}\n\n` +
          `${JSON.stringify(metadata)}\n\n${ddb}\n` +
+         (isBase64 ? "Content-Transfer-Encoding: base64\n" : '') +
          `Content-Type: ${mediaType}\n\n`;
-      
       if (media.constructor == String) {
          body += `${media}${ending}`;
       } else {
@@ -51,14 +51,13 @@ export default class Files {
             .concat(media)
             .concat(StaticUtils.encodedUtf8ToByteArray(utf8.encode(ending))));
       }
-      
       return fetch(
          `${uploadUrl}?uploadType=multipart`, {
             method: "POST",
             headers: GDrive._createHeaders(
                `multipart/related; boundary=${this.params.boundary}`,
-               body.length,
-               isBase64 ? ["Content-Transfer-Encoding", "base64"] : undefined),
+               body.length
+            ),
             body
          });
    }
