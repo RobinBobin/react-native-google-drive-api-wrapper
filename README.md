@@ -58,6 +58,7 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
  - [createFileMultipart()<i class="icon-up"></i>](#gdriveapiwFiles)
     
     Creates a file using [multipart upload](https://developers.google.com/drive/v3/web/manage-uploads). Returns the result of `fetch()`.
+    If `contents` is a base64 string, set `isBase64` to `true`.
     
         const contents = "My text file contents";
         // or
@@ -68,7 +69,8 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
             "corresponding mime type", {
 	            parents: ["root"],
 	            name: "My file"
-            });
+            },
+            isBase64);
             
  - [delete()<i class="icon-up"></i>](#gdriveapiwFiles)
     
@@ -146,6 +148,7 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 
 Version number|Changes
 -|-
+v1.2.0|`GDrive.files.createFileMultipart()` &mdash; `isBase64`. Merge pull request #10 from duyluonglc/master. Thanks, duyluonglc!
 v1.1.1|`GDrive.files.export()` added.
 v1.0.1|1.&nbsp;A critical bug with invalid imports fixed.<br>2.&nbsp;`client-side-common-utils` deprecated; switched to `simple-common-utils`.
 v1.0.0|Initial release.
