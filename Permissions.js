@@ -29,8 +29,6 @@ export default class Permissions {
          finalQueryParams = _stringifyQueryParams(queryParams);
       }
 
-      console.log('URL BRE', `${GDrive._urlFiles}/${fileId}${permissions}${finalQueryParams}`);
-
       return fetch(`${GDrive._urlFiles}/${fileId}${permissions}${finalQueryParams}`, {
          method: "POST",
          headers: GDrive._createHeaders(
