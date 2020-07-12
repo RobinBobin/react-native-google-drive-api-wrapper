@@ -137,8 +137,11 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 	
         GDrive.permissions.create(
             fileId, {
+                emailAddress: 'example@gmail.com',
                 role: "reader",
                 type: "anyone"
+            }, {
+                emailMessage: `I shared a file with you.`,
             });
 
 
