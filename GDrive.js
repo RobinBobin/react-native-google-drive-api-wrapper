@@ -1,5 +1,9 @@
 import Files from "./Files";
 import Permissions from "./Permissions";
+import {
+   StaticUtils,
+   ArrayStringifier
+} from "simple-common-utils";
 
 export default class GDrive {
    static _urlFiles = "https://www.googleapis.com/drive/v3/files";
@@ -39,5 +43,17 @@ export default class GDrive {
       }
       
       return headers;
+   }
+
+   static _stringifyQueryParams(queryParams, prefix = "?", separator = "&", quoteIfString) {
+      const array = [];
+
+      Object.keys(queryParams).forEach(key => array.push(
+         `${key}=${StaticUtils.safeQuoteIfString(queryParams[key], quoteIfString)}`));
+      
+      return new ArrayStringifier(array)
+         .setPrefix(prefix)
+         .setSeparator(separator)
+         .process();
    }
 }

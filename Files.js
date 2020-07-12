@@ -1,26 +1,9 @@
 import RNFS from "react-native-fs";
 import utf8 from "utf8";
-import {
-   StaticUtils,
-   ArrayStringifier
-} from "simple-common-utils";
+import { StaticUtils } from "simple-common-utils";
 import GDrive from "./GDrive";
 
 const uploadUrl = "https://www.googleapis.com/upload/drive/v3/files";
-
-function _stringifyQueryParams(queryParams,
-   prefix = "?", separator = "&", quoteIfString)
-{
-   const array = [];
-   
-   Object.keys(queryParams).forEach(key => array.push(
-      `${key}=${StaticUtils.safeQuoteIfString(queryParams[key], quoteIfString)}`));
-   
-   return new ArrayStringifier(array)
-      .setPrefix(prefix)
-      .setSeparator(separator)
-      .process();
-}
 
 export default class Files {
    static mimeFolder = "application/vnd.google-apps.folder";
@@ -105,7 +88,7 @@ export default class Files {
       }
       
       let result = await this.list({
-         q: _stringifyQueryParams(queryParams, "",
+         q: GDrive._stringifyQueryParams(queryParams, "",
             " and ", true) + ` and '${parents[0]}' in parents`
       });
       
@@ -119,7 +102,7 @@ export default class Files {
    }
    
    get(fileId, queryParams) {
-      const parameters = _stringifyQueryParams(queryParams);
+      const parameters = GDrive._stringifyQueryParams(queryParams);
       
       return fetch(`${GDrive._urlFiles}/${fileId}${parameters}`, {
          headers: GDrive._createHeaders()
@@ -129,7 +112,7 @@ export default class Files {
    download(fileId, downloadFileOptions, queryParams = {}) {
       queryParams.alt = "media";
       
-      const parameters = _stringifyQueryParams(queryParams);
+      const parameters = GDrive._stringifyQueryParams(queryParams);
       
       downloadFileOptions.fromUrl = `${GDrive._urlFiles}/${fileId}${parameters}`;
       
@@ -141,7 +124,7 @@ export default class Files {
    }
    
    list(queryParams) {
-      return fetch(`${GDrive._urlFiles}${_stringifyQueryParams(queryParams)}`, {
+      return fetch(`${GDrive._urlFiles}${GDrive._stringifyQueryParams(queryParams)}`, {
          headers: GDrive._createHeaders()
       });
    }
