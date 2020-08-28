@@ -119,6 +119,19 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 	[Lists or searches files](https://developers.google.com/drive/v3/reference/files/list) returning the result of `fetch()`.
 	
 		GDrive.files.list({q: "'root' in parents"});
+		
+ - [update()<i class="icon-up"></i>](#gdriveapiwFiles)
+	
+	[Files: update](https://developers.google.com/drive/api/v3/reference/files/update) returning the result of `fetch()`.
+	
+		await GDrive.files.update("file_id", {
+		    removeParents: "o_parent_id",
+		    addParents: "parent_id",
+		    resource: {
+			modifiedTime: new Date(Date.now()).toISOString(),
+		    },
+		})
+
 	
  - [safeCreateFolder()<i class="icon-up"></i>](#gdriveapiwFiles)
 	
