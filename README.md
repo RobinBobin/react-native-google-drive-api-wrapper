@@ -124,7 +124,7 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 	
 	[Files: update](https://developers.google.com/drive/api/v3/reference/files/update) returning the result of `fetch()`.
 	
-		await GDrive.files.update("file_id", {
+		GDrive.files.update("file_id", {
 		    removeParents: "o_parent_id",
 		    addParents: "parent_id",
 		    resource: {
