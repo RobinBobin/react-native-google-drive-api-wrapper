@@ -130,16 +130,16 @@ export default class Files {
    }
 
    update(fileId, queryParams) {
-      let resource = queryParams.resource
-      delete queryParams.resource
+      let resource = queryParams.resource;
+      delete queryParams.resource;
 
       let config = {
             headers: GDrive._createHeaders('application/json'),
             method: 'PATCH',
-      }
+      };
 
       if( resource ) {
-         config.body = JSON.stringify(resource) 
+         config.body = JSON.stringify(resource) ;
       }
       return fetch(`${GDrive._urlFiles}/${fileId}${GDrive._stringifyQueryParams(queryParams)}`,config);
    }
