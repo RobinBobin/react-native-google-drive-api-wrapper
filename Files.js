@@ -135,11 +135,11 @@ export default class Files {
 
       let config = {
             headers: GDrive._createHeaders('application/json'),
-            method: 'PATCH',
+            method: 'PATCH'
       };
 
       if( resource ) {
-         config.body = JSON.stringify(resource) ;
+         config.body = JSON.stringify(resource);
       }
       return fetch(`${GDrive._urlFiles}/${fileId}${GDrive._stringifyQueryParams(queryParams)}`,config);
    }
