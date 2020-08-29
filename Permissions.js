@@ -17,4 +17,11 @@ export default class Permissions {
          body
       });
    }
+   
+   delete(fileId, permissionId) {
+      return fetch(`${GDrive._urlFiles}/${fileId}${permissions}${permissionId}`, {
+         method: "DELETE",
+         headers: GDrive._createHeaders()
+      });
+   }
 }
