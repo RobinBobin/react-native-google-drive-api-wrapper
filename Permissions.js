@@ -19,8 +19,8 @@ export default class Permissions {
    }
    
    delete(fileId, permissionId) {
-      return fetch(`${GDrive._urlFiles}/${fileId}${permissions}${permissionId}`, {
-         method: "DELETE",
+      return fetch(`${GDrive._urlFiles}/${fileId}${permissions}/${permissionId}`, {
+         method: `DELETE`,
          headers: GDrive._createHeaders()
       });
    }
