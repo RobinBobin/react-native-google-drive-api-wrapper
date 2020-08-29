@@ -1,5 +1,6 @@
 import Files from "./Files";
 import Permissions from "./Permissions";
+import About from "./About";
 import {
    StaticUtils,
    ArrayStringifier
@@ -7,11 +8,13 @@ import {
 
 export default class GDrive {
    static _urlFiles = "https://www.googleapis.com/drive/v3/files";
+   static _urlAbout = "https://www.googleapis.com/drive/v3/about";
    static _contentTypeJson = "application/json; charset=UTF-8";
    
    static init(params = {}) {
       GDrive.files = new Files(params.files);
       GDrive.permissions = new Permissions();
+      GDrive.about = new About();
    }
    
    static setAccessToken(accessToken) {

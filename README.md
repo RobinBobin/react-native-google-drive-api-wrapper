@@ -19,6 +19,7 @@ It doesn't provide any authorization mechanism, so another package has to be use
  1. <a name="cgdriveapiwGDrive">[GDrive](#gdriveapiwGDrive)</a>
  1. <a name="cgdriveapiwFiles">[Files](#gdriveapiwFiles)</a>
  1. <a name="cgdriveapiwPermissions">[Permissions](#gdriveapiwPermissions)</a>
+ 1. <a name="cgdriveapiwAbout">[About](#gdriveapiwAbout)</a>
 
 #### <a name="gdriveapiwGDrive">[GDrive<i class="icon-up"></i>](#cgdriveapiwGDrive)</a>
 This is the "entry point" of the wrapper. It contains only `static` methods and fields.
@@ -119,6 +120,19 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
 	[Lists or searches files](https://developers.google.com/drive/v3/reference/files/list) returning the result of `fetch()`.
 	
 		GDrive.files.list({q: "'root' in parents"});
+		
+ - [update()<i class="icon-up"></i>](#gdriveapiwFiles)
+	
+	[Updates](https://developers.google.com/drive/api/v3/reference/files/update) a file's metadata. returning the result of `fetch()`.
+	
+		GDrive.files.update("file_id", {
+		    removeParents: "o_parent_id",
+		    addParents: "parent_id",
+		    resource: {
+			modifiedTime: new Date(Date.now()).toISOString(),
+		    },
+		})
+
 	
  - [safeCreateFolder()<i class="icon-up"></i>](#gdriveapiwFiles)
 	
@@ -143,9 +157,23 @@ This is the "entry point" of the wrapper. It contains only `static` methods and 
             }, {
                 emailMessage: `I shared a file with you.`,
             });
+	    
+ - [delete()](#gdriveapiwPermissions)
+	
+	[Delete](https://developers.google.com/drive/api/v3/reference/permissions/delete) a permission returning the result of fetch().
+	
+        GDrive.permissions.delete("fileId", "permissionId");
 
 
+#### <a name="gdriveapiwAbout">[About<i class="icon-up"></i>](#cgdriveapiwAbout)</a>
 
+ - [get()](#gdriveapiwAbout)
+	
+	[Gets](https://developers.google.com/drive/api/v3/reference/about/get) information about the user, the user's Drive, and system capabilities returning the result of fetch().
+	
+        GDrive.about.get({
+            fields: 'storageQuota'
+        });
 
 ### <a name="versionHistory"></a>[Version history](#cversionHistory)
 
