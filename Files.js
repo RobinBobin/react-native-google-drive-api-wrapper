@@ -54,8 +54,8 @@ export default class Files {
       });
    }
    
-   async safeCreateFolder(metadata) {
-      let id = await this.getId(metadata.name, metadata.parents, Files.mimeFolder);
+   async safeCreateFolder(metadata, spaces = 'drive') {
+      let id = await this.getId(metadata.name, metadata.parents, Files.mimeFolder, false, spaces);
       
       if (!id) {
          metadata.mimeType = Files.mimeFolder;
@@ -80,8 +80,8 @@ export default class Files {
       return id;
    }
    
-   async getId(name, parents, mimeType, trashed = false) {
-      const queryParams = {name, trashed};
+   async getId(name, parents, mimeType, trashed = false, spaces = 'drive') {
+      const queryParams = {trashed};
       
       if (mimeType) {
          queryParams.mimeType = mimeType;
@@ -89,7 +89,8 @@ export default class Files {
       
       let result = await this.list({
          q: GDrive._stringifyQueryParams(queryParams, "",
-            " and ", true) + ` and '${parents[0]}' in parents`
+            " and ", true) + ` and '${parents[0]}' in parents`,
+         spaces: spaces,
       });
       
       if (!result.ok) {
