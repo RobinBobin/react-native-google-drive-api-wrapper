@@ -1,0 +1,26 @@
+{
+  "author": "Ruben Shalimov <r_shalimov@inbox.ru>",
+  "bugs": {
+    "url": "https://github.com/RobinBobin/react-native-google-drive-api-wrapper/issues"
+  },
+  "description": "This wrapper facilitates the use of the Google Drive API in React Native projects.",
+  "homepage": "https://github.com/RobinBobin/react-native-google-drive-api-wrapper#readme",
+  "keywords": [
+    "Google Drive API",
+    "React Native"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "@robinbobin/react-native-google-drive-api-wrapper",
+  "peerDependencies": {
+    "simple-common-utils": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/RobinBobin/react-native-google-drive-api-wrapper.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.1"
+}
