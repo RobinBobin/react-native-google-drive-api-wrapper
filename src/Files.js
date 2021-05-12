@@ -9,25 +9,15 @@ export default class Files extends GDriveApi {
   }
   
   delete(fileId) {
-    return fetch(
-      Uris.files(fileId), {
-        headers: this.createHeaders(),
-        method: "DELETE"
-    });
+    return this.fetch(Uris.files(fileId), {method: "DELETE"});
   }
   
   get(fileId, queryParams) {
-    return fetch(
-      Uris.files(fileId, queryParams), {
-        headers: this.createHeaders()
-      });
+    return this.fetch(Uris.files(fileId, queryParams));
   }
   
   list(queryParams) {
-    return fetch(
-      Uris.files(null, queryParams), {
-        headers: this.createHeaders()
-      });
+    return this.fetch(Uris.files(null, queryParams));
   }
   
   get multipartBoundary() {
