@@ -43,6 +43,10 @@ export default class Files extends GDriveApi {
     return this.__getContent(fileId, queryParams, "text");
   }
   
+  emptyTrash() {
+    this.fetch(Uris.files("trash"), {method: "DELETE"});
+  }
+  
   list(queryParams) {
     return this.fetch(Uris.files(null, queryParams));
   }
