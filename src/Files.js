@@ -1,8 +1,7 @@
 import GDriveApi from "./GDriveApi";
-import {
-  Uris,
-  blobToByteArray
-} from "./utils";
+import MimeTypes from "./aux/MimeTypes";
+import Uris from "./aux/Uris";
+import { blobToByteArray } from "./aux/utils";
 
 export default class Files extends GDriveApi {
   constructor() {
@@ -11,16 +10,27 @@ export default class Files extends GDriveApi {
     this.__multipartBoundary = "foo_bar_baz";
   }
   
-  // copy(fileId, queryParameters) {
-    
-  // }
+  copy(fileId, queryParameters, requestBody = {}) {
+    return this.createFetcher()
+      .setBody(JSON.stringify(requestBody), MimeTypes.JSON)
+      .setMethod("POST")
+      .fetch(Uris.files(fileId, "copy", null, queryParameters));
+  }
   
   delete(fileId) {
-    return this.fetch(Uris.files(fileId), {method: "DELETE"});
+    return this.createFetcher()
+      .setMethod("DELETE")
+      .fetch(Uris.files(fileId));
+  }
+  
+  emptyTrash() {
+    return this.createFetcher()
+      .setMethod("DELETE")
+      .fetch(Uris.files(null, "trash"));
   }
   
   get(fileId, queryParameters) {
-    return this.fetch(Uris.files(fileId, null, null, queryParameters));
+    return this.createFetcher().fetch(Uris.files(fileId, null, null, queryParameters));
   }
   
   getBinary(fileId, queryParameters) {
@@ -47,12 +57,8 @@ export default class Files extends GDriveApi {
     return this.__getContent(fileId, queryParameters, "text");
   }
   
-  emptyTrash() {
-    return this.fetch(Uris.files(null, "trash"), {method: "DELETE"});
-  }
-  
   list(queryParameters) {
-    return this.fetch(Uris.files(null, null, null, queryParameters));
+    return this.createFetcher().fetch(Uris.files(null, null, null, queryParameters));
   }
   
   get multipartBoundary() {

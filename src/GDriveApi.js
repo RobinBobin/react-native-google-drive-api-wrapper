@@ -1,12 +1,10 @@
-/*
- * A weird workaround of an equally weird bug:
- *
- * Require cycle: node_modules/react-native/Libraries/Network/fetch.js -> node_modules/whatwg-fetch/dist/fetch.umd.js -> node_modules/react-native/Libraries/Network/fetch.js
-*/
-
-fetch;
+import Fetcher from "./aux/Fetcher";
 
 export default class GDriveApi {
+  createFetcher() {
+    return new Fetcher(this.__gdrive.accessToken);
+  }
+  
   // createHeaders(contentType, contentLength) {
   //   const headers = new Headers();
     
@@ -21,20 +19,6 @@ export default class GDriveApi {
     
   //   return headers;
   // }
-  
-  fetch(input, init) {
-    const _init = {...init};
-    
-    if (!_init.headers) {
-      _init.headers = new Headers();
-    }
-    
-    if (!_init.headers.has("Authorization")) {
-      _init.headers.append("Authorization", `Bearer ${this.__gdrive.accessToken}`);
-    }
-    
-    return fetch(input, _init);
-  }
   
   set gdrive(gdrive) {
     this.__gdrive = gdrive;
