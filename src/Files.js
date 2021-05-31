@@ -29,6 +29,12 @@ export default class Files extends GDriveApi {
       .fetch(Uris.files(null, "trash"));
   }
   
+  async export(fileId, queryParameters) {
+    return (await this.createFetcher()
+      .fetch(Uris.files(fileId, "export", null, queryParameters))
+    ).text();
+  }
+  
   get(fileId, queryParameters) {
     return this.createFetcher().fetch(Uris.files(fileId, null, null, queryParameters));
   }
