@@ -11,44 +11,46 @@ export default class Files extends GDriveApi {
     this.__multipartBoundary = "foo_bar_baz";
   }
   
+  copy(fileId, )
+  
   delete(fileId) {
     return this.fetch(Uris.files(fileId), {method: "DELETE"});
   }
   
-  get(fileId, queryParams) {
-    return this.fetch(Uris.files(fileId, queryParams));
+  get(fileId, queryParameters) {
+    return this.fetch(Uris.files(fileId, queryParameters));
   }
   
-  getBinary(fileId, queryParams) {
-    return this.__getContent(fileId, queryParams, "blob")
+  getBinary(fileId, queryParameters) {
+    return this.__getContent(fileId, queryParameters, "blob")
   }
   
-  getContent(fileId, queryParams) {
-    return this.__getContent(fileId, queryParams);
+  getContent(fileId, queryParameters) {
+    return this.__getContent(fileId, queryParameters);
   }
   
-  getJson(fileId, queryParams) {
-    return this.__getContent(fileId, queryParams, "json");
+  getJson(fileId, queryParameters) {
+    return this.__getContent(fileId, queryParameters, "json");
   }
   
-  async getMetadata(fileId, queryParams) {
-    const _queryParams = {...queryParams};
+  async getMetadata(fileId, queryParameters) {
+    const _queryParams = {...queryParameters};
     
     delete _queryParams.alt;
     
     return (await this.get(fileId, _queryParams)).json();
   }
   
-  getText(fileId, queryParams) {
-    return this.__getContent(fileId, queryParams, "text");
+  getText(fileId, queryParameters) {
+    return this.__getContent(fileId, queryParameters, "text");
   }
   
   emptyTrash() {
     return this.fetch(Uris.files("trash"), {method: "DELETE"});
   }
   
-  list(queryParams) {
-    return this.fetch(Uris.files(null, queryParams));
+  list(queryParameters) {
+    return this.fetch(Uris.files(null, queryParameters));
   }
   
   get multipartBoundary() {
@@ -59,9 +61,9 @@ export default class Files extends GDriveApi {
     this.__multipartBoundary = multipartBoundary;
   }
   
-  async __getContent(fileId, queryParams, type) {
+  async __getContent(fileId, queryParameters, type) {
     let content = await this.get(fileId, {
-      ...queryParams,
+      ...queryParameters,
       alt: "media"
     });
     

@@ -13,21 +13,21 @@ export class Mimes {
 };
 
 export class Uris {
-  static about(path, queryParams) {
-    return Uris.__makeUri("drive/v3/about", path, queryParams);
+  static about(path, queryParameters) {
+    return Uris.__makeUri("drive/v3/about", path, queryParameters);
   }
   
-  static files(path, queryParams) {
-    return Uris.__makeUri("drive/v3/files", path, queryParams);
+  static files(path, queryParameters) {
+    return Uris.__makeUri("drive/v3/files", path, queryParameters);
   }
   
-  static __makeUri(uri, path, queryParams) {
+  static __makeUri(uri, path, queryParameters) {
     const realPath = new ArrayStringifier()
       .setArray(Array.isArray(path) ? path : path === null ? [] : [path])
       .setPrefix("/")
       .setSeparator("/");
     
-    return `https://www.googleapis.com/${uri}${realPath}${stringifyQueryParams(queryParams)}`;
+    return `https://www.googleapis.com/${uri}${realPath}${stringifyQueryParams(queryParameters)}`;
   }
 };
 
@@ -43,8 +43,8 @@ export async function blobToByteArray(blob) {
   });
 }
 
-export function stringifyQueryParams(queryParams = {}, prefix = "?", separator = "&", quoteIfString) {
-  const array = Object.keys(queryParams).map(key => `${key}=${StaticUtils.safeQuoteIfString(queryParams[key], quoteIfString)}`);
+export function stringifyQueryParams(queryParameters = {}, prefix = "?", separator = "&", quoteIfString) {
+  const array = Object.keys(queryParameters).map(key => `${key}=${StaticUtils.safeQuoteIfString(queryParameters[key], quoteIfString)}`);
   
   return new ArrayStringifier(array)
      .setPrefix(prefix)
