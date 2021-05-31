@@ -44,7 +44,7 @@ export default class Files extends GDriveApi {
   }
   
   emptyTrash() {
-    this.fetch(Uris.files("trash"), {method: "DELETE"});
+    return this.fetch(Uris.files("trash"), {method: "DELETE"});
   }
   
   list(queryParams) {
