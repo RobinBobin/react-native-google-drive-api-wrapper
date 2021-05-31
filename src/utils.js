@@ -27,7 +27,7 @@ export class Uris {
       .setPrefix("/")
       .setSeparator("/");
     
-    return `https://www.googleapis.com/${uri}${realPath}${stringifyQueryParams(queryParameters)}`;
+    return `https://www.googleapis.com/${uri}${realPath}${stringifyQueryParameters(queryParameters)}`;
   }
 };
 
@@ -43,7 +43,7 @@ export async function blobToByteArray(blob) {
   });
 }
 
-export function stringifyQueryParams(queryParameters = {}, prefix = "?", separator = "&", quoteIfString) {
+export function stringifyQueryParameters(queryParameters = {}, prefix = "?", separator = "&", quoteIfString) {
   const array = Object.keys(queryParameters).map(key => `${key}=${StaticUtils.safeQuoteIfString(queryParameters[key], quoteIfString)}`);
   
   return new ArrayStringifier(array)

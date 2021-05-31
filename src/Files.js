@@ -11,7 +11,9 @@ export default class Files extends GDriveApi {
     this.__multipartBoundary = "foo_bar_baz";
   }
   
-  copy(fileId, )
+  // copy(fileId, queryParameters) {
+    
+  // }
   
   delete(fileId) {
     return this.fetch(Uris.files(fileId), {method: "DELETE"});
@@ -34,11 +36,11 @@ export default class Files extends GDriveApi {
   }
   
   async getMetadata(fileId, queryParameters) {
-    const _queryParams = {...queryParameters};
+    const _queryParameters = {...queryParameters};
     
-    delete _queryParams.alt;
+    delete _queryParameters.alt;
     
-    return (await this.get(fileId, _queryParams)).json();
+    return (await this.get(fileId, _queryParameters)).json();
   }
   
   getText(fileId, queryParameters) {
