@@ -20,7 +20,7 @@ export default class Files extends GDriveApi {
   }
   
   get(fileId, queryParameters) {
-    return this.fetch(Uris.files(fileId, queryParameters));
+    return this.fetch(Uris.files(fileId, null, null, queryParameters));
   }
   
   getBinary(fileId, queryParameters) {
@@ -48,11 +48,11 @@ export default class Files extends GDriveApi {
   }
   
   emptyTrash() {
-    return this.fetch(Uris.files("trash"), {method: "DELETE"});
+    return this.fetch(Uris.files(null, "trash"), {method: "DELETE"});
   }
   
   list(queryParameters) {
-    return this.fetch(Uris.files(null, queryParameters));
+    return this.fetch(Uris.files(null, null, null, queryParameters));
   }
   
   get multipartBoundary() {

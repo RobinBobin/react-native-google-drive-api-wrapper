@@ -13,21 +13,37 @@ export class Mimes {
 };
 
 export class Uris {
-  static about(path, queryParameters) {
-    return Uris.__makeUri("drive/v3/about", path, queryParameters);
+  // static about(path, queryParameters) {
+  //   return Uris.__makeUri("drive/v3/about", path, queryParameters);
+  // }
+  
+  static files(fileId, method, preDrivePath, queryParameters) {
+    return Uris.__makeUri("files", fileId, method, preDrivePath, queryParameters);
   }
   
-  static files(path, queryParameters) {
-    return Uris.__makeUri("drive/v3/files", path, queryParameters);
-  }
-  
-  static __makeUri(uri, path, queryParameters) {
-    const realPath = new ArrayStringifier()
-      .setArray(Array.isArray(path) ? path : path === null ? [] : [path])
-      .setPrefix("/")
-      .setSeparator("/");
+  static __makeUri(api, fileId = null, method = null, preDrivePath = null, queryParameters) {
+    const uri = ["https://www.googleapis.com"];
     
-    return `https://www.googleapis.com/${uri}${realPath}${stringifyQueryParameters(queryParameters)}`;
+    if (Array.isArray(preDrivePath)) {
+      uri.push(...preDrivePath);
+    } else if (preDrivePath !== null) {
+      uri.push(preDrivePath);
+    }
+    
+    uri.push("drive/v3");
+    uri.push(api);
+    
+    [fileId, method].forEach(element => {
+      if (element !== null) {
+        uri.push(element);
+      }
+    });
+    
+    return new ArrayStringifier()
+      .setArray(uri)
+      .setPostfix(stringifyQueryParameters(queryParameters))
+      .setSeparator("/")
+      .process();
   }
 };
 
