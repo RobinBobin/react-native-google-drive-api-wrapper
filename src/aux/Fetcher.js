@@ -1,3 +1,6 @@
+import HttpError from "./HttpError";
+import { blobToByteArray } from "./utils";
+
 /*
  * A weird workaround of an equally weird bug:
  *
@@ -7,12 +10,14 @@
 fetch;
 
 export default class Fetcher {
-  constructor(accessToken) {
+  constructor(gDriveApi) {
+    this.__gDriveApi = gDriveApi;
+    
     this.__init = {
       headers: new Headers()
     };
     
-    this.appendHeader("Authorization", `Bearer ${accessToken}`);
+    this.appendHeader("Authorization", `Bearer ${gDriveApi.gdrive.accessToken}`);
   }
   
   appendHeader(name, value) {
@@ -21,8 +26,22 @@ export default class Fetcher {
     return this;
   }
   
-  fetch(resource) {
-    return fetch(resource, this.__init);
+  async fetch(resource, responseType) {
+    let response = await fetch(resource, this.__init);
+    
+    if (!response.ok) {
+      if (this.__gDriveApi.fetchRejectsOnHttpErrors) {
+        throw new HttpError(await response.json(), response);
+      }
+    } else if (this.__gDriveApi.fetchCoercesTypes && responseType) {
+      response = await response[responseType]();
+      
+      if (responseType === "blob") {
+        response = blobToByteArray(response);
+      }
+    }
+    
+    return response;
   }
   
   setBody(body, contentType) {

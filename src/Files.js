@@ -1,7 +1,6 @@
 import GDriveApi from "./GDriveApi";
 import MimeTypes from "./aux/MimeTypes";
 import Uris from "./aux/Uris";
-import { blobToByteArray } from "./aux/utils";
 
 export default class Files extends GDriveApi {
   constructor() {
@@ -14,7 +13,7 @@ export default class Files extends GDriveApi {
     return this.createFetcher()
       .setBody(JSON.stringify(requestBody), MimeTypes.JSON)
       .setMethod("POST")
-      .fetch(Uris.files(fileId, "copy", null, queryParameters));
+      .fetch(Uris.files(fileId, "copy", null, queryParameters), "json");
   }
   
   delete(fileId) {
@@ -29,17 +28,16 @@ export default class Files extends GDriveApi {
       .fetch(Uris.files(null, "trash"));
   }
   
-  async export(fileId, queryParameters) {
-    return (await this.fetch(Uris.files(fileId, "export", null, queryParameters))
-    ).text();
+  export(fileId, queryParameters) {
+    return this.fetch(Uris.files(fileId, "export", null, queryParameters), "text");
   }
   
-  async generateIds(queryParameters) {
-    return (await this.fetch(Uris.files(null, "generateIds", null, queryParameters))).json();
+  generateIds(queryParameters) {
+    return this.fetch(Uris.files(null, "generateIds", null, queryParameters), "json");
   }
   
   get(fileId, queryParameters) {
-    return this.fetch(Uris.files(fileId, null, null, queryParameters));
+    return this.__get(fileId, queryParameters);
   }
   
   getBinary(fileId, queryParameters) {
@@ -54,12 +52,13 @@ export default class Files extends GDriveApi {
     return this.__getContent(fileId, queryParameters, "json");
   }
   
-  async getMetadata(fileId, queryParameters) {
-    const _queryParameters = {...queryParameters};
-    
-    delete _queryParameters.alt;
-    
-    return (await this.get(fileId, _queryParameters)).json();
+  getMetadata(fileId, queryParameters) {
+    return this.__get(
+      fileId, {
+        ...queryParameters,
+        alt: "json"
+      },
+      "json");
   }
   
   getText(fileId, queryParameters) {
@@ -67,7 +66,7 @@ export default class Files extends GDriveApi {
   }
   
   list(queryParameters) {
-    return this.fetch(Uris.files(null, null, null, queryParameters));
+    return this.fetch(Uris.files(null, null, null, queryParameters), "json");
   }
   
   get multipartBoundary() {
@@ -78,20 +77,18 @@ export default class Files extends GDriveApi {
     this.__multipartBoundary = multipartBoundary;
   }
   
-  async __getContent(fileId, queryParameters, type) {
-    let content = await this.get(fileId, {
-      ...queryParameters,
-      alt: "media"
-    });
-    
-    if (type) {
-      content = await content[type]();
-      
-      if (type == "blob") {
-        content = blobToByteArray(content);
-      }
-    }
-    
-    return content;
+  __get(fileId, queryParameters, responseType) {
+    return this.fetch(Uris.files(fileId, null, null, queryParameters), responseType);
+  }
+  
+  __getContent(fileId, queryParameters, responseType) {
+    return this.__get(
+      fileId, {
+        ...queryParameters,
+        alt: "media"
+      },
+      responseType,
+      !!responseType
+    );
   }
 };
