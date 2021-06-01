@@ -19,13 +19,13 @@ export default class Files extends GDriveApi {
   delete(fileId) {
     return this.createFetcher()
       .setMethod("DELETE")
-      .fetch(Uris.files(fileId));
+      .fetch(Uris.files(fileId), "text");
   }
   
   emptyTrash() {
     return this.createFetcher()
       .setMethod("DELETE")
-      .fetch(Uris.files(null, "trash"));
+      .fetch(Uris.files(null, "trash"), "text");
   }
   
   export(fileId, queryParameters) {
