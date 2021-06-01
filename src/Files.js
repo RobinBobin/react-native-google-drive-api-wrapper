@@ -30,13 +30,16 @@ export default class Files extends GDriveApi {
   }
   
   async export(fileId, queryParameters) {
-    return (await this.createFetcher()
-      .fetch(Uris.files(fileId, "export", null, queryParameters))
+    return (await this.fetch(Uris.files(fileId, "export", null, queryParameters))
     ).text();
   }
   
+  async generateIds(queryParameters) {
+    return (await this.fetch(Uris.files(null, "generateIds", null, queryParameters))).json();
+  }
+  
   get(fileId, queryParameters) {
-    return this.createFetcher().fetch(Uris.files(fileId, null, null, queryParameters));
+    return this.fetch(Uris.files(fileId, null, null, queryParameters));
   }
   
   getBinary(fileId, queryParameters) {
@@ -64,7 +67,7 @@ export default class Files extends GDriveApi {
   }
   
   list(queryParameters) {
-    return this.createFetcher().fetch(Uris.files(null, null, null, queryParameters));
+    return this.fetch(Uris.files(null, null, null, queryParameters));
   }
   
   get multipartBoundary() {
