@@ -36,20 +36,20 @@ export default class Files extends GDriveApi {
     return this.fetch(Uris.files(null, "generateIds", null, queryParameters), "json");
   }
   
-  get(fileId, queryParameters) {
-    return this.__get(fileId, queryParameters);
+  get(fileId, queryParameters, range) {
+    return this.__get(fileId, queryParameters, range);
   }
   
-  getBinary(fileId, queryParameters) {
-    return this.__getContent(fileId, queryParameters, "blob")
+  getBinary(fileId, queryParameters, range) {
+    return this.__getContent(fileId, queryParameters, range, "blob")
   }
   
-  getContent(fileId, queryParameters) {
-    return this.__getContent(fileId, queryParameters);
+  getContent(fileId, queryParameters, range) {
+    return this.__getContent(fileId, queryParameters, range);
   }
   
   getJson(fileId, queryParameters) {
-    return this.__getContent(fileId, queryParameters, "json");
+    return this.__getContent(fileId, queryParameters, null, "json");
   }
   
   getMetadata(fileId, queryParameters) {
@@ -58,11 +58,12 @@ export default class Files extends GDriveApi {
         ...queryParameters,
         alt: "json"
       },
+      null,
       "json");
   }
   
-  getText(fileId, queryParameters) {
-    return this.__getContent(fileId, queryParameters, "text");
+  getText(fileId, queryParameters, range) {
+    return this.__getContent(fileId, queryParameters, range, "text");
   }
   
   list(queryParameters) {
@@ -77,18 +78,24 @@ export default class Files extends GDriveApi {
     this.__multipartBoundary = multipartBoundary;
   }
   
-  __get(fileId, queryParameters, responseType) {
-    return this.fetch(Uris.files(fileId, null, null, queryParameters), responseType);
+  __get(fileId, queryParameters, range, responseType) {
+    const fetcher = this.createFetcher();
+    
+    if (range) {
+      fetcher.appendHeader("Range", `bytes=${range}`);
+    }
+    
+    return fetcher.fetch(Uris.files(fileId, null, null, queryParameters), responseType);
   }
   
-  __getContent(fileId, queryParameters, responseType) {
+  __getContent(fileId, queryParameters, range, responseType) {
     return this.__get(
       fileId, {
         ...queryParameters,
         alt: "media"
       },
-      responseType,
-      !!responseType
+      range,
+      responseType
     );
   }
 };
