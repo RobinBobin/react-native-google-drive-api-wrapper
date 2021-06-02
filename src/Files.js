@@ -1,5 +1,6 @@
 import GDriveApi from "./GDriveApi";
 import MimeTypes from "./aux/MimeTypes";
+import Uploader from "./aux/Uploader";
 import Uris from "./aux/Uris";
 
 export default class Files extends GDriveApi {
@@ -52,14 +53,10 @@ export default class Files extends GDriveApi {
     return this.__getContent(fileId, queryParameters, null, "json");
   }
   
-  getMetadata(fileId, queryParameters) {
-    return this.__get(
-      fileId, {
-        ...queryParameters,
-        alt: "json"
-      },
-      null,
-      "json");
+  getMetadata(fileId, queryParameters = {}) {
+    queryParameters.alt = "json";
+    
+    return this.__get(fileId, queryParameters, null, "json");
   }
   
   getText(fileId, queryParameters, range) {
@@ -78,6 +75,22 @@ export default class Files extends GDriveApi {
     this.__multipartBoundary = multipartBoundary;
   }
   
+  newMediaUploader() {
+    return new Uploader(this.createFetcher(), "media");
+  }
+  
+  // newMetadataOnlyUploader() {
+  //   return new Uploader(this.createFetcher());
+  // }
+  
+  // newMultipartUploader() {
+  //   return new Uploader(this.createFetcher(), "multipart");
+  // }
+  
+  // newResumableUploader() {
+  //   return new Uploader(this.createFetcher(), "resumable");
+  // }
+  
   __get(fileId, queryParameters, range, responseType) {
     const fetcher = this.createFetcher();
     
@@ -88,14 +101,9 @@ export default class Files extends GDriveApi {
     return fetcher.fetch(Uris.files(fileId, null, null, queryParameters), responseType);
   }
   
-  __getContent(fileId, queryParameters, range, responseType) {
-    return this.__get(
-      fileId, {
-        ...queryParameters,
-        alt: "media"
-      },
-      range,
-      responseType
-    );
+  __getContent(fileId, queryParameters = {}, range, responseType) {
+    queryParameters.alt = "media";
+    
+    return this.__get(fileId, queryParameters, range, responseType);
   }
 };

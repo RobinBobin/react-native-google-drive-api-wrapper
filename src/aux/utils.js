@@ -4,7 +4,7 @@ import {
   StaticUtils
 } from "simple-common-utils";
 
-export async function blobToByteArray(blob) {
+export function blobToByteArray(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     

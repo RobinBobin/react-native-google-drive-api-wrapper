@@ -13,11 +13,7 @@ export default class Fetcher {
   constructor(gDriveApi) {
     this.__gDriveApi = gDriveApi;
     
-    this.__init = {
-      headers: new Headers()
-    };
-    
-    this.appendHeader("Authorization", `Bearer ${gDriveApi.gdrive.accessToken}`);
+    this.reset();
   }
   
   appendHeader(name, value) {
@@ -27,21 +23,37 @@ export default class Fetcher {
   }
   
   async fetch(resource, responseType) {
-    let response = await fetch(resource, this.__init);
+    if (resource) {
+      this.setResource(resource);
+    }
+    
+    if (responseType) {
+      this.setResponseType(responseType);
+    }
+    
+    let response = await fetch(this.__resource, this.__init);
     
     if (!response.ok) {
       if (this.__gDriveApi.fetchRejectsOnHttpErrors) {
         throw new HttpError(await response.json(), response);
       }
-    } else if (this.__gDriveApi.fetchCoercesTypes && responseType) {
-      response = await response[responseType]();
+    } else if (this.__gDriveApi.fetchCoercesTypes && this.__responseType) {
+      response = await response[this.__responseType]();
       
-      if (responseType === "blob") {
+      if (this.__responseType === "blob") {
         response = blobToByteArray(response);
       }
     }
     
     return response;
+  }
+  
+  reset() {
+    this.__init = {
+      headers: new Headers()
+    };
+    
+    this.appendHeader("Authorization", `Bearer ${this.__gDriveApi.gdrive.accessToken}`);
   }
   
   setBody(body, contentType) {
@@ -58,6 +70,18 @@ export default class Fetcher {
   
   setMethod(method) {
     this.__init.method = method;
+    
+    return this;
+  }
+  
+  setResource(resource) {
+    this.__resource = resource;
+    
+    return this;
+  }
+  
+  setResponseType(responseType) {
+    this.__responseType = responseType;
     
     return this;
   }
