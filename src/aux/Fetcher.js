@@ -35,7 +35,7 @@ export default class Fetcher {
     
     if (!response.ok) {
       if (this.__gDriveApi.fetchRejectsOnHttpErrors) {
-        throw new HttpError(await response.json(), response);
+        throw await HttpError.create(response);
       }
     } else if (this.__gDriveApi.fetchCoercesTypes && this.__responseType) {
       response = await response[this.__responseType]();

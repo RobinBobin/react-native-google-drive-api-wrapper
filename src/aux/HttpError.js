@@ -1,20 +1,45 @@
 export default class HttpError extends Error {
-  constructor(json, result) {
+  constructor(response) {
     super();
     
-    this.__json = json;
-    this.__result = result;
+    this.__response = response;
+  }
+  
+  static async create(response) {
+    const error = new HttpError(response);
+    
+    error.text = await response.text();
+    
+    try {
+      error.json = JSON.parse(error.text);
+    } catch (error) {
+      // Nothing to do.
+    }
+    
+    return error;
   }
   
   get json() {
     return this.__json;
   }
   
-  get result() {
-    return this.__result;
+  set json(json) {
+    this.__json = json;
+  }
+  
+  get response() {
+    return this.__response;
+  }
+  
+  get text() {
+    return this.__text;
+  }
+  
+  set text(text) {
+    this.__text = text;
   }
   
   toString() {
-    return `HttpError: ${JSON.stringify(this.result)} ${JSON.stringify(this.json)}`;
+    return `HttpError: ${JSON.stringify(this.response)} ${this.json ? JSON.stringify(this.json) : this.text}`;
   }
 }

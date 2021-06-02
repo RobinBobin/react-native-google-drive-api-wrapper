@@ -13,15 +13,17 @@ export default class Uploader {
     const preDrivePath = this.__queryParameters.uploadType ? "upload" : null;
     
     this.__fetcher
-      .setMethod(this.__isUpdater ? "PUT" : "POST")
-      .setResource(Uris.files(null, null, preDrivePath, this.__queryParameters));
+      .setMethod(this.__fileId ? "PATCH" : "POST")
+      .setResource(Uris.files(this.__fileId, null, preDrivePath, this.__queryParameters));
     
     if (!isResumable) {
       this.__fetcher.setResponseType("json");
     }
     
+    let result;
+    
     if (this.__queryParameters.uploadType === "media") {
-      return this.__fetcher
+      result = this.__fetcher
         .setBody(this.__data, this.__dataType)
         .fetch();
     } else if (this.__queryParameters.uploadType === "multipart" || !preDrivePath) {
@@ -31,6 +33,8 @@ export default class Uploader {
     } else {
       throw new Error(`Invalid upload type: '${this.__queryParameters.uploadType}'`);
     }
+    
+    return result;
   }
   
   setData(data, dataType) {
@@ -44,8 +48,8 @@ export default class Uploader {
     return this;
   }
   
-  setIsUpdater(isUpdater) {
-    this.__isUpdater = isUpdater;
+  setFileId(fileId) {
+    this.__fileId = fileId;
     
     return this;
   }
