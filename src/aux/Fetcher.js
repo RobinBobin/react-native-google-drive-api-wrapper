@@ -48,6 +48,10 @@ export default class Fetcher {
     return response;
   }
   
+  get gDriveApi() {
+    return this.__gDriveApi;
+  }
+  
   reset() {
     this.__init = {
       headers: new Headers()
