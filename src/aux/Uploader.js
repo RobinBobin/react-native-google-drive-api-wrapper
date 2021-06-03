@@ -67,7 +67,7 @@ export default class Uploader {
         .setBody(body)
         .fetch();
     } else if (isResumable) {
-      
+      throw new Error("'resumable' isn't implemented yet");
     } else {
       throw new Error(`Invalid upload type: '${this.__queryParameters.uploadType}'`);
     }
@@ -82,7 +82,7 @@ export default class Uploader {
     return this;
   }
   
-  setFileId(fileId) {
+  setIdOfFileToUpdate(fileId) {
     this.__fileId = fileId;
     
     return this;
