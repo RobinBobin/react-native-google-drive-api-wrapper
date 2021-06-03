@@ -13,9 +13,17 @@ export default class Uploader {
   }
   
   execute() {
-    const dataIsString = this.__data.constructor === String;
+    /**
+     * 'uploadType' will be present, but undefined for metadata-only uploads.
+     */
+    if (!this.__queryParameters.uploadType) {
+      delete this.__queryParameters.uploadType;
+    }
+    
+    const dataIsString = this.__data?.constructor === String;
     const isResumable = this.__queryParameters.uploadType === "resumable";
     const preDrivePath = this.__queryParameters.uploadType ? "upload" : null;
+    const requestBody = JSON.stringify(this.__requestBody ?? {});
     
     this.__fetcher
       .setMethod(this.__fileId ? "PATCH" : "POST")
@@ -27,18 +35,20 @@ export default class Uploader {
     
     let result;
     
-    if (this.__queryParameters.uploadType === "media") {
+    if (this.__queryParameters.uploadType === "media" || !preDrivePath) {
       result = this.__fetcher
-        .setBody(dataIsString ? this.__data : new Uint8Array(this.__data), this.__dataType)
+        .setBody(
+          dataIsString ? this.__data : preDrivePath ? new Uint8Array(this.__data) : requestBody,
+          this.__dataType ?? MimeTypes.JSON)
         .fetch();
-    } else if (this.__queryParameters.uploadType === "multipart" || !preDrivePath) {
+    } else if (this.__queryParameters.uploadType === "multipart") {
       const dashDashBoundary = `--${this.__fetcher.gDriveApi.multipartBoundary}`;
       const ending = `\n${dashDashBoundary}--`;
       
       let body = [
         `\n${dashDashBoundary}\n`,
         `Content-Type: ${MimeTypes.JSON_UTF8}\n\n`,
-        `${JSON.stringify(this.__requestBody ?? {})}\n\n${dashDashBoundary}\n`
+        `${requestBody}\n\n${dashDashBoundary}\n`
       ];
       
       if (this.__isBase64) {

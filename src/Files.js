@@ -79,9 +79,9 @@ export default class Files extends GDriveApi {
     return new Uploader(this.createFetcher(), "media");
   }
   
-  // newMetadataOnlyUploader() {
-  //   return new Uploader(this.createFetcher());
-  // }
+  newMetadataOnlyUploader() {
+    return new Uploader(this.createFetcher());
+  }
   
   newMultipartUploader() {
     return new Uploader(this.createFetcher(), "multipart");
