@@ -101,9 +101,13 @@ export default class Files extends GDriveApi {
     return fetcher.fetch(Uris.files(fileId, null, null, queryParameters), responseType);
   }
   
-  __getContent(fileId, queryParameters = {}, range, responseType) {
-    queryParameters.alt = "media";
-    
-    return this.__get(fileId, queryParameters, range, responseType);
+  __getContent(fileId, queryParameters, range, responseType) {
+    return this.__get(
+      fileId, {
+        ...queryParameters,
+        alt: "media"
+      },
+      range,
+      responseType);
   }
 };
