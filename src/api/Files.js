@@ -1,7 +1,7 @@
 import GDriveApi from "./GDriveApi";
-import MimeTypes from "./aux/MimeTypes";
 import Uploader from "./aux/Uploader";
 import Uris from "./aux/Uris";
+import MimeTypes from "../MimeTypes";
 
 export default class Files extends GDriveApi {
   constructor() {

@@ -3,8 +3,8 @@ import {
   StaticUtils
 } from "simple-common-utils";
 import utf8 from "utf8";
-import MimeTypes from "./MimeTypes";
 import Uris from "./Uris";
+import MimeTypes from "../../MimeTypes";
 
 export default class Uploader {
   constructor(fetcher, uploadType) {

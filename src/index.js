@@ -1,10 +1,8 @@
-import Files from "./Files";
 import GDrive from "./GDrive";
-import HttpError from "./aux/HttpError";
-import MimeTypes from "./aux/MimeTypes";
+import HttpError from "./HttpError";
+import MimeTypes from "./MimeTypes";
 
 export {
-  Files,
   GDrive,
   HttpError,
   MimeTypes

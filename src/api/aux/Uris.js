@@ -2,9 +2,9 @@ import { ArrayStringifier } from "simple-common-utils";
 import { stringifyQueryParameters } from "./utils";
 
 export default class Uris {
-  // static about(path, queryParameters) {
-  //   return Uris.__makeUri("drive/v3/about", path, queryParameters);
-  // }
+  static about(queryParameters) {
+    return Uris.__makeUri("about", null, null, null, queryParameters);
+  }
   
   static files(fileId, method, preDrivePath, queryParameters) {
     return Uris.__makeUri("files", fileId, method, preDrivePath, queryParameters);
