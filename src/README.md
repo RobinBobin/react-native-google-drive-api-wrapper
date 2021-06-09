@@ -1,4 +1,4 @@
-﻿This wrapper facilitates the use of the [google drive api](https://developers.google.com/drive/v3/reference/).
+This wrapper facilitates the use of the [google drive api](https://developers.google.com/drive/v3/reference/).
 
 It doesn't provide any authorization mechanism, so another package has to be used. I use [@react-native-google-signin/google-signin](https://www.npmjs.com/package/@react-native-google-signin/google-signin) (thanks for the great work, [vonovak](https://www.npmjs.com/~vonovak)!).
 
@@ -56,7 +56,6 @@ Extending [GDriveApi](#gdriveapi), this class gives access to [various informati
 Name|Description
 -|-
 get(queryParametersOrFields)|[Gets](https://developers.google.com/drive/api/v3/reference/about) various information, returning an [About resource](https://developers.google.com/drive/api/v3/reference/about#resource) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`. `queryParametersOrFields` can be an object containing the query parameters or a string, containing a [`fields`](https://developers.google.com/drive/api/v3/reference/about/get#parameters) value.
- | 
 
 #### <a name="files"></a>[Files](#c_files)
 
@@ -85,7 +84,6 @@ multipartBoundary|String (read/write property)|The boundary string to be used fo
 newMediaUploader()|Method|Creates an [Uploader](#uploader) instance with `uploadType` of `media`.
 newMetadataOnlyUploader()|Method|Creates a metadata-only [Uploader](#uploader) instance.
 newMultipartUploader()|Method|Creates an [Uploader](#uploader) instance with `uploadType` of `multipart`.
- | | 
 
 #### <a name="gdrive"></a>[GDrive](#c_gdrive)
 
@@ -96,7 +94,6 @@ Name|Type|Description
 about|[`About`](#about) instance|The instance to get [various information](https://developers.google.com/drive/api/v3/reference/about).
 accessToken|access token|The access token to be used in subsequent calls to the api. Get the token from a package you choose to use.
 files|[`Files`](#files) instance|The instance to manage [files](#https://developers.google.com/drive/api/v3/reference/files) in a google drive.
- | |
 
 #### <a name="gdriveapi"></a>[GDriveApi](#c_gdriveapi)
 
@@ -106,7 +103,6 @@ Name|Type|Description
 -|-|-
 <a name="gdriveapi_fetch_coerces_types"></a>fetchCoercesTypes|Boolean (read/write property)|If true, the data returned from a successful api call is converted to the json, text or byte (`Uint8Array`) type. If `false`, no conversion is performed and the result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is returned as is. The type, the data is coerced to, is specified in the documentation of each method, that utilizes this property. The default value is `true`.
 <a name="gdriveapi_fetch_rejects_on_http_errors"></a>fetchRejectsOnHttpErrors|Boolean (read/write property)|If true, unsuccessful api calls throw an instance of [`HttpError`](#http_error). If `false`, the result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is returned as is. The default value is `true`.
- | |
 
 #### <a name="http_error"></a>[HttpError](#c_http_error)
 
@@ -117,7 +113,6 @@ Name|Type|Description
 json|Object|An object containing the error. Can be `undefined`.
 response|Object|The result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 text|String|The error description obtained from the response.
- | |
 
 #### <a name="mime_types"></a>[MimeTypes](#c_mime_types)
 
@@ -132,28 +127,25 @@ JSON|`application/json`
 JSON_UTF8|`application/json; charset=UTF-8`
 PDF|`application/pdf`
 TEXT|`text/plain`
- | 
 
 #### <a name="uploader"></a>[Uploader](#c_uploader)
 
 This class handles the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. Currently only `media`, `multipart` and metadata-only requests are supported.
 
 Name|Description
--|-|-
+-|-
 execute()|Executes the request, returning an `Object` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 setData(data, dataType)|Sets the data and its MIME type.
 setIdOfFileToUpdate(fileId)|If this method is invoked, the request becomes an update request. Otherwise it's a creation request.
 setIsBase64(isBase64)|If it's a `multipart` request and the data supplied is Base64, this method can be invoked to add the header `Content-Transfer-Encoding: base64` which is recognized by Google Drive.
 setQueryParameters(queryParameters)|Sets the query parameters.
 setRequestBody(requestBody)|Sets the request body.
- | | 
 
 ### <a name="version_history"></a>[Version history](#c_version_history)
 
 Version number|Changes
 -|-
 v0.3.0|Initial documented release.
- | 
 
 <br>
 <br>
