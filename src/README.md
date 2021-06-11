@@ -59,7 +59,7 @@ get(queryParametersOrFields)|[Gets](https://developers.google.com/drive/api/v3/r
 
 #### <a name="filesfiles"></a>[Files](#c_files)
 
-Extending [GDriveApi](#gdriveapi), this class is used to manage [files](#https://developers.google.com/drive/api/v3/reference/files) in a google drive. The parameter `range` for the methods that accept it is specified as [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range) with one exception:
+Extending [GDriveApi](#gdriveapi), this class is used to manage [files](https://developers.google.com/drive/api/v3/reference/files) in a google drive. The parameter `range` for the methods that accept it is specified as [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range) with one exception:
 **\<unit\>** is always bytes and mustn't be set. E.g.:
 
     await gdrive.files.getBinary(fileId, null, "1-1");
@@ -93,7 +93,7 @@ Name|Type|Description
 -|-|-
 about|[`About`](#about) instance|The instance to get [various information](https://developers.google.com/drive/api/v3/reference/about).
 accessToken|access token|The access token to be used in subsequent calls to the api. Get the token from a package you choose to use.
-files|[`Files`](#filesfiles) instance|The instance to manage [files](#https://developers.google.com/drive/api/v3/reference/files) in a google drive.
+files|[`Files`](#filesfiles) instance|The instance to manage [files](https://developers.google.com/drive/api/v3/reference/files) in a google drive.
 
 #### <a name="gdriveapi"></a>[GDriveApi](#c_gdriveapi)
 
