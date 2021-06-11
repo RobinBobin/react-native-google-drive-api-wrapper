@@ -12,8 +12,10 @@ It doesn't provide any authorization mechanism, so another package has to be use
 
 ### <a name="usage"></a>[Usage](#c_usage)
 
-Example (list files, create a binary file and read it):
+Example:
 
+    // = List files, create a binary file and read it = //
+    
     import { GoogleSignin } from "@react-native-google-signin/google-signin";
     import {
       GDrive,
@@ -46,9 +48,10 @@ Example (list files, create a binary file and read it):
 3. <a name="c_gdrive"></a>[GDrive](#gdrive)
 4. <a name="c_gdriveapi"></a>[GDriveApi](#gdriveapi)
 5. <a name="c_http_error"></a>[HttpError](#http_error)
-6. <a name="c_mime_types"></a>[MimeTypes](#mime_types)
-7. <a name="c_permissions"></a>[Permissions](#permissions)
-8. <a name="c_uploader"></a>[Uploader](#uploader)
+6. <a name="c_list_query_builder"></a>[ListQueryBuilder](#list_query_builder)
+7. <a name="c_mime_types"></a>[MimeTypes](#mime_types)
+8. <a name="c_permissions"></a>[Permissions](#permissions)
+9. <a name="c_uploader"></a>[Uploader](#uploader)
 
 #### <a name="about"></a>[About](#c_about)
 
@@ -80,7 +83,7 @@ getContent(fileId, queryParameters, range)|Method|Gets the content of **any** fi
 getJson(fileId, queryParameters)|Method|Gets the content of a json text file. Returns an `Object` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 getMetadata(fileId, queryParameters = {})|Method|Gets a file's metadata. Returns a [Files resource](https://developers.google.com/drive/api/v3/reference/files) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 getText(fileId, queryParameters, range)|Method|Gets the content of a text file. Returns a string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
-list(queryParameters)|Method|[Lists](https://developers.google.com/drive/api/v3/reference/files/list) files. Returns an `Object` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
+<a name="filesfiles_list"></a>list(queryParameters)|Method|[Lists](https://developers.google.com/drive/api/v3/reference/files/list) files. Returns an `Object` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.<br><br>`queryParameters.q` can be a [`ListQueryBuilder`](#list_query_builder) instance.
 multipartBoundary|String (read/write property)|The boundary string to be used for multipart uploads. The default value is `"foo_bar_baz"`.
 newMediaUploader()|Method|Creates an [Uploader](#uploader) instance with `uploadType` of `media`.
 newMetadataOnlyUploader()|Method|Creates a metadata-only [Uploader](#uploader) instance.
@@ -115,6 +118,35 @@ Name|Type|Description
 json|Object|An object containing the error. Can be `undefined`.
 response|Object|The result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 text|String|The error description obtained from the response.
+
+#### <a name="list_query_builder"></a>[ListQueryBuilder](#c_list_query_builder)
+
+A helper for building [`list()`](#filesfiles_list) [queries](https://developers.google.com/drive/api/v3/search-files).
+
+Example:
+
+    // = List files contained in the root folder and named "Untitled" = //
+    
+    await gdrive.files.list({
+      q: new ListQueryBuilder()
+        .e("name", "Untitled")
+        .and()
+        .in("root", "parents")
+    });
+
+Name|Description
+-|-
+and()|`and`s two subqueries.
+contains(key, value, quoteValueIfString = true)|key contains value
+e(key, value, quoteValueIfString = true)|key = value
+g(key, value, quoteValueIfString = true)|key > value
+in(value, key, quoteValueIfString = true)|value in key
+l(key, value, quoteValueIfString = true)|key < value
+operator(left, operator, right, quoteLeftIfString, quoteRightIfString)|A generic method to build all the other key/value relations.
+or()|`or`s two subqueries.
+pop()|Adds `)`.
+push()|Adds `(`.
+toString()|Stringifies the query (called internally by [`list()`](#filesfiles_list)).
 
 #### <a name="mime_types"></a>[MimeTypes](#c_mime_types)
 
@@ -156,6 +188,7 @@ setRequestBody(requestBody)|Sets the request body.
 
 Version number|Changes
 -|-
+v0.5.0|[`ListQueryBuilder`](#list_query_builder) added.
 v0.4.0|[`Permissions`](#permissions) added.
 v0.3.0|Initial documented release.
 

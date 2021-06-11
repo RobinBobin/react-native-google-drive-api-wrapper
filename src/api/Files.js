@@ -64,7 +64,16 @@ export default class Files extends GDriveApi {
   }
   
   list(queryParameters) {
-    return this.fetch(Uris.files(null, null, null, queryParameters), "json");
+    let _queryParameters = queryParameters;
+    
+    if (_queryParameters?.q && (_queryParameters.q.constructor !== String)) {
+      _queryParameters = {
+        ..._queryParameters,
+        q: _queryParameters.q.toString()
+      };
+    }
+    
+    return this.fetch(Uris.files(null, null, null, _queryParameters), "json");
   }
   
   get multipartBoundary() {
