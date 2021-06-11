@@ -1,10 +1,12 @@
 import About from "./api/About";
 import Files from "./api/Files";
+import Permissions from "./api/Permissions";
 
 export default class GDrive {
   constructor() {
     this.about = new About();
     this.files = new Files();
+    this.permissions = new Permissions();
   }
   
   get about() {
@@ -12,9 +14,7 @@ export default class GDrive {
   }
   
   set about(about) {
-    this.__about = about;
-    
-    this.__about.gdrive = this;
+    this.__setApi(about, "about");
   }
   
   get accessToken() {
@@ -30,8 +30,20 @@ export default class GDrive {
   }
   
   set files(files) {
-    this.__files = files;
+    this.__setApi(files, "files");
+  }
+  
+  get permissions() {
+    return this.__permissions;
+  }
+  
+  set permissions(permissions) {
+    this.__setApi(permissions, "permissions");
+  }
+  
+  __setApi(api, apiName) {
+    api.gdrive = this;
     
-    this.__files.gdrive = this;
+    this[`__${apiName}`] = api;
   }
 };

@@ -1,4 +1,4 @@
-This wrapper facilitates the use of the [google drive api](https://developers.google.com/drive/v3/reference/).
+﻿This wrapper facilitates the use of the [google drive api](https://developers.google.com/drive/v3/reference/).
 
 It doesn't provide any authorization mechanism, so another package has to be used. I use [@react-native-google-signin/google-signin](https://www.npmjs.com/package/@react-native-google-signin/google-signin) (thanks for the great work, [vonovak](https://www.npmjs.com/~vonovak)!).
 
@@ -47,7 +47,8 @@ Example (list files, create a binary file and read it):
 4. <a name="c_gdriveapi"></a>[GDriveApi](#gdriveapi)
 5. <a name="c_http_error"></a>[HttpError](#http_error)
 6. <a name="c_mime_types"></a>[MimeTypes](#mime_types)
-7. <a name="c_uploader"></a>[Uploader](#uploader)
+7. <a name="c_permissions"></a>[Permissions](#permissions)
+8. <a name="c_uploader"></a>[Uploader](#uploader)
 
 #### <a name="about"></a>[About](#c_about)
 
@@ -94,6 +95,7 @@ Name|Type|Description
 about|[`About`](#about) instance|The instance to get [various information](https://developers.google.com/drive/api/v3/reference/about).
 accessToken|access token|The access token to be used in subsequent calls to the api. Get the token from a package you choose to use.
 files|[`Files`](#filesfiles) instance|The instance to manage [files](https://developers.google.com/drive/api/v3/reference/files) in a google drive.
+permissions|[`Permissions`](#permissions) instance|The instance to manage file [permissions](https://developers.google.com/drive/api/v3/reference/permissions).
 
 #### <a name="gdriveapi"></a>[GDriveApi](#c_gdriveapi)
 
@@ -128,6 +130,15 @@ JSON_UTF8|`application/json; charset=UTF-8`
 PDF|`application/pdf`
 TEXT|`text/plain`
 
+#### <a name="permissions"></a>[Permissions](#c_permissions)
+
+This class handles file [permissions](https://developers.google.com/drive/api/v3/reference/permissions).
+
+Name|Description
+-|-
+create(fileId, queryParameters, requestBody)|[Creates](https://developers.google.com/drive/api/v3/reference/permissions/create) a permission, returning a [Permissions resource](https://developers.google.com/drive/api/v3/reference/permissions#resource) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
+delete(fileId, permissionId, queryParameters)|[Deletes](https://developers.google.com/drive/api/v3/reference/permissions/delete) a permission, returning an empty string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
+
 #### <a name="uploader"></a>[Uploader](#c_uploader)
 
 This class handles the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. Currently only `media`, `multipart` and metadata-only requests are supported.
@@ -145,6 +156,7 @@ setRequestBody(requestBody)|Sets the request body.
 
 Version number|Changes
 -|-
+v0.4.0|[`Permissions`](#permissions) added.
 v0.3.0|Initial documented release.
 
 <br>

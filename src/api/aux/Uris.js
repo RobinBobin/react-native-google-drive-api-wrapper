@@ -10,7 +10,17 @@ export default class Uris {
     return Uris.__makeUri("files", fileId, method, preDrivePath, queryParameters);
   }
   
-  static __makeUri(api, fileId = null, method = null, preDrivePath = null, queryParameters) {
+  static permissions(fileId, permissionId, queryParameters) {
+    const path = ["permissions"];
+    
+    if (permissionId) {
+      path.push(permissionId);
+    }
+    
+    return Uris.__makeUri("files", fileId, path.join("/"), null, queryParameters);
+  }
+  
+  static __makeUri(api, fileId = null, path = null, preDrivePath = null, queryParameters) {
     const uri = ["https://www.googleapis.com"];
     
     if (Array.isArray(preDrivePath)) {
@@ -22,7 +32,7 @@ export default class Uris {
     uri.push("drive/v3");
     uri.push(api);
     
-    [fileId, method].forEach(element => {
+    [fileId, path].forEach(element => {
       if (element !== null) {
         uri.push(element);
       }
