@@ -2,6 +2,7 @@ import GDriveApi from "./GDriveApi";
 import Uploader from "./aux/Uploader";
 import Uris from "./aux/Uris";
 import MimeTypes from "../MimeTypes";
+import UnexpectedFileCountError from "../UnexpectedFileCountError";
 
 export default class Files extends GDriveApi {
   constructor() {
@@ -15,6 +16,33 @@ export default class Files extends GDriveApi {
       .setBody(JSON.stringify(requestBody), MimeTypes.JSON)
       .setMethod("POST")
       .fetch(Uris.files(fileId, "copy", null, queryParameters), "json");
+  }
+  
+  async createIfNotExists(queryParameters, uploader) {
+    uploader.setIdOfFileToUpdate();
+    
+    const result = {};
+    
+    const files = (await this.list(queryParameters)).files;
+    
+    switch (files.length) {
+      case 0:
+        result.alreadyExisted = false;
+        result.result = await uploader.execute();
+        
+        break;
+      
+      case 1:
+        result.alreadyExisted = true;
+        result.result = files[0];
+        
+        break;
+      
+      default:
+        throw new UnexpectedFileCountError([0, 1], files.length);
+    }
+    
+    return result;
   }
   
   delete(fileId) {

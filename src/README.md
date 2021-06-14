@@ -51,7 +51,8 @@ Example:
 6. <a name="c_list_query_builder"></a>[ListQueryBuilder](#list_query_builder)
 7. <a name="c_mime_types"></a>[MimeTypes](#mime_types)
 8. <a name="c_permissions"></a>[Permissions](#permissions)
-9. <a name="c_uploader"></a>[Uploader](#uploader)
+9. <a name="c_unexpected_file_count_error"></a>[UnexpectedFileCountError](#unexpected_file_count_error)
+10. <a name="c_uploader"></a>[Uploader](#uploader)
 
 #### <a name="about"></a>[About](#c_about)
 
@@ -73,6 +74,7 @@ will return the byte at index one.
 Name|Type|Description
 -|-|-
 copy(fileId, queryParameters, requestBody = {})|Method|Creates a [copy](#https://developers.google.com/drive/api/v3/reference/files/copy) of a file. Returns a [Files resource](https://developers.google.com/drive/api/v3/reference/files#resource) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
+createIfNotExists(queryParameters, uploader)|Method|Invokes `uploader.execute()` and returns its result, if the file described with `queryParameters` doesn't exist. Returns the result of `list(queryParameters)` otherwise. Throws [`UnexpectedFileCountError`](#unexpected_file_count_error) if there are 2 or more files matching `queryParameters`.
 delete(fileId)|Method|[Deletes](https://developers.google.com/drive/api/v3/reference/files/delete) a file. Returns an empty string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 emptyTrash()|Method|Permanently [deletes](https://developers.google.com/drive/api/v3/reference/files/emptyTrash) all of the user's trashed files. Returns an empty string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 export(fileId, queryParameters)|Method|[Exports](https://developers.google.com/drive/api/v3/reference/files/export) a Google Doc to the requested MIME type. Returns a [Files resource](https://developers.google.com/drive/api/v3/reference/files#resource) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
@@ -171,9 +173,19 @@ Name|Description
 create(fileId, queryParameters, requestBody)|[Creates](https://developers.google.com/drive/api/v3/reference/permissions/create) a permission, returning a [Permissions resource](https://developers.google.com/drive/api/v3/reference/permissions#resource) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 delete(fileId, permissionId, queryParameters)|[Deletes](https://developers.google.com/drive/api/v3/reference/permissions/delete) a permission, returning an empty string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 
+#### <a name="unexpected_file_count_error"></a>[UnexpectedFileCountError](#c_unexpected_file_count_error)
+
+An instance of this class is thrown when the real number of files differs from the expected. All the properties are read-only.
+
+Name|Type|Description
+-|-|-
+expectedCount|Array\|Number|The expected count.
+realCount|Number|Real count.
+
+
 #### <a name="uploader"></a>[Uploader](#c_uploader)
 
-This class handles the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. Currently only `media`, `multipart` and metadata-only requests are supported.
+This class handles the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. Currently only `media`, `multipart` and metadata-only requests are supported. All the methods except `execute()` can be chained.
 
 Name|Description
 -|-
@@ -188,6 +200,7 @@ setRequestBody(requestBody)|Sets the request body.
 
 Version number|Changes
 -|-
+v0.6.0|1. [`UnexpectedFileCountError`](#unexpected_file_count_error).<br>2. `Files.createIfNotExists()` is added.
 v0.5.0|[`ListQueryBuilder`](#list_query_builder) added.
 v0.4.0|[`Permissions`](#permissions) added.
 v0.3.0|Initial documented release.
