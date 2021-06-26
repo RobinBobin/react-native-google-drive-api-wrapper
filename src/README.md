@@ -19,7 +19,8 @@ Example:
     import { GoogleSignin } from "@react-native-google-signin/google-signin";
     import {
       GDrive,
-      MimeTypes
+      MimeTypes,
+      ListQueryBuilder,
     } from "@robinbobin/react-native-google-drive-api-wrapper";
     
     // = Somewhere in your code = //
@@ -40,6 +41,58 @@ Example:
     ).id;
     
     console.log(await gdrive.files.getBinary(id));
+    
+    // Create a folder :
+    const folderResponse = await gDrive.files
+          .newMetadataOnlyUploader()
+          .setRequestBody({
+            name: APP_DIRECTORY,
+            mimeType: MimeTypes.FOLDER,
+            parents: ['root'],
+          })
+          .execute();
+          
+    // Using ListQueryBuilder in List method
+    const listResponse = await gDrive.files.list({
+        q: new ListQueryBuilder()
+          .in('root', 'parents') // Will searchn in Root folder
+          .and()
+          .operator('trashed', '=', 'false') // Exclude searching in Trash of the Google Drive
+          .and()
+          .e('name', 'folder_name') // search for file with name : folder_name
+          .and()
+          .e('mimeType', 'application/vnd.google-apps.folder'), // filter only folders
+      });
+      
+    // Upload a file 
+    
+    let fileContent = await RNFS.readFile(fileDetails.uri, 'base64'); // Using RNFS library to convert data to base64 encoding
+
+    let fileResponse = await gDrive.files
+        .newMultipartUploader()
+        .setIsBase64(fileContent)
+        .setData(fileContent, fileDetails.type)
+        .setRequestBody({
+          name: fileDetails.name,
+          mimeType: fileDetails.type,
+          parents: [folderId],
+        })
+        .execute();
+        
+    // Create a permission so that anyone with link can read the file 
+    const permissionResponse = await gDrive.permissions.create(
+        file.id, // Id of the file or folder
+        {},
+        {
+          role: 'reader',
+          type: 'anyone',
+        },
+      );
+      
+    // Fetch viewbale & downloadable link for a file
+    let metaDataResponse = await gDrive.files.getMetadata(result.id, {
+        fields: 'webViewLink, webContentLink',
+      });
 
 <br>
 
