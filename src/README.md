@@ -110,6 +110,7 @@ Name|Type|Description
 -|-|-
 <a name="gdriveapi_fetch_coerces_types"></a>fetchCoercesTypes|Boolean (read/write property)|If true, the data returned from a successful api call is converted to the json, text or byte (`Uint8Array`) type. If `false`, no conversion is performed and the result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is returned as is. The type, the data is coerced to, is specified in the documentation of each method, that utilizes this property. The default value is `true`.
 <a name="gdriveapi_fetch_rejects_on_http_errors"></a>fetchRejectsOnHttpErrors|Boolean (read/write property)|If true, unsuccessful api calls throw an instance of [`HttpError`](#http_error). If `false`, the result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is returned as is. The default value is `true`.
+<a name="gdriveapi_fetch_timeout"></a>fetchTimeout|Number (read/write property)|Timeout in ms for [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) invocations. The default value is `1500`.
 
 #### <a name="http_error"></a>[HttpError](#c_http_error)
 
@@ -185,7 +186,7 @@ realCount|Number|Real count.
 
 #### <a name="uploader"></a>[Uploader](#c_uploader)
 
-This class handles the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. Currently only `media`, `multipart` and metadata-only requests are supported. All the methods except `execute()` can be chained.
+This class handles the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. Currently only `media`, `multipart` and `metadata-only` requests are supported. All the methods except `execute()` can be chained.
 
 Name|Description
 -|-
@@ -200,6 +201,7 @@ setRequestBody(requestBody)|Sets the request body.
 
 Version number|Changes
 -|-
+v1.0.0|1. [`GDriveApi.fetchTimeout`](#gdriveapi_fetch_timeout) added.<br>2. [`HttpError`](#http_error) and [`UnexpectedFileCountError`](#unexpected_file_count_error): prototype names are specified and error messages are made more concise.
 v0.6.0|1. [`UnexpectedFileCountError`](#unexpected_file_count_error).<br>2. `Files.createIfNotExists()` is added.
 v0.5.0|[`ListQueryBuilder`](#list_query_builder) added.
 v0.4.0|[`Permissions`](#permissions) added.

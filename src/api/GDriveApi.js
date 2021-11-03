@@ -4,6 +4,7 @@ export default class GDriveApi {
   constructor() {
     this.fetchCoercesTypes = true;
     this.fetchRejectsOnHttpErrors = true;
+    this.fetchTimeout = 1500;
   }
   
   createFetcher() {
@@ -28,6 +29,14 @@ export default class GDriveApi {
   
   set fetchRejectsOnHttpErrors(fetchRejectsOnHttpErrors) {
     this.__fetchRejectsOnHttpErrors = fetchRejectsOnHttpErrors;
+  }
+  
+  get fetchTimeout() {
+    return this.__fetchTimeout;
+  }
+  
+  set fetchTimeout(fetchTimeout) {
+    this.__fetchTimeout = fetchTimeout;
   }
   
   get gdrive() {

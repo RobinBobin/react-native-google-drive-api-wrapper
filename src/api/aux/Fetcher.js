@@ -31,6 +31,8 @@ export default class Fetcher {
       this.setResponseType(responseType);
     }
     
+    setTimeout(() => this.__abortController.abort(), this.__gDriveApi.fetchTimeout);
+    
     let response = await fetch(this.__resource, this.__init);
     
     if (!response.ok) {
@@ -53,8 +55,11 @@ export default class Fetcher {
   }
   
   reset() {
+    this.__abortController = new AbortController();
+    
     this.__init = {
-      headers: new Headers()
+      headers: new Headers(),
+      signal: this.__abortController.signal
     };
     
     this.appendHeader("Authorization", `Bearer ${this.__gDriveApi.gdrive.accessToken}`);

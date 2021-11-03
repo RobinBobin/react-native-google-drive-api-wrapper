@@ -8,7 +8,8 @@ export default class HttpError extends Error {
   static async create(response) {
     const error = new HttpError(response);
     
-    error.text = await response.text();
+    error.message = await response.text();
+    error.text = error.message;
     
     try {
       error.json = JSON.parse(error.text);
@@ -38,8 +39,6 @@ export default class HttpError extends Error {
   set text(text) {
     this.__text = text;
   }
-  
-  toString() {
-    return `HttpError: ${JSON.stringify(this.response)} ${this.json ? JSON.stringify(this.json) : this.text}`;
-  }
-}
+};
+
+HttpError.prototype.name = "HttpError";
