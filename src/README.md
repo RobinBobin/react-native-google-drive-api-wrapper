@@ -12,6 +12,8 @@ It doesn't provide any authorization mechanism, so another package has to be use
 
 ### <a name="usage"></a>[Usage](#c_usage)
 
+An example [project](https://github.com/RobinBobin/gdrivetest).
+
 Example:
 
     // = List files, create a binary file and read it = //
@@ -201,6 +203,7 @@ setRequestBody(requestBody)|Sets the request body.
 
 Version number|Changes
 -|-
+v1.0.1|My example [repo](https://github.com/RobinBobin/gdrivetest) for this package  is referenced in the readme.
 v1.0.0|1. [`GDriveApi.fetchTimeout`](#gdriveapi_fetch_timeout) added.<br>2. [`HttpError`](#http_error) and [`UnexpectedFileCountError`](#unexpected_file_count_error): prototype names are specified and error messages are made more concise.
 v0.6.0|1. [`UnexpectedFileCountError`](#unexpected_file_count_error).<br>2. `Files.createIfNotExists()` is added.
 v0.5.0|[`ListQueryBuilder`](#list_query_builder) added.
