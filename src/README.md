@@ -12,9 +12,9 @@ It doesn't provide any authorization mechanism, so another package has to be use
 
 ### <a name="usage"></a>[Usage](#c_usage)
 
-An example [project](https://github.com/RobinBobin/gdrivetest).
+If something doesn't work as expected, please do have a look at an example [project](https://github.com/RobinBobin/gdrivetest) before opening an issue.
 
-Example:
+Quick example:
 
     // = List files, create a binary file and read it = //
     
@@ -112,7 +112,7 @@ Name|Type|Description
 -|-|-
 <a name="gdriveapi_fetch_coerces_types"></a>fetchCoercesTypes|Boolean (read/write property)|If true, the data returned from a successful api call is converted to the json, text or byte (`Uint8Array`) type. If `false`, no conversion is performed and the result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is returned as is. The type, the data is coerced to, is specified in the documentation of each method, that utilizes this property. The default value is `true`.
 <a name="gdriveapi_fetch_rejects_on_http_errors"></a>fetchRejectsOnHttpErrors|Boolean (read/write property)|If true, unsuccessful api calls throw an instance of [`HttpError`](#http_error). If `false`, the result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is returned as is. The default value is `true`.
-<a name="gdriveapi_fetch_timeout"></a>fetchTimeout|Number (read/write property)|Timeout in ms for [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) invocations. The default value is `1500`.
+<a name="gdriveapi_fetch_timeout"></a>fetchTimeout|Number (read/write property)|Timeout in ms for [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) invocations. The default value is `1500`. If the value is negative, `fetch()` will wait infinitely.
 
 #### <a name="http_error"></a>[HttpError](#c_http_error)
 
@@ -131,12 +131,13 @@ A helper for building [`list()`](#filesfiles_list) [queries](https://developers.
 Example:
 
     // = List files contained in the root folder and named "Untitled" = //
+    const folderIdNotItsName = "root";
     
     await gdrive.files.list({
       q: new ListQueryBuilder()
         .e("name", "Untitled")
         .and()
-        .in("root", "parents")
+        .in(folderIdNotItsName, "parents")
     });
 
 Name|Description
@@ -203,6 +204,7 @@ setRequestBody(requestBody)|Sets the request body.
 
 Version number|Changes
 -|-
+v1.1.0|[`GDriveApi.fetchTimeout`](#gdriveapi_fetch_timeout) can be set to a negative value to make `fetch()` wait infinitely.
 v1.0.1|My example [repo](https://github.com/RobinBobin/gdrivetest) for this package  is referenced in the readme.
 v1.0.0|1. [`GDriveApi.fetchTimeout`](#gdriveapi_fetch_timeout) added.<br>2. [`HttpError`](#http_error) and [`UnexpectedFileCountError`](#unexpected_file_count_error): prototype names are specified and error messages are made more concise.
 v0.6.0|1. [`UnexpectedFileCountError`](#unexpected_file_count_error).<br>2. `Files.createIfNotExists()` is added.

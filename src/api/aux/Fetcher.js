@@ -31,7 +31,9 @@ export default class Fetcher {
       this.setResponseType(responseType);
     }
     
-    setTimeout(() => this.__abortController.abort(), this.__gDriveApi.fetchTimeout);
+    if (this.__gDriveApi.fetchTimeout >= 0) {
+      setTimeout(() => this.__abortController.abort(), this.__gDriveApi.fetchTimeout);
+    }
     
     let response = await fetch(this.__resource, this.__init);
     
