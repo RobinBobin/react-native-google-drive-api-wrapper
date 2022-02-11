@@ -110,7 +110,7 @@ export default class Uploader {
     return this;
   }
   
-  setIdOfFileToUpdate(fileId: string) {
+  setIdOfFileToUpdate(fileId?: string) {
     this.__idOfFileToUpdate = fileId;
     
     return this;
