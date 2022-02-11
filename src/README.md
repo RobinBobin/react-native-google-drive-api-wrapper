@@ -99,9 +99,12 @@ A `GDrive` instance stores your google sign-in token and the class instances you
 
 Name|Type|Description
 -|-|-
-about|[`About`](#about) instance|The instance to get [various information](https://developers.google.com/drive/api/v3/reference/about).
-accessToken|access token|The access token to be used in subsequent calls to the api. Get the token from a package you choose to use.
-files|[`Files`](#filesfiles) instance|The instance to manage [files](https://developers.google.com/drive/api/v3/reference/files) in a google drive.
+about|[`About`](#about) instance (read/write property)|The instance to get [various information](https://developers.google.com/drive/api/v3/reference/about).
+accessToken|access token (read/write property)|The access token to be used in subsequent calls to the api. Get the token from a package you choose to use.
+files|[`Files`](#filesfiles) instance (read/write property)|The instance to manage [files](https://developers.google.com/drive/api/v3/reference/files) in a google drive.
+<a name="gdrive_fetch_coerces_types"></a>fetchCoercesTypes|(read/write property)|Manages [`fetchCoercesTypes`](#gdriveapi_fetch_coerces_types) of all the `GDriveApi` instances stored in this class instance.
+<a name="gdrive_fetch_rejects_on_http_errors"></a>fetchRejectsOnHttpErrors|(read/write property)|Manages [`fetchRejectsOnHttpErrors`](#gdriveapi_fetch_rejects_on_http_errors) of all the `GDriveApi` instances stored in this class instance.
+<a name="gdrive_fetch_timeout"></a>fetchTimeout|(read/write property)|Manages [`fetchTimeout`](#gdriveapi_fetch_timeout) of all the `GDriveApi` instances stored in this class instance.
 permissions|[`Permissions`](#permissions) instance|The instance to manage file [permissions](https://developers.google.com/drive/api/v3/reference/permissions).
 
 #### <a name="gdriveapi"></a>[GDriveApi](#c_gdriveapi)
@@ -204,6 +207,7 @@ setRequestBody(requestBody)|Sets the request body.
 
 Version number|Changes
 -|-
+v1.2.0|1. The package is rewritten in TypeScript.<br>2. The following properties are added to [`GDrive`](#gdrive):<br><ul><li>[`fetchCoercesTypes`](#gdrive_fetch_coerces_types)</li><li>[`fetchRejectsOnHttpErrors`](#gdrive_fetch_rejects_on_http_errors)</li><li>[`fetchTimeout`](#gdrive_fetch_timeout)</li></ul>
 v1.1.0|[`GDriveApi.fetchTimeout`](#gdriveapi_fetch_timeout) can be set to a negative value to make `fetch()` wait infinitely.
 v1.0.1|My example [repo](https://github.com/RobinBobin/gdrivetest) for this package  is referenced in the readme.
 v1.0.0|1. [`GDriveApi.fetchTimeout`](#gdriveapi_fetch_timeout) added.<br>2. [`HttpError`](#http_error) and [`UnexpectedFileCountError`](#unexpected_file_count_error): prototype names are specified and error messages are made more concise.

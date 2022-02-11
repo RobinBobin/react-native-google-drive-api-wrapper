@@ -1,18 +1,21 @@
-import Fetcher from "./aux/Fetcher";
-
 export default class GDriveApi {
+  private __accessToken: string = "";
+  private __fetchCoercesTypes: boolean;
+  private __fetchRejectsOnHttpErrors: boolean;
+  private __fetchTimeout: number;
+  
   constructor() {
-    this.fetchCoercesTypes = true;
-    this.fetchRejectsOnHttpErrors = true;
-    this.fetchTimeout = 1500;
+    this.__fetchCoercesTypes = true;
+    this.__fetchRejectsOnHttpErrors = true;
+    this.__fetchTimeout = 1500;
   }
   
-  createFetcher() {
-    return new Fetcher(this);
+  get accessToken() {
+    return this.__accessToken;
   }
   
-  fetch(resource, responseType) {
-    return this.createFetcher().fetch(resource, responseType);
+  set accessToken(accessToken) {
+    this.__accessToken = accessToken;
   }
   
   get fetchCoercesTypes() {
@@ -37,13 +40,5 @@ export default class GDriveApi {
   
   set fetchTimeout(fetchTimeout) {
     this.__fetchTimeout = fetchTimeout;
-  }
-  
-  get gdrive() {
-    return this.__gdrive;
-  }
-  
-  set gdrive(gdrive) {
-    this.__gdrive = gdrive;
   }
 };

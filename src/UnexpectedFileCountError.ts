@@ -1,5 +1,10 @@
+type ExpectedCount = number[] | number;
+
 export default class UnexpectedFileCountError extends Error {
-  constructor(expectedCount, realCount) {
+  __expectedCount: ExpectedCount;
+  __realCount: number;
+  
+  constructor(expectedCount: ExpectedCount, realCount: number) {
     super();
     
     this.__expectedCount = expectedCount;

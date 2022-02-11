@@ -1,11 +1,15 @@
 export default class HttpError extends Error {
-  constructor(response) {
+  private __json?: any;
+  private __response: Response;
+  private __text?: string;
+  
+  constructor(response: Response) {
     super();
     
     this.__response = response;
   }
   
-  static async create(response) {
+  static async create(response: Response) {
     const error = new HttpError(response);
     
     error.message = await response.text();
