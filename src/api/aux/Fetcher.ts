@@ -15,9 +15,9 @@ export type BodyType = Uint8Array | string;
 export type FetchResponseType = "blob" | "json" | "text";
 
 export default class Fetcher <SomeGDriveApi extends GDriveApi> {
-  private __abortController: AbortController;
-  private __gDriveApi: SomeGDriveApi;
-  private __init: RequestInit;
+  private readonly __abortController: AbortController;
+  private readonly __gDriveApi: SomeGDriveApi;
+  private readonly __init: RequestInit;
   private __resource?: RequestInfo;
   private __responseType?: FetchResponseType;
   
@@ -34,8 +34,7 @@ export default class Fetcher <SomeGDriveApi extends GDriveApi> {
   }
   
   appendHeader(name: string, value: any) {
-    //@ts-ignore
-    this.__init.headers.append(name, value);
+    (this.__init.headers as Headers).append(name, value);
     
     return this;
   }
