@@ -3,21 +3,28 @@ import {
   StaticUtils
 } from "simple-common-utils";
 import utf8 from "utf8";
-import Uris from "./Uris";
-import FilesApi from "../files/FilesApi";
-import Fetcher, { BodyType } from "../aux/Fetcher";
-import MimeTypes from "../../MimeTypes";
+import Uris from "../Uris";
+import FilesApi from "../../files/FilesApi";
+import Fetcher, { BodyType } from "../Fetcher";
+import MimeTypes from "../../../MimeTypes";
 
+type FetchFunction = () => Promise <any>
 type DataType = number[] | string;
 type UploadType = "media" | "multipart" | "resumable";
 
 export default class Uploader {
+  private static readonly __fetchFunctions = {
+    "media": "__fetchMediaOrMetadataOnly",
+    "multipart": "__fetchMultipart",
+    "resumable": "__fetchResumable"
+  } as const
+
   private __data?: DataType;
   private __dataType?: string;
   private __fetcher: Fetcher <FilesApi>;
   private __idOfFileToUpdate?: string;
   private __isBase64?: boolean;
-  private __queryParameters: {uploadType: UploadType};
+  private __queryParameters: {uploadType: UploadType | undefined};
   private __requestBody?: string | object;
   
   constructor(fetcher: Fetcher <FilesApi>, uploadType?: UploadType) {
@@ -26,9 +33,8 @@ export default class Uploader {
   }
   
   execute() {
-    const isMetadataOnly = !this.__queryParameters.uploadType
-    const isResumable = this.__queryParameters.uploadType === "resumable";
-    
+    const isMetadataOnly = !this.__queryParameters.uploadType;
+
     this.__requestBody = JSON.stringify(this.__requestBody ?? {});
     
     this.__fetcher
@@ -39,23 +45,13 @@ export default class Uploader {
         queryParameters: this.__queryParameters
       }));
     
-    if (!isResumable) {
-      this.__fetcher.setResponseType("json");
+    const fetchFunctionName = Uploader.__fetchFunctions[this.__queryParameters.uploadType ?? "media"]
+
+    if (!fetchFunctionName) {
+      throw new Error(`Invalid upload type: '${this.__queryParameters.uploadType}'`);
     }
 
-    if (this.__queryParameters.uploadType === "media" || isMetadataOnly) {
-      return this.__fetchMediaOrMetadataOnly(isMetadataOnly);
-    }
-
-    if (this.__queryParameters.uploadType === "multipart") {
-      return this.__fetchMultipart();
-    }
-
-    if (isResumable) {
-      return this.__fetchResumable();
-    }
-    
-    throw new Error(`Invalid upload type: '${this.__queryParameters.uploadType}'`);
+    return (this[fetchFunctionName] as FetchFunction)()
   }
   
   setData(data: DataType, dataType: string) {
@@ -92,14 +88,15 @@ export default class Uploader {
     return this;
   }
 
-  __fetchMediaOrMetadataOnly(isMetadataOnly: boolean) {
+  __fetchMediaOrMetadataOnly() {
     const body =
       typeof this.__data === "string" ? this.__data
-      : isMetadataOnly ? this.__requestBody as string
+      : !this.__data ? this.__requestBody as string
       : new Uint8Array(this.__data)
     
     return this.__fetcher
       .setBody(body, this.__dataType ?? MimeTypes.JSON)
+      .setResponseType("json")
       .fetch();
   }
 
@@ -137,10 +134,11 @@ export default class Uploader {
       .appendHeader("Content-Length", body.length)
       .appendHeader("Content-Type", `multipart/related; boundary=${this.__fetcher.gDriveApi.multipartBoundary}`)
       .setBody(body as BodyType)
+      .setResponseType("json")
       .fetch();
   }
 
-  __fetchResumable() {
-    throw new Error("'resumable' isn't implemented yet");
+  async __fetchResumable() {
+    const response = this.__fetcher.fetch()
   }
 };

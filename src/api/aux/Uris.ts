@@ -73,7 +73,7 @@ export default class Uris {
     path = null,
     preDrivePath = null,
     queryParameters = {}
-  }: UriParameters) {
+  }: UriParameters): string {
     const uri = ["https://www.googleapis.com"];
     
     if (Array.isArray(preDrivePath)) {

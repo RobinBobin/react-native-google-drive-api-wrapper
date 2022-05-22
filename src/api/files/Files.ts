@@ -3,7 +3,7 @@ import Fetcher, {
   FetchResponseType,
   fetch
 } from "../aux/Fetcher";
-import Uploader from "../aux/Uploader";
+import Uploader from "../aux/uploaders/Uploader";
 import Uris from "../aux/Uris";
 import MimeTypes from "../../MimeTypes";
 import UnexpectedFileCountError from "../../UnexpectedFileCountError";
@@ -116,9 +116,9 @@ export default class Files extends FilesApi {
     return new Uploader(new Fetcher(this), "multipart");
   }
   
-  // newResumableUploader() {
-  //   return new Uploader(new Fetcher(this), "resumable");
-  // }
+  newResumableUploader() {
+    return new Uploader(new Fetcher(this), "resumable");
+  }
   
   __get(
     fileId: string,
