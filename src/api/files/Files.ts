@@ -3,6 +3,10 @@ import Fetcher, {
   FetchResponseType,
   fetch
 } from "../aux/Fetcher";
+import MediaUploader from "../aux/uploaders/MediaUploader";
+import MetadataOnlyUploader from "../aux/uploaders/MetadataOnlyUploader";
+import MultipartUploader from "../aux/uploaders/MultipartUploader";
+import ResumableUploader from "../aux/uploaders/ResumableUploader";
 import Uploader from "../aux/uploaders/Uploader";
 import Uris from "../aux/Uris";
 import MimeTypes from "../../MimeTypes";
@@ -17,9 +21,11 @@ export default class Files extends FilesApi {
   }
   
   async createIfNotExists(queryParameters: object, uploader: Uploader): Promise <CreateIfNotExistsResult> {
-    uploader.setIdOfFileToUpdate();
-    
     const files = (await this.list(queryParameters)).files;
+
+    if (!this.fetchRejectsOnHttpErrors && !files.ok) {
+      return files
+    }
     
     switch (files.length) {
       case 0:
@@ -105,19 +111,19 @@ export default class Files extends FilesApi {
   }
   
   newMediaUploader() {
-    return new Uploader(new Fetcher(this), "media");
+    return new MediaUploader(new Fetcher(this));
   }
   
   newMetadataOnlyUploader() {
-    return new Uploader(new Fetcher(this));
+    return new MetadataOnlyUploader(new Fetcher(this));
   }
   
   newMultipartUploader() {
-    return new Uploader(new Fetcher(this), "multipart");
+    return new MultipartUploader(new Fetcher(this));
   }
   
   newResumableUploader() {
-    return new Uploader(new Fetcher(this), "resumable");
+    return new ResumableUploader(new Fetcher(this));
   }
   
   __get(

@@ -53,8 +53,9 @@ Quick example:
 6. <a name="c_list_query_builder"></a>[ListQueryBuilder](#list_query_builder)
 7. <a name="c_mime_types"></a>[MimeTypes](#mime_types)
 8. <a name="c_permissions"></a>[Permissions](#permissions)
-9. <a name="c_unexpected_file_count_error"></a>[UnexpectedFileCountError](#unexpected_file_count_error)
-10. <a name="c_uploader"></a>[Uploader](#uploader)
+9. <a name="c_resumable_uploader"></a>[ResumableUploader](#resumable_uploader)
+10. <a name="c_unexpected_file_count_error"></a>[UnexpectedFileCountError](#unexpected_file_count_error)
+11. <a name="c_uploader"></a>[Uploader](#uploader)
 
 #### <a name="about"></a>[About](#c_about)
 
@@ -63,6 +64,10 @@ Extending [GDriveApi](#gdriveapi), this class gives access to [various informati
 Name|Description
 -|-
 get(queryParametersOrFields)|[Gets](https://developers.google.com/drive/api/v3/reference/about) various information, returning an [About resource](https://developers.google.com/drive/api/v3/reference/about#resource) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`. `queryParametersOrFields` can be an object containing the query parameters or a string, containing a [`fields`](https://developers.google.com/drive/api/v3/reference/about/get#parameters) value.
+
+#### <a name="data_type"></a>DataType
+
+Uint8Array | number[] | string
 
 #### <a name="filesfiles"></a>[Files](#c_files)
 
@@ -80,7 +85,7 @@ createIfNotExists(queryParameters, uploader)|Method|Invokes `uploader.execute()`
 delete(fileId)|Method|[Deletes](https://developers.google.com/drive/api/v3/reference/files/delete) a file. Returns an empty string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 emptyTrash()|Method|Permanently [deletes](https://developers.google.com/drive/api/v3/reference/files/emptyTrash) all of the user's trashed files. Returns an empty string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 export(fileId, queryParameters)|Method|[Exports](https://developers.google.com/drive/api/v3/reference/files/export) a Google Doc to the requested MIME type. Returns a [Files resource](https://developers.google.com/drive/api/v3/reference/files#resource) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
-generateIds(queryParameters)|Method|[Generates](https://developers.google.com/drive/api/v3/reference/files/generateIds) file IDs. Returns an `Object` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
+generateIds(queryParameters)|Method|[Generates](https://developers.google.com/drive/api/v3/reference/files/generateIds) file IDs. [This info](https://developers.google.com/drive/api/guides/manage-uploads#use_a_pre-generated_id_to_upload_files) might seem interesting. Returns an `Object` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 get(fileId, queryParameters, range)|Method|[Gets](https://developers.google.com/drive/api/v3/reference/files/get) a file's metadata or content by ID. Returns the result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) if the call succeeds, [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is ignored.
 getBinary(fileId, queryParameters, range)|Method|Gets the content of a binary file. Returns `Uint8Array` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 getContent(fileId, queryParameters, range)|Method|Gets the content of **any** file. Returns the result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) if the call succeeds, [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is ignored.
@@ -89,13 +94,14 @@ getMetadata(fileId, queryParameters = {})|Method|Gets a file's metadata. Returns
 getText(fileId, queryParameters, range)|Method|Gets the content of a text file. Returns a string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 <a name="filesfiles_list"></a>list(queryParameters)|Method|[Lists](https://developers.google.com/drive/api/v3/reference/files/list) files. Returns an `Object` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.<br><br>`queryParameters.q` can be a [`ListQueryBuilder`](#list_query_builder) instance.
 multipartBoundary|String (read/write property)|The boundary string to be used for multipart uploads. The default value is `"foo_bar_baz"`.
-newMediaUploader()|Method|Creates an [Uploader](#uploader) instance with `uploadType` of `media`.
-newMetadataOnlyUploader()|Method|Creates a metadata-only [Uploader](#uploader) instance.
-newMultipartUploader()|Method|Creates an [Uploader](#uploader) instance with `uploadType` of `multipart`.
+newMediaUploader()|Method|Creates an instance of `MediaUploader`, an [Uploader](#uploader) descending class handling `media` uploads.
+newMetadataOnlyUploader()|Method|Creates an instance of `MetadataOnlyUploader`, an [Uploader](#uploader) descending class handling metadata-only uploads.
+newMultipartUploader()|Method|Creates an instance of `MultipartUploader`, an [Uploader](#uploader) descending class handling `multipart` uploads.
+<a name="filesfiles_newResumableUploader"></a>newResumableUploader()|Method|Creates an instance of [ResumableUploader](#resumable_uploader).
 
 #### <a name="gdrive"></a>[GDrive](#c_gdrive)
 
-A `GDrive` instance stores your google sign-in token and the class instances you create to utilize the google drive api.
+A `GDrive` instance stores your google sign-in token and the instances of the [GDriveApi](gdriveapi) descendants.
 
 Name|Type|Description
 -|-|-
@@ -126,6 +132,23 @@ Name|Type|Description
 json|Object|An object containing the error. Can be `undefined`.
 response|Object|The result of [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 text|String|The error description obtained from the response.
+
+#### <a name="i_request_upload_status_result"></a>IRequestUploadStatusResult
+
+This interface is used as the return type of [ResumableUploader.requestUploadStatus()](#resumable_uploader_request_upload_status).
+
+Name|Type
+-|-
+isComplete|Boolean
+transferredByteCount|Number
+
+#### <a name="i_upload_chunk_result"></a>IUploadChunkResult
+
+Extending [IRequestUploadStatusResult](#i_request_upload_status_result), describes the result of [uploading a chunk of data](#resumable_uploader_upload_chunk). Its only field, `json`, is optional and will be missing when `isComplete` is `false`.
+
+Name|Type
+-|-
+json|any
 
 #### <a name="list_query_builder"></a>[ListQueryBuilder](#c_list_query_builder)
 
@@ -159,7 +182,7 @@ toString()|Stringifies the query (called internally by [`list()`](#filesfiles_li
 
 #### <a name="mime_types"></a>[MimeTypes](#c_mime_types)
 
-Commonly used MIME types. The class contains only static fields.
+Commonly used MIME types.
 
 Name|Type
 -|-
@@ -180,6 +203,19 @@ Name|Description
 create(fileId, queryParameters, requestBody)|[Creates](https://developers.google.com/drive/api/v3/reference/permissions/create) a permission, returning a [Permissions resource](https://developers.google.com/drive/api/v3/reference/permissions#resource) if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 delete(fileId, permissionId, queryParameters)|[Deletes](https://developers.google.com/drive/api/v3/reference/permissions/delete) a permission, returning an empty string if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
 
+#### <a name="resumable_uploader"></a>[ResumableUploader](#c_resumable_uploader)
+
+An [Uploader](#uploader) descendant, this class handles resumable uploads.
+
+Name|Type|Description
+-|-|-
+<a name="resumable_uploader_request_upload_status"></a>requestUploadStatus()|Method|Returns the current [upload status](#i_request_upload_status_result), wrapped in a `Promise`.
+setContentLength(contentLength: number)|Method|Optional. Sets the content length. **Can't be invoked after sending the initial upload request.**
+setDataType(dataType: string)|Method|Sets the data type when using [multiple requests](#resumable_uploader_should_use_multiple_requests).
+<a name="resumable_uploader_should_use_multiple_requests"></a>setShouldUseMultipleRequests(shouldUseMultipleRequests: boolean)|Method|Specifies whether multiple requests will be used to upload the data.
+transferredByteCount|Read property (Number)|The current transferred byte count.
+<a name="resumable_uploader_upload_chunk"></a>uploadChunk(chunk: [DataType](#data_type))|Method|Uploads a chunk of data, returning [IUploadChunkResult](#i_upload_chunk_result), wrapped in a `Promise`.
+
 #### <a name="unexpected_file_count_error"></a>[UnexpectedFileCountError](#c_unexpected_file_count_error)
 
 An instance of this class is thrown when the real number of files differs from the expected. All the properties are read-only.
@@ -189,10 +225,9 @@ Name|Type|Description
 expectedCount|Array\|Number|The expected count.
 realCount|Number|Real count.
 
-
 #### <a name="uploader"></a>[Uploader](#c_uploader)
 
-This class handles the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. Currently only `media`, `multipart` and `metadata-only` requests are supported. All the methods except `execute()` can be chained.
+Descendants of this class handle the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. All the methods except `execute()` can be chained.
 
 Name|Description
 -|-
@@ -207,6 +242,7 @@ setRequestBody(requestBody)|Sets the request body.
 
 Version number|Changes
 -|-
+v1.2.3|[Resumable uploads](#filesfiles_newResumableUploader) added.
 v1.2.0|1. The package is rewritten in TypeScript.<br>2. The following properties are added to [`GDrive`](#gdrive):<br><ul><li>[`fetchCoercesTypes`](#gdrive_fetch_coerces_types)</li><li>[`fetchRejectsOnHttpErrors`](#gdrive_fetch_rejects_on_http_errors)</li><li>[`fetchTimeout`](#gdrive_fetch_timeout)</li></ul>
 v1.1.0|[`GDriveApi.fetchTimeout`](#gdriveapi_fetch_timeout) can be set to a negative value to make `fetch()` wait infinitely.
 v1.0.1|My example [repo](https://github.com/RobinBobin/gdrivetest) for this package  is referenced in the readme.
