@@ -1,7 +1,4 @@
-import {
-  ArrayStringifier,
-  StaticUtils
-} from 'simple-common-utils'
+import { ArrayStringifier, StaticUtils } from 'simple-common-utils'
 import utf8 from 'utf8'
 import Uploader from './Uploader'
 import Fetcher, { BodyType, FetchResultType } from '../Fetcher'
@@ -16,31 +13,26 @@ export default class MultipartUploader extends Uploader {
   protected _execute(): FetchResultType {
     const dashDashBoundary = `--${this.fetcher.gDriveApi.multipartBoundary}`
     const ending = `\n${dashDashBoundary}--`
-    
+
     let body: BodyType | string[] = [
       `\n${dashDashBoundary}\n`,
       `Content-Type: ${MimeTypes.JSON_UTF8}\n\n`,
-      `${this.requestBody}\n\n${dashDashBoundary}\n`
+      `${this.requestBody}\n\n${dashDashBoundary}\n`,
     ]
-    
+
     if (this.isBase64) {
       body.push('Content-Transfer-Encoding: base64\n')
     }
-    
+
     body.push(`Content-Type: ${this.dataType}\n\n`)
-    
-    body = new ArrayStringifier()
-      .setArray(body)
-      .setSeparator('')
-      .process()
-    
+
+    body = new ArrayStringifier().setArray(body).setSeparator('').process()
+
     if (typeof this.data === 'string') {
       body += `${this.data}${ending}`
     } else {
-      const converter =
-        Array.isArray(this.data) ? (ar: number[]) => ar
-        : Array.from
-      
+      const converter = Array.isArray(this.data) ? (ar: number[]) => ar : Array.from
+
       const encodedBody = utf8.encode(body)
       const encodedEnding = utf8.encode(ending)
 
@@ -50,10 +42,13 @@ export default class MultipartUploader extends Uploader {
 
       body = new Uint8Array(byteArray)
     }
-    
+
     return this.fetcher
       .appendHeader('Content-Length', body.length.toString())
-      .appendHeader('Content-Type', `multipart/related; boundary=${this.fetcher.gDriveApi.multipartBoundary}`)
+      .appendHeader(
+        'Content-Type',
+        `multipart/related; boundary=${this.fetcher.gDriveApi.multipartBoundary}`,
+      )
       .setBody(body as BodyType)
       .fetch()
   }

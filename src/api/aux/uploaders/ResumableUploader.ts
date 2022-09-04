@@ -9,7 +9,7 @@ export interface IRequestUploadStatusResult {
   transferredByteCount: number
 }
 
-export interface IUploadChunkResult extends IRequestUploadStatusResult{
+export interface IUploadChunkResult extends IRequestUploadStatusResult {
   json?: any
 }
 
@@ -33,14 +33,14 @@ export default class ResumableUploader extends Uploader {
     if (response.ok) {
       return {
         isComplete: true,
-        transferredByteCount: this.__transferredByteCount
+        transferredByteCount: this.__transferredByteCount,
       }
     }
 
     if (response.status === 308) {
       return {
         isComplete: false,
-        transferredByteCount: this.processRange(response)
+        transferredByteCount: this.processRange(response),
       }
     }
 
@@ -69,13 +69,12 @@ export default class ResumableUploader extends Uploader {
     return this.__transferredByteCount
   }
 
-  async uploadChunk(chunk: DataType): Promise <IUploadChunkResult> {
-    const fetcher =
-      new Fetcher(this.fetcher.gDriveApi, !this.shouldUseMultipleRequests)
+  async uploadChunk(chunk: DataType): Promise<IUploadChunkResult> {
+    const fetcher = new Fetcher(this.fetcher.gDriveApi, !this.shouldUseMultipleRequests)
       .setMethod('PUT')
       .setBody(Array.isArray(chunk) ? new Uint8Array(chunk) : chunk, this.dataType)
       .setResource(this.location!)
-    
+
     if (this.shouldUseMultipleRequests) {
       const from = this.transferredByteCount
       const to = from + chunk.length - 1
@@ -92,7 +91,7 @@ export default class ResumableUploader extends Uploader {
       return {
         isComplete: true,
         json: await response.json(),
-        transferredByteCount: chunk.length
+        transferredByteCount: chunk.length,
       }
     }
 
@@ -103,7 +102,7 @@ export default class ResumableUploader extends Uploader {
 
       return {
         isComplete: false,
-        transferredByteCount
+        transferredByteCount,
       }
     }
 
@@ -141,9 +140,9 @@ export default class ResumableUploader extends Uploader {
   }
 
   private processRange(response: Response) {
-    return response.headers.get('Range')!
-      .split('=')
-      [1]
+    return response.headers
+      .get('Range')!
+      .split('=')[1]
       .split('-')
       .map(Number)
       .reduce((previousValue, currentValue) => currentValue - previousValue + 1)

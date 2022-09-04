@@ -4,8 +4,6 @@ import MimeTypes from '../../../MimeTypes'
 
 export default class MetadataOnlyUploader extends Uploader {
   protected _execute(): FetchResultType {
-    return this.fetcher
-      .setBody(this.requestBody as string, MimeTypes.JSON)
-      .fetch()
+    return this.fetcher.setBody(this.requestBody as string, MimeTypes.JSON).fetch()
   }
 }
