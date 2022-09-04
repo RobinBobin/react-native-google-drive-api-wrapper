@@ -1,6 +1,6 @@
 type ExpectedCount = number[] | number
 
-export default class UnexpectedFileCountError extends Error {
+export class UnexpectedFileCountError extends Error {
   __expectedCount: ExpectedCount
   __realCount: number
 

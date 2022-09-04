@@ -1,47 +1,25 @@
-export default class HttpError extends Error {
-  private __json?: any
-  private __response: Response
-  private __text?: string
+export class HttpError extends Error {
+  readonly json: any
+  readonly response: Response
 
-  constructor(response: Response) {
-    super()
+  constructor(json: any, message: string, response: Response) {
+    super(message)
 
-    this.__response = response
+    this.json = json
+    this.response = response
   }
 
   static async create(response: Response) {
-    const error = new HttpError(response)
-
-    error.message = await response.text()
-    error.text = error.message
+    const message = await response.text()
+    let json: any
 
     try {
-      error.json = JSON.parse(error.text)
+      json = JSON.parse(message)
     } catch (error) {
       // Nothing to do.
     }
 
-    return error
-  }
-
-  get json() {
-    return this.__json
-  }
-
-  set json(json) {
-    this.__json = json
-  }
-
-  get response() {
-    return this.__response
-  }
-
-  get text() {
-    return this.__text
-  }
-
-  set text(text) {
-    this.__text = text
+    return new HttpError(json, message, response)
   }
 }
 

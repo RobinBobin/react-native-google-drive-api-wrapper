@@ -1,8 +1,8 @@
-import GDriveApi from '../GDriveApi'
+import { GDriveApi } from '../GDriveApi'
 import { fetch } from '../aux/Fetcher'
-import Uris from '../aux/Uris'
+import { Uris } from '../aux/Uris'
 
-export default class About extends GDriveApi {
+export class About extends GDriveApi {
   get(queryParametersOrFields: object | string) {
     const queryParameters =
       typeof queryParametersOrFields === 'object'

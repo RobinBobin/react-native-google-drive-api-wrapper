@@ -1,19 +1,13 @@
-import Uploader, { DataType } from './Uploader'
-import Fetcher, { FetchResultType } from '../Fetcher'
-import FilesApi from '../../files/FilesApi'
-import HttpError from '../../../HttpError'
-import MimeTypes from '../../../MimeTypes'
+import { RequestUploadStatusResultType, UploadChunkResultType } from './types'
+import { Uploader } from '../Uploader'
+import { DataType } from '../Uploader/types'
+import { Fetcher } from '../../Fetcher'
+import { FetchResultType } from '../../Fetcher/types'
+import { FilesApi } from '../../../files/FilesApi'
+import { HttpError } from '../../../../HttpError'
+import { MimeTypes } from '../../../../MimeTypes'
 
-export interface IRequestUploadStatusResult {
-  isComplete: boolean
-  transferredByteCount: number
-}
-
-export interface IUploadChunkResult extends IRequestUploadStatusResult {
-  json?: any
-}
-
-export default class ResumableUploader extends Uploader {
+export class ResumableUploader extends Uploader {
   private contentLength?: number
   private location?: string
   private shouldUseMultipleRequests?: boolean
@@ -23,8 +17,8 @@ export default class ResumableUploader extends Uploader {
     super(fetcher, 'resumable', false)
   }
 
-  async requestUploadStatus(): Promise<IRequestUploadStatusResult> {
-    const response: Response = await new Fetcher(this.fetcher.gDriveApi, false)
+  async requestUploadStatus(): Promise<RequestUploadStatusResultType> {
+    const response: Response = await new Fetcher(this.fetcher.gDriveApi)
       .appendHeader('Content-Range', `bytes */${this.contentLength ?? '*'}`)
       .setMethod('PUT')
       .setResource(this.location!)
@@ -69,8 +63,8 @@ export default class ResumableUploader extends Uploader {
     return this.__transferredByteCount
   }
 
-  async uploadChunk(chunk: DataType): Promise<IUploadChunkResult> {
-    const fetcher = new Fetcher(this.fetcher.gDriveApi, !this.shouldUseMultipleRequests)
+  async uploadChunk(chunk: DataType): Promise<UploadChunkResultType> {
+    const fetcher = new Fetcher(this.fetcher.gDriveApi)
       .setMethod('PUT')
       .setBody(Array.isArray(chunk) ? new Uint8Array(chunk) : chunk, this.dataType)
       .setResource(this.location!)
@@ -125,10 +119,6 @@ export default class ResumableUploader extends Uploader {
     }
 
     const response: Response = await this.fetcher.fetch()
-
-    if (!this.fetcher.gDriveApi.fetchRejectsOnHttpErrors && !response.ok) {
-      return response
-    }
 
     this.location = response.headers.get('Location')!
 

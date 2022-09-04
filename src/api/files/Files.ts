@@ -1,15 +1,17 @@
-import FilesApi from './FilesApi'
-import Fetcher, { FetchResponseType, fetch } from '../aux/Fetcher'
-import MediaUploader from '../aux/uploaders/MediaUploader'
-import MetadataOnlyUploader from '../aux/uploaders/MetadataOnlyUploader'
-import MultipartUploader from '../aux/uploaders/MultipartUploader'
-import ResumableUploader from '../aux/uploaders/ResumableUploader'
-import Uploader from '../aux/uploaders/Uploader'
-import Uris from '../aux/Uris'
-import MimeTypes from '../../MimeTypes'
-import UnexpectedFileCountError from '../../UnexpectedFileCountError'
+import { FilesApi } from './FilesApi'
+import { CreateIfNotExistsResultType } from './types'
+import { Fetcher, fetch } from '../aux/Fetcher'
+import { FetchResponseType } from '../aux/Fetcher/types'
+import { MediaUploader } from '../aux/uploaders/MediaUploader'
+import { MetadataOnlyUploader } from '../aux/uploaders/MetadataOnlyUploader'
+import { MultipartUploader } from '../aux/uploaders/MultipartUploader'
+import { ResumableUploader } from '../aux/uploaders/ResumableUploader'
+import { Uploader } from '../aux/uploaders/Uploader'
+import { Uris } from '../aux/Uris'
+import { MimeTypes } from '../../MimeTypes'
+import { UnexpectedFileCountError } from '../../UnexpectedFileCountError'
 
-export default class Files extends FilesApi {
+export class Files extends FilesApi {
   copy(fileId: string, queryParameters?: object, requestBody: object = {}) {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MimeTypes.JSON)
@@ -20,12 +22,8 @@ export default class Files extends FilesApi {
   async createIfNotExists(
     queryParameters: object,
     uploader: Uploader,
-  ): Promise<CreateIfNotExistsResult> {
+  ): Promise<CreateIfNotExistsResultType> {
     const files = (await this.list(queryParameters)).files
-
-    if (!this.fetchRejectsOnHttpErrors && !files.ok) {
-      return files
-    }
 
     switch (files.length) {
       case 0:
@@ -153,9 +151,4 @@ export default class Files extends FilesApi {
       responseType,
     )
   }
-}
-
-interface CreateIfNotExistsResult {
-  alreadyExisted: boolean
-  result: object
 }

@@ -1,11 +1,8 @@
 import { StaticUtils } from 'simple-common-utils'
+import { Key, KeyOrValue, Value } from './types'
 
-type Key = string
-type Value = boolean | number | string
-type KeyOrValue = Key | Value
-
-export default class ListQueryBuilder {
-  __query: Array<KeyOrValue> = []
+export class ListQueryBuilder {
+  __query: KeyOrValue[] = []
 
   and() {
     return this.__push('and')

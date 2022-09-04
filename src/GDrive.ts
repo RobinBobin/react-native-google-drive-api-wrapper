@@ -1,9 +1,9 @@
-import About from './api/about/About'
-import Files from './api/files/Files'
-import GDriveApi from './api/GDriveApi'
-import Permissions from './api/permissions/Permissions'
+import { About } from './api/about/About'
+import { Files } from './api/files/Files'
+import { GDriveApi } from './api/GDriveApi'
+import { Permissions } from './api/permissions/Permissions'
 
-export default class GDrive {
+export class GDrive {
   private readonly __apis = new Map<string, GDriveApi>()
 
   constructor() {
@@ -21,7 +21,7 @@ export default class GDrive {
   }
 
   get accessToken() {
-    return this.__apis.values().next().value?.accessToken
+    return this.__apis.values().next().value.accessToken
   }
 
   set accessToken(accessToken) {
@@ -30,16 +30,8 @@ export default class GDrive {
     }
   }
 
-  set fetchCoercesTypes(fetchCoercesTypes: boolean) {
-    for (const api of this.__apis.values()) {
-      api.fetchCoercesTypes = fetchCoercesTypes
-    }
-  }
-
-  set fetchRejectsOnHttpErrors(fetchRejectsOnHttpErrors: boolean) {
-    for (const api of this.__apis.values()) {
-      api.fetchRejectsOnHttpErrors = fetchRejectsOnHttpErrors
-    }
+  get fetchTimeout() {
+    return this.__apis.values().next().value.fetchTimeout
   }
 
   set fetchTimeout(fetchTimeout: number) {
@@ -65,8 +57,8 @@ export default class GDrive {
   }
 
   __setApi(api: GDriveApi, apiName: string) {
-    api.accessToken = this.accessToken
-
     this.__apis.set(apiName, api)
+
+    api.accessToken = this.accessToken
   }
 }

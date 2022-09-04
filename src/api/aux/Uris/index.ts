@@ -1,34 +1,8 @@
 import { ArrayStringifier } from 'simple-common-utils'
-import { stringifyQueryParameters } from './utils'
+import { AboutParameters, FilesParameters, PermissionsParameters, UriParameters } from './types'
+import { stringifyQueryParameters } from '../utils'
 
-interface AboutParameters {
-  queryParameters: object
-}
-
-interface FilesParameters {
-  fileId?: string
-  method?: string
-  preDrivePath?: PreDrivePath
-  queryParameters?: object
-}
-
-interface PermissionsParameters {
-  fileId: string
-  permissionId?: string
-  queryParameters: object
-}
-
-interface UriParameters {
-  api: string
-  fileId?: string | null
-  path?: string | null
-  preDrivePath?: PreDrivePath | null
-  queryParameters?: object
-}
-
-type PreDrivePath = Array<string> | string
-
-export default class Uris {
+export class Uris {
   static about({ queryParameters }: AboutParameters) {
     return Uris.__makeUri({ api: 'about', queryParameters })
   }

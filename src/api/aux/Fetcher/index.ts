@@ -1,6 +1,7 @@
-import { blobToByteArray } from './utils'
-import GDriveApi from '../GDriveApi'
-import HttpError from '../../HttpError'
+import { BodyType, FetchResponseType, FetchResultType } from './types'
+import { blobToByteArray } from '../utils'
+import { GDriveApi } from '../../GDriveApi'
+import { HttpError } from '../../../HttpError'
 
 /*
  * A weird workaround of an equally weird bug:
@@ -10,21 +11,14 @@ import HttpError from '../../HttpError'
 
 fetch
 
-export type BodyType = Uint8Array | string
-export type FetchResponseType = 'blob' | 'json' | 'text'
-export type FetchResultType = Promise<any>
-
-export default class Fetcher<SomeGDriveApi extends GDriveApi> {
-  private readonly abortController: AbortController
-  private readonly fetchRejectsOnHttpErrors: boolean
+export class Fetcher<SomeGDriveApi extends GDriveApi> {
+  private readonly abortController = new AbortController()
   private readonly __gDriveApi: SomeGDriveApi
   private readonly init: RequestInit
   private resource?: RequestInfo
   private responseType?: FetchResponseType
 
-  constructor(gDriveApi: SomeGDriveApi, fetchRejectsOnHttpErrors?: boolean) {
-    this.abortController = new AbortController()
-    this.fetchRejectsOnHttpErrors = fetchRejectsOnHttpErrors ?? gDriveApi.fetchRejectsOnHttpErrors
+  constructor(gDriveApi: SomeGDriveApi) {
     this.__gDriveApi = gDriveApi
 
     this.init = {
@@ -57,14 +51,10 @@ export default class Fetcher<SomeGDriveApi extends GDriveApi> {
     let response: Response = await fetch(this.resource as RequestInfo, this.init)
 
     if (!response.ok) {
-      if (this.fetchRejectsOnHttpErrors) {
-        throw await HttpError.create(response)
-      }
-
-      return response
+      throw await HttpError.create(response)
     }
 
-    if (!(this.gDriveApi.fetchCoercesTypes && this.responseType)) {
+    if (!this.responseType) {
       return response
     }
 

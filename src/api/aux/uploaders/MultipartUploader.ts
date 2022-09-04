@@ -1,11 +1,12 @@
 import { ArrayStringifier, StaticUtils } from 'simple-common-utils'
 import utf8 from 'utf8'
-import Uploader from './Uploader'
-import Fetcher, { BodyType, FetchResultType } from '../Fetcher'
-import FilesApi from '../../files/FilesApi'
-import MimeTypes from '../../../MimeTypes'
+import { Uploader } from './Uploader'
+import { Fetcher } from '../Fetcher'
+import { BodyType, FetchResultType } from '../Fetcher/types'
+import { FilesApi } from '../../files/FilesApi'
+import { MimeTypes } from '../../../MimeTypes'
 
-export default class MultipartUploader extends Uploader {
+export class MultipartUploader extends Uploader {
   constructor(fetcher: Fetcher<FilesApi>) {
     super(fetcher, 'multipart')
   }

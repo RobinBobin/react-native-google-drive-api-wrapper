@@ -1,19 +1,17 @@
-import Fetcher, { FetchResultType } from '../Fetcher'
-import Uris from '../Uris'
-import FilesApi from '../../files/FilesApi'
+import { DataType, UploadType } from './types'
+import { Fetcher } from '../../Fetcher'
+import { FetchResultType } from '../../Fetcher/types'
+import { Uris } from '../../Uris'
+import { FilesApi } from '../../../files/FilesApi'
 
-export type DataType = Uint8Array | number[] | string
-
-type UploadType = 'media' | 'multipart' | 'resumable'
-
-export default abstract class Uploader {
+export abstract class Uploader {
   protected data?: DataType
   protected dataType?: string
   protected isBase64?: boolean
   protected requestBody?: string | object
 
   private idOfFileToUpdate?: string
-  private queryParameters: { uploadType: UploadType | undefined }
+  private queryParameters: { uploadType?: UploadType }
 
   constructor(
     protected readonly fetcher: Fetcher<FilesApi>,

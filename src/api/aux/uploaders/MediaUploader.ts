@@ -1,8 +1,9 @@
-import Uploader from './Uploader'
-import Fetcher, { FetchResultType } from '../Fetcher'
-import FilesApi from '../../files/FilesApi'
+import { Uploader } from './Uploader'
+import { Fetcher } from '../Fetcher'
+import { FetchResultType } from '../Fetcher/types'
+import { FilesApi } from '../../files/FilesApi'
 
-export default class MediaUploader extends Uploader {
+export class MediaUploader extends Uploader {
   constructor(fetcher: Fetcher<FilesApi>) {
     super(fetcher, 'media')
   }
