@@ -1,17 +1,17 @@
 import { RequestUploadStatusResultType, UploadChunkResultType } from './types'
 import { Uploader } from '../Uploader'
-import { DataType } from '../Uploader/types'
+import { Data } from '../Uploader/types'
 import { Fetcher } from '../../Fetcher'
 import { FetchResultType } from '../../Fetcher/types'
 import { FilesApi } from '../../../files/FilesApi'
 import { HttpError } from '../../../../HttpError'
-import { MimeTypes } from '../../../../MimeTypes'
+import { MimeType } from '../../../../MimeType'
 
 export class ResumableUploader extends Uploader {
-  private contentLength?: number
+  private contentLength = 0
   private location?: string
-  private shouldUseMultipleRequests?: boolean
-  private __transferredByteCount: number = 0
+  private shouldUseMultipleRequests = false
+  private __transferredByteCount = 0
 
   constructor(fetcher: Fetcher<FilesApi>) {
     super(fetcher, 'resumable', false)
@@ -47,8 +47,8 @@ export class ResumableUploader extends Uploader {
     return this
   }
 
-  setDataType(dataType: string): ResumableUploader {
-    this.dataType = dataType
+  setMimeType(mimeType: string): ResumableUploader {
+    this.mimeType = mimeType
 
     return this
   }
@@ -63,10 +63,10 @@ export class ResumableUploader extends Uploader {
     return this.__transferredByteCount
   }
 
-  async uploadChunk(chunk: DataType): Promise<UploadChunkResultType> {
+  async uploadChunk(chunk: Data): Promise<UploadChunkResultType> {
     const fetcher = new Fetcher(this.fetcher.gDriveApi)
       .setMethod('PUT')
-      .setBody(Array.isArray(chunk) ? new Uint8Array(chunk) : chunk, this.dataType)
+      .setBody(Array.isArray(chunk) ? new Uint8Array(chunk) : chunk, this.mimeType)
       .setResource(this.location!)
 
     if (this.shouldUseMultipleRequests) {
@@ -112,10 +112,10 @@ export class ResumableUploader extends Uploader {
       this.fetcher.appendHeader('X-Upload-Content-Length', this.contentLength.toString())
     }
 
-    this.fetcher.appendHeader('X-Upload-Content-Type', this.dataType!)
+    this.fetcher.appendHeader('X-Upload-Content-Type', this.mimeType!)
 
     if (this.requestBody) {
-      this.fetcher.setBody(this.requestBody as string, MimeTypes.JSON_UTF8)
+      this.fetcher.setBody(this.requestBody as string, MimeType.JSON_UTF8)
     }
 
     const response: Response = await this.fetcher.fetch()

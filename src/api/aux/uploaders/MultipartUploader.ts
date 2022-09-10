@@ -4,7 +4,7 @@ import { Uploader } from './Uploader'
 import { Fetcher } from '../Fetcher'
 import { BodyType, FetchResultType } from '../Fetcher/types'
 import { FilesApi } from '../../files/FilesApi'
-import { MimeTypes } from '../../../MimeTypes'
+import { MimeType } from '../../../MimeType'
 
 export class MultipartUploader extends Uploader {
   constructor(fetcher: Fetcher<FilesApi>) {
@@ -17,7 +17,7 @@ export class MultipartUploader extends Uploader {
 
     let body: BodyType | string[] = [
       `\n${dashDashBoundary}\n`,
-      `Content-Type: ${MimeTypes.JSON_UTF8}\n\n`,
+      `Content-Type: ${MimeType.JSON_UTF8}\n\n`,
       `${this.requestBody}\n\n${dashDashBoundary}\n`,
     ]
 
@@ -25,7 +25,7 @@ export class MultipartUploader extends Uploader {
       body.push('Content-Transfer-Encoding: base64\n')
     }
 
-    body.push(`Content-Type: ${this.dataType}\n\n`)
+    body.push(`Content-Type: ${this.mimeType}\n\n`)
 
     body = new ArrayStringifier().setArray(body).setSeparator('').process()
 

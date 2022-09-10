@@ -1,7 +1,6 @@
 1. createIfNotExists - result type
 1. Create chunks in multiples of 256 KB (256 x 1024 bytes) in size
 1.  `execute()` sends the initial chunk.
-1. It looks like `shouldUseMultipleRequests` is redundant.
 1. ResumableUploader.ts - line 114 - what if [] / string is empty?
 1. `uploadChunk()` - `setContentLength()`- upload much more - consider this case.
 1.  `Uploader.execute()` returns `FetchResultType` - nope.
@@ -133,18 +132,7 @@ Name|Type|Description
 expectedCount|Array\|Number|The expected count.
 realCount|Number|Real count.
 
-#### <a name="uploader"></a>[Uploader](#c_uploader)
 
-Descendants of this class handle the [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. All the methods except `execute()` can be chained.
-
-Name|Description
--|-
-execute()|Executes the request, returning an `Object` if the call succeeds and [fetchCoercesTypes](#gdriveapi_fetch_coerces_types) is `true`.
-setData(data, dataType)|Sets the data and its MIME type.
-setIdOfFileToUpdate(fileId)|If this method is invoked, the request becomes an update request. Otherwise it's a creation request.
-setIsBase64(isBase64)|If it's a `multipart` request and the data supplied is Base64, this method can be invoked to add the header `Content-Transfer-Encoding: base64` which is recognized by Google Drive.
-setQueryParameters(queryParameters)|Sets the query parameters.
-setRequestBody(requestBody)|Sets the request body.
 
 ### <a name="version_history"></a>[Version history](#c_version_history)
 

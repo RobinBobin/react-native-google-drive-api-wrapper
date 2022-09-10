@@ -1,13 +1,13 @@
-import { DataType, UploadType } from './types'
+import { Data, UploadType } from './types'
 import { Fetcher } from '../../Fetcher'
 import { FetchResultType } from '../../Fetcher/types'
 import { Uris } from '../../Uris'
 import { FilesApi } from '../../../files/FilesApi'
 
 export abstract class Uploader {
-  protected data?: DataType
-  protected dataType?: string
-  protected isBase64?: boolean
+  protected data?: Data
+  protected isBase64 = false
+  protected mimeType?: string
   protected requestBody?: string | object
 
   private idOfFileToUpdate?: string
@@ -41,9 +41,9 @@ export abstract class Uploader {
     return this._execute()
   }
 
-  setData(data: DataType, dataType: string): Uploader {
+  setData(data: Data, mimeType: string): Uploader {
     this.data = data
-    this.dataType = dataType
+    this.mimeType = mimeType
 
     return this
   }

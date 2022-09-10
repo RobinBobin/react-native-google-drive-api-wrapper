@@ -87,24 +87,24 @@ Notes:
 
 Name|Type|Description
 -|-|-
-`copy(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object,`<br>&nbsp;`  requestBody: object = {}`<br>`)`|Method, returns `Promise<`[Files resource](https://developers.google.com/drive/api/v3/reference/files#resource)`>`|Creates a [copy](#https://developers.google.com/drive/api/v3/reference/files/copy) of a file.
+`copy(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object,`<br>&nbsp;`  requestBody: object = {}`<br>`)`|Method, returns `Promise<`[File resource](https://developers.google.com/drive/api/v3/reference/files#resource)`>`|Creates a [copy](#https://developers.google.com/drive/api/v3/reference/files/copy) of a file.
 `createIfNotExists(`<br>&nbsp;`  queryParameters: object,`<br>&nbsp;`  uploader:`[` Uploader`](#uploader)<br>`)`|Method, returns `Promise<`[CreateIfNotExistsResultType](#create_if_not_exists_result_type)`>`|Invokes `uploader.execute()`, if the file described with `queryParameters` doesn't exist. Throws [`UnexpectedFileCountError`](#unexpected_file_count_error) if there are 2 or more files matching `queryParameters`.
 `delete(fileId: string)`|Method, returns `Promise<void>`|[Deletes](https://developers.google.com/drive/api/v3/reference/files/delete) a file.
 `emptyTrash()`|Method, returns `Promise<void>`|Permanently [deletes](https://developers.google.com/drive/api/v3/reference/files/emptyTrash) all of the user's trashed files.
-`export(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters: object`<br>`)`|Method, returns a `Promise<`[Files resource](https://developers.google.com/drive/api/v3/reference/files#resource)`>`|[Exports](https://developers.google.com/drive/api/v3/reference/files/export) a Google Doc to the requested MIME type.
+`export(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters: object`<br>`)`|Method, returns `Promise<`[File resource](https://developers.google.com/drive/api/v3/reference/files#resource)`>`|[Exports](https://developers.google.com/drive/api/v3/reference/files/export) a Google Doc to the requested MIME type.
 `generateIds(queryParameters?: object)`|Method, returns `Promise<`[`object`](https://developers.google.com/drive/api/v3/reference/files/generateIds#response)`>`|[Generates](https://developers.google.com/drive/api/v3/reference/files/generateIds) file IDs. [This info](https://developers.google.com/drive/api/guides/manage-uploads#use_a_pre-generated_id_to_upload_files) might seem interesting.
 `get(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object,`<br>&nbsp;`  range?: string`<br>`)`|Method, returns `Promise<`[`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response)`>`|[Gets](https://developers.google.com/drive/api/v3/reference/files/get) the file's metadata or content.
 `getBinary(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object,`<br>&nbsp;`  range?: string`<br>`)`|Method, returns `Promise<`[`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)`>`|Gets the content of a binary file.
 `getContent(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object,`<br>&nbsp;`  range?: string`<br>`)`|Method, returns `Promise<`[`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response)`>`|Gets the content of **any** file.
 `getJson(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object`<br>`)`|Method, returns `Promise<object>`|Gets the content of a json text file.
-`getMetadata(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object`<br>`)`|Method, returns `Promise<`[Files resource](https://developers.google.com/drive/api/v3/reference/files)`>` |Gets a file's metadata.
+`getMetadata(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object`<br>`)`|Method, returns `Promise<`[File resource](https://developers.google.com/drive/api/v3/reference/files#resource)`>` |Gets a file's metadata.
 `getText(`<br>&nbsp;`  fileId: string,`<br>&nbsp;`  queryParameters?: object,`<br>&nbsp;`  range?: string`<br>`)`|Method, returns `Promise<string>`|Gets the content of a text file.
 <a name="filesfiles_list"></a>`list(queryParameters?: object)`|Method, returns `Promise<`[`object`](https://developers.google.com/drive/api/v3/reference/files/list#response)`>`|[Lists](https://developers.google.com/drive/api/v3/reference/files/list) files.<br><br>`queryParameters.q` can be a [query string](https://developers.google.com/drive/api/guides/search-files) or a [`ListQueryBuilder`](#list_query_builder) instance.
 `multipartBoundary`|Property, read/write<br>string|The boundary string to be used for [multipart uploads](#filesfiles_new_multipart_uploader). The default value is `foo_bar_baz`.
-`newMediaUploader()`|Method|Creates an instance of `MediaUploader`, an [`Uploader`](#uploader) descending class handling `media` uploads.
-`newMetadataOnlyUploader()`|Method|Creates an instance of `MetadataOnlyUploader`, an [`Uploader`](#uploader) descending class handling metadata-only uploads.
-<a name="filesfiles_new_multipart_uploader"></a>`newMultipartUploader()`|Method|Creates an instance of `MultipartUploader`, an [`Uploader`](#uploader) descending class handling `multipart` uploads.
-<a name="filesfiles_newResumableUploader"></a>`newResumableUploader()`|Method|Creates an instance of [`ResumableUploader`](#resumable_uploader).
+`newMediaUploader()`|Method, returns [`MediaUploader`](#media_uploader)|Creates a class instance to handle a `media` upload.
+`newMetadataOnlyUploader()`|Method, returns [`MetadataOnlyUploader`](#metadata_only_uploader)|Creates a class instance to handle a `metadata-only` upload.
+<a name="filesfiles_new_multipart_uploader"></a>`newMultipartUploader()`|Method, returns [`MultipartUploader`](#multipart_uploader)|Creates a class instance to handle a `multipart` upload.
+<a name="filesfiles_newResumableUploader"></a>`newResumableUploader()`|Method, returns [`ResumableUploader`](#resumable_uploader)|Creates a class instance to handle a `resumable` upload.
 
 ### <a name="gdrive"></a>[GDrive](#c_gdrive)
 
@@ -155,6 +155,19 @@ setDataType(dataType: string)|Method|Sets the data type when using [multiple req
 <a name="resumable_uploader_should_use_multiple_requests"></a>setShouldUseMultipleRequests(shouldUseMultipleRequests: boolean)|Method|Specifies whether multiple requests will be used to upload the data.
 transferredByteCount|Read property (Number)|The current transferred byte count.
 <a name="resumable_uploader_upload_chunk"></a>uploadChunk(chunk: [DataType](#data_type))|Method|Uploads a chunk of data, returning [IUploadChunkResult](#i_upload_chunk_result), wrapped in a `Promise`.
+
+### <a name="uploader"></a>[Uploader](#c_uploader)
+
+Descendants of this class handle [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests.
+
+Name|Type|Description
+-|-|-
+`execute()`|Method, returns `Promise<`[File resource](https://developers.google.com/drive/api/v3/reference/files#resource)`>`|Executes the request.
+`setData(`<br>&nbsp;`  data:`[` Data`](#data)`,`<br>&nbsp;`  mimeType: string`<br>`)`|Method, returns `this`|Sets the data and its MIME type.
+`setIdOfFileToUpdate(`<br>&nbsp;`  fileId: string`<br>`)`|Method, returns `this`|If this method is invoked and `fileId` is a string, the request becomes an update request. Otherwise it's a creation request.
+`setIsBase64(`<br>&nbsp;`  isBase64: boolean`<br>`)`|If the data to be handled by this uploader is Base64, this method can be invoked to add the header `Content-Transfer-Encoding: base64` which is recognized by Google Drive.
+setQueryParameters(queryParameters)|Sets the query parameters.
+setRequestBody(requestBody)|Sets the request body.
 
 <br>
 <br>

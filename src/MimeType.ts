@@ -1,4 +1,4 @@
-export enum MimeTypes {
+export enum MimeType {
   BINARY = 'application/octet-stream',
   CSV = 'text/csv',
   FOLDER = 'application/vnd.google-apps.folder',

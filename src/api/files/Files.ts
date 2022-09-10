@@ -8,13 +8,13 @@ import { MultipartUploader } from '../aux/uploaders/MultipartUploader'
 import { ResumableUploader } from '../aux/uploaders/ResumableUploader'
 import { Uploader } from '../aux/uploaders/Uploader'
 import { Uris } from '../aux/Uris'
-import { MimeTypes } from '../../MimeTypes'
+import { MimeType } from '../../MimeType'
 import { UnexpectedFileCountError } from '../../UnexpectedFileCountError'
 
 export class Files extends FilesApi {
   copy(fileId: string, queryParameters?: object, requestBody: object = {}) {
     return new Fetcher(this)
-      .setBody(JSON.stringify(requestBody), MimeTypes.JSON)
+      .setBody(JSON.stringify(requestBody), MimeType.JSON)
       .setMethod('POST')
       .fetch(Uris.files({ fileId, method: 'copy', queryParameters }), 'json')
   }

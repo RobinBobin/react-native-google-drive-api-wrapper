@@ -11,6 +11,6 @@ export class MediaUploader extends Uploader {
   protected _execute(): FetchResultType {
     const body = Array.isArray(this.data) ? new Uint8Array(this.data) : this.data!
 
-    return this.fetcher.setBody(body, this.dataType).fetch()
+    return this.fetcher.setBody(body, this.mimeType).fetch()
   }
 }

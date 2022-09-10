@@ -1,12 +1,12 @@
 import { GDriveApi } from '../GDriveApi'
 import { Fetcher } from '../aux/Fetcher'
 import { Uris } from '../aux/Uris'
-import { MimeTypes } from '../../MimeTypes'
+import { MimeType } from '../../MimeType'
 
 export class Permissions extends GDriveApi {
   create(fileId: string, requestBody: object, queryParameters?: object) {
     return new Fetcher(this)
-      .setBody(JSON.stringify(requestBody), MimeTypes.JSON)
+      .setBody(JSON.stringify(requestBody), MimeType.JSON)
       .setMethod('POST')
       .fetch(Uris.permissions({ fileId, queryParameters }), 'json')
   }
