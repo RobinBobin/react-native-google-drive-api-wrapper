@@ -6,18 +6,21 @@ import { FilesApi } from '../../../files/FilesApi'
 
 export abstract class Uploader {
   protected data?: Data
-  protected isBase64 = false
+  protected readonly fetcher: Fetcher<FilesApi>
   protected mimeType?: string
   protected requestBody?: string | object
 
   private idOfFileToUpdate?: string
+  private readonly isJsonResponseType: boolean
   private queryParameters: { uploadType?: UploadType }
 
   constructor(
-    protected readonly fetcher: Fetcher<FilesApi>,
+    fetcher: Fetcher<FilesApi>,
     uploadType?: UploadType,
-    private readonly isJsonResponseType: boolean = true,
+    isJsonResponseType: boolean = true
   ) {
+    this.fetcher = fetcher
+    this.isJsonResponseType = isJsonResponseType
     this.queryParameters = { uploadType }
   }
 
@@ -50,12 +53,6 @@ export abstract class Uploader {
 
   setIdOfFileToUpdate(fileId: string): Uploader {
     this.idOfFileToUpdate = fileId
-
-    return this
-  }
-
-  setIsBase64(isBase64: boolean): Uploader {
-    this.isBase64 = isBase64
 
     return this
   }

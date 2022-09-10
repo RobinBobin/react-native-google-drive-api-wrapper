@@ -8,6 +8,10 @@
 
 
 
+`setIsBase64(`<br>&nbsp;`  isBase64: boolean`<br>`)`|If the data to be handled by this instance is Base64, this method can be invoked to add the header `Content-Transfer-Encoding: base64` which is recognized by Google Drive.
+
+
+
 
 CreateIfNotExistsResultType
 HttpError

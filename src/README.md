@@ -165,7 +165,6 @@ Name|Type|Description
 `execute()`|Method, returns `Promise<`[File resource](https://developers.google.com/drive/api/v3/reference/files#resource)`>`|Executes the request.
 `setData(`<br>&nbsp;`  data:`[` Data`](#data)`,`<br>&nbsp;`  mimeType: string`<br>`)`|Method, returns `this`|Sets the data and its MIME type.
 `setIdOfFileToUpdate(`<br>&nbsp;`  fileId: string`<br>`)`|Method, returns `this`|If this method is invoked and `fileId` is a string, the request becomes an update request. Otherwise it's a creation request.
-`setIsBase64(`<br>&nbsp;`  isBase64: boolean`<br>`)`|If the data to be handled by this uploader is Base64, this method can be invoked to add the header `Content-Transfer-Encoding: base64` which is recognized by Google Drive.
 setQueryParameters(queryParameters)|Sets the query parameters.
 setRequestBody(requestBody)|Sets the request body.
 

@@ -7,8 +7,16 @@ import { FilesApi } from '../../files/FilesApi'
 import { MimeType } from '../../../MimeType'
 
 export class MultipartUploader extends Uploader {
+  private isBase64 = false
+
   constructor(fetcher: Fetcher<FilesApi>) {
     super(fetcher, 'multipart')
+  }
+
+  setIsBase64(isBase64: boolean): Uploader {
+    this.isBase64 = isBase64
+
+    return this
   }
 
   protected _execute(): FetchResultType {
