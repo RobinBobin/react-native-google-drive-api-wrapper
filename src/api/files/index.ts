@@ -9,7 +9,7 @@ import { ResumableUploader } from '../aux/uploaders/ResumableUploader'
 import { Uploader } from '../aux/uploaders/Uploader'
 import { Uris } from '../aux/Uris'
 import { MimeType } from '../../MimeType'
-import { UnexpectedFileCountError } from '../../UnexpectedFileCountError'
+import { UnexpectedFileCountError } from './UnexpectedFileCountError'
 
 export class Files extends FilesApi {
   copy(fileId: string, queryParameters?: object, requestBody: object = {}) {

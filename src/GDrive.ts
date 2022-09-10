@@ -1,5 +1,5 @@
 import { About } from './api/about/About'
-import { Files } from './api/files/Files'
+import { Files } from './api/files'
 import { GDriveApi } from './api/GDriveApi'
 import { Permissions } from './api/permissions/Permissions'
 

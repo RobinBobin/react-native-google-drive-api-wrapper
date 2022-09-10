@@ -108,7 +108,7 @@ Name|Type|Description
 
 ### <a name="gdrive"></a>[GDrive](#c_gdrive)
 
-A `GDrive` instance stores your google sign-in token and the instances of the [`GDriveApi`](gdriveapi) descendants.
+A `GDrive` instance stores your google sign-in token and the instances of the [`GDriveApi`](#gdriveapi) descendants.
 
 Name|Type|Description
 -|-|-
