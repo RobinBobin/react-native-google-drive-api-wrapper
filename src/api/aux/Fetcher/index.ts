@@ -11,25 +11,24 @@ import { HttpError } from '../../../HttpError'
 
 fetch
 
-export class Fetcher<SomeGDriveApi extends GDriveApi> {
+export class Fetcher {
+  public readonly gDriveApi: GDriveApi
+
   private readonly abortController = new AbortController()
-  private readonly __gDriveApi: SomeGDriveApi
   private readonly init: RequestInit
   private resource?: RequestInfo
   private responseType?: FetchResponseType
 
-  constructor(gDriveApi: SomeGDriveApi) {
-    this.__gDriveApi = gDriveApi
-
+  constructor(gDriveApi: GDriveApi) {
     this.init = {
       headers: new Headers(),
       signal: this.abortController.signal,
     }
 
-    this.appendHeader('Authorization', `Bearer ${this.gDriveApi.accessToken}`)
+    this.appendHeader('Authorization', `Bearer ${this.gDriveApi.accessParameters.accessToken}`)
   }
 
-  appendHeader(name: string, value: string): Fetcher<SomeGDriveApi> {
+  appendHeader(name: string, value: string): Fetcher {
     ;(this.init.headers as Headers).append(name, value)
 
     return this
@@ -44,8 +43,8 @@ export class Fetcher<SomeGDriveApi extends GDriveApi> {
       this.setResponseType(responseType)
     }
 
-    if (this.gDriveApi.fetchTimeout >= 0) {
-      setTimeout(() => this.abortController.abort(), this.gDriveApi.fetchTimeout)
+    if (this.gDriveApi.accessParameters.fetchTimeout >= 0) {
+      setTimeout(() => this.abortController.abort(), this.gDriveApi.accessParameters.fetchTimeout)
     }
 
     let response: Response = await fetch(this.resource as RequestInfo, this.init)
@@ -63,11 +62,7 @@ export class Fetcher<SomeGDriveApi extends GDriveApi> {
     return this.responseType === 'blob' ? blobToByteArray(result) : result
   }
 
-  get gDriveApi() {
-    return this.__gDriveApi
-  }
-
-  setBody(body: BodyType, contentType?: string): Fetcher<SomeGDriveApi> {
+  setBody(body: BodyType, contentType?: string): Fetcher {
     this.init.body = body
 
     if (contentType) {
@@ -78,19 +73,19 @@ export class Fetcher<SomeGDriveApi extends GDriveApi> {
     return this
   }
 
-  setMethod(method: string): Fetcher<SomeGDriveApi> {
+  setMethod(method: string): Fetcher {
     this.init.method = method
 
     return this
   }
 
-  setResource(resource: RequestInfo): Fetcher<SomeGDriveApi> {
+  setResource(resource: RequestInfo): Fetcher {
     this.resource = resource
 
     return this
   }
 
-  setResponseType(responseType: FetchResponseType): Fetcher<SomeGDriveApi> {
+  setResponseType(responseType: FetchResponseType): Fetcher {
     this.responseType = responseType
 
     return this

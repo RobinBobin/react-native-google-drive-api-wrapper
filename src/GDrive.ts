@@ -1,64 +1,30 @@
 import { About } from './api/about/About'
 import { Files } from './api/files'
-import { GDriveApi } from './api/GDriveApi'
 import { Permissions } from './api/permissions/Permissions'
 
 export class GDrive {
-  private readonly __apis = new Map<string, GDriveApi>()
+  // GDrive apis.
+  public readonly about = new About(this)
+  public readonly files = new Files(this)
+  public readonly permissions = new Permissions(this)
 
-  constructor() {
-    this.about = new About()
-    this.files = new Files()
-    this.permissions = new Permissions()
-  }
-
-  get about() {
-    return this.__apis.get('about') as About
-  }
-
-  set about(about: About) {
-    this.__setApi(about, 'about')
-  }
+  // Access parameters.
+  private __accessToken = ''
+  private __fetchTimeout = 1500
 
   get accessToken() {
-    return this.__apis.values().next().value.accessToken
+    return this.__accessToken
   }
 
-  set accessToken(accessToken) {
-    for (const api of this.__apis.values()) {
-      api.accessToken = accessToken
-    }
+  set accessToken(accessToken: string) {
+    this.__accessToken = accessToken
   }
 
   get fetchTimeout() {
-    return this.__apis.values().next().value.fetchTimeout
+    return this.__fetchTimeout
   }
 
   set fetchTimeout(fetchTimeout: number) {
-    for (const api of this.__apis.values()) {
-      api.fetchTimeout = fetchTimeout
-    }
-  }
-
-  get files() {
-    return this.__apis.get('files') as Files
-  }
-
-  set files(files: Files) {
-    this.__setApi(files, 'files')
-  }
-
-  get permissions() {
-    return this.__apis.get('permissions') as Permissions
-  }
-
-  set permissions(permissions: Permissions) {
-    this.__setApi(permissions, 'permissions')
-  }
-
-  __setApi(api: GDriveApi, apiName: string) {
-    this.__apis.set(apiName, api)
-
-    api.accessToken = this.accessToken
+    this.__fetchTimeout = fetchTimeout
   }
 }

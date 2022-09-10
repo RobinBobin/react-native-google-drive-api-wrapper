@@ -3,14 +3,22 @@ import utf8 from 'utf8'
 import { Uploader } from './Uploader'
 import { Fetcher } from '../Fetcher'
 import { BodyType, FetchResultType } from '../Fetcher/types'
-import { FilesApi } from '../../files/FilesApi'
 import { MimeType } from '../../../MimeType'
 
 export class MultipartUploader extends Uploader {
+  private __multipartBoundary = 'foo_bar_baz'
   private isBase64 = false
 
-  constructor(fetcher: Fetcher<FilesApi>) {
+  constructor(fetcher: Fetcher) {
     super(fetcher, 'multipart')
+  }
+
+  get multipartBoundary() {
+    return this.__multipartBoundary
+  }
+
+  set multipartBoundary(multipartBoundary) {
+    this.__multipartBoundary = multipartBoundary
   }
 
   setIsBase64(isBase64: boolean): Uploader {
@@ -20,7 +28,7 @@ export class MultipartUploader extends Uploader {
   }
 
   protected _execute(): FetchResultType {
-    const dashDashBoundary = `--${this.fetcher.gDriveApi.multipartBoundary}`
+    const dashDashBoundary = `--${this.multipartBoundary}`
     const ending = `\n${dashDashBoundary}--`
 
     let body: BodyType | string[] = [
@@ -56,7 +64,7 @@ export class MultipartUploader extends Uploader {
       .appendHeader('Content-Length', body.length.toString())
       .appendHeader(
         'Content-Type',
-        `multipart/related; boundary=${this.fetcher.gDriveApi.multipartBoundary}`,
+        `multipart/related; boundary=${this.multipartBoundary}`,
       )
       .setBody(body as BodyType)
       .fetch()

@@ -3,7 +3,6 @@ import { Uploader } from '../Uploader'
 import { Data } from '../Uploader/types'
 import { Fetcher } from '../../Fetcher'
 import { FetchResultType } from '../../Fetcher/types'
-import { FilesApi } from '../../../files/FilesApi'
 import { HttpError } from '../../../../HttpError'
 import { MimeType } from '../../../../MimeType'
 
@@ -13,7 +12,7 @@ export class ResumableUploader extends Uploader {
   private shouldUseMultipleRequests = false
   private __transferredByteCount = 0
 
-  constructor(fetcher: Fetcher<FilesApi>) {
+  constructor(fetcher: Fetcher) {
     super(fetcher, 'resumable', false)
   }
 

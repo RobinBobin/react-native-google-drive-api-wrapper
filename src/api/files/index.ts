@@ -1,5 +1,6 @@
-import { FilesApi } from './FilesApi'
+import { UnexpectedFileCountError } from './UnexpectedFileCountError'
 import { CreateIfNotExistsResultType } from './types'
+import { GDriveApi } from '../GDriveApi'
 import { Fetcher, fetch } from '../aux/Fetcher'
 import { FetchResponseType } from '../aux/Fetcher/types'
 import { MediaUploader } from '../aux/uploaders/MediaUploader'
@@ -9,9 +10,8 @@ import { ResumableUploader } from '../aux/uploaders/ResumableUploader'
 import { Uploader } from '../aux/uploaders/Uploader'
 import { Uris } from '../aux/Uris'
 import { MimeType } from '../../MimeType'
-import { UnexpectedFileCountError } from './UnexpectedFileCountError'
 
-export class Files extends FilesApi {
+export class Files extends GDriveApi {
   copy(fileId: string, queryParameters?: object, requestBody: object = {}) {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MimeType.JSON)

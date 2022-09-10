@@ -2,11 +2,10 @@ import { Data, UploadType } from './types'
 import { Fetcher } from '../../Fetcher'
 import { FetchResultType } from '../../Fetcher/types'
 import { Uris } from '../../Uris'
-import { FilesApi } from '../../../files/FilesApi'
 
 export abstract class Uploader {
   protected data?: Data
-  protected readonly fetcher: Fetcher<FilesApi>
+  protected readonly fetcher: Fetcher
   protected mimeType?: string
   protected requestBody?: string | object
 
@@ -15,7 +14,7 @@ export abstract class Uploader {
   private queryParameters: { uploadType?: UploadType }
 
   constructor(
-    fetcher: Fetcher<FilesApi>,
+    fetcher: Fetcher,
     uploadType?: UploadType,
     isJsonResponseType: boolean = true
   ) {
