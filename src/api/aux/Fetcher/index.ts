@@ -1,4 +1,4 @@
-import { BodyType, FetchResponseType, FetchResultType } from './types'
+import { BodyType, FetchResponseType } from './types'
 import { blobToByteArray } from '../utils'
 import { GDriveApi } from '../../GDriveApi'
 import { HttpError } from '../../../HttpError'
@@ -11,7 +11,7 @@ import { HttpError } from '../../../HttpError'
 
 fetch
 
-export class Fetcher {
+export class Fetcher<T> {
   public readonly gDriveApi: GDriveApi
 
   private readonly abortController = new AbortController()
@@ -20,6 +20,8 @@ export class Fetcher {
   private responseType?: FetchResponseType
 
   constructor(gDriveApi: GDriveApi) {
+    this.gDriveApi = gDriveApi
+
     this.init = {
       headers: new Headers(),
       signal: this.abortController.signal,
@@ -28,13 +30,13 @@ export class Fetcher {
     this.appendHeader('Authorization', `Bearer ${this.gDriveApi.accessParameters.accessToken}`)
   }
 
-  appendHeader(name: string, value: string): Fetcher {
+  appendHeader(name: string, value: string): Fetcher<T> {
     ;(this.init.headers as Headers).append(name, value)
 
     return this
   }
 
-  async fetch(resource?: RequestInfo, responseType?: FetchResponseType): FetchResultType {
+  async fetch(resource?: RequestInfo, responseType?: FetchResponseType): Promise<T> {
     if (resource) {
       this.setResource(resource)
     }
@@ -54,7 +56,7 @@ export class Fetcher {
     }
 
     if (!this.responseType) {
-      return response
+      return response as T
     }
 
     const result = await response[this.responseType]()
@@ -62,7 +64,7 @@ export class Fetcher {
     return this.responseType === 'blob' ? blobToByteArray(result) : result
   }
 
-  setBody(body: BodyType, contentType?: string): Fetcher {
+  setBody(body: BodyType, contentType?: string): Fetcher<T> {
     this.init.body = body
 
     if (contentType) {
@@ -73,31 +75,31 @@ export class Fetcher {
     return this
   }
 
-  setMethod(method: string): Fetcher {
+  setMethod(method: string): Fetcher<T> {
     this.init.method = method
 
     return this
   }
 
-  setResource(resource: RequestInfo): Fetcher {
+  setResource(resource: RequestInfo): Fetcher<T> {
     this.resource = resource
 
     return this
   }
 
-  setResponseType(responseType: FetchResponseType): Fetcher {
+  setResponseType(responseType: FetchResponseType): Fetcher<T> {
     this.responseType = responseType
 
     return this
   }
 }
 
-async function exportedFetch(
+async function exportedFetch<T>(
   gDriveApi: GDriveApi,
   resource: RequestInfo,
   responseType: FetchResponseType,
-): FetchResultType {
-  return new Fetcher(gDriveApi).fetch(resource, responseType)
+): Promise<T> {
+  return new Fetcher<T>(gDriveApi).fetch(resource, responseType)
 }
 
 export { exportedFetch as fetch }

@@ -1,12 +1,9 @@
-import { Data, UploadType } from './types'
-import { Fetcher } from '../../Fetcher'
-import { FetchResultType } from '../../Fetcher/types'
-import { Uris } from '../../Uris'
+import { UploadType } from './types'
+import { Fetcher } from '../Fetcher'
+import { Uris } from '../Uris'
 
-export abstract class Uploader {
-  protected data?: Data
-  protected readonly fetcher: Fetcher
-  protected mimeType?: string
+export abstract class Uploader<ExecuteResultType, FetcherResultType = ExecuteResultType> {
+  protected readonly fetcher: Fetcher<FetcherResultType>
   protected requestBody?: string | object
 
   private idOfFileToUpdate?: string
@@ -14,7 +11,7 @@ export abstract class Uploader {
   private queryParameters: { uploadType?: UploadType }
 
   constructor(
-    fetcher: Fetcher,
+    fetcher: Fetcher<FetcherResultType>,
     uploadType?: UploadType,
     isJsonResponseType: boolean = true
   ) {
@@ -23,7 +20,7 @@ export abstract class Uploader {
     this.queryParameters = { uploadType }
   }
 
-  execute(): FetchResultType {
+  execute(): Promise<ExecuteResultType> {
     const isMetadataOnly = !this.queryParameters.uploadType
 
     this.requestBody = JSON.stringify(this.requestBody ?? {})
@@ -43,20 +40,13 @@ export abstract class Uploader {
     return this._execute()
   }
 
-  setData(data: Data, mimeType: string): Uploader {
-    this.data = data
-    this.mimeType = mimeType
-
-    return this
-  }
-
-  setIdOfFileToUpdate(fileId: string): Uploader {
+  setIdOfFileToUpdate(fileId: string): Uploader<ExecuteResultType, FetcherResultType> {
     this.idOfFileToUpdate = fileId
 
     return this
   }
 
-  setQueryParameters(queryParameters: object): Uploader {
+  setQueryParameters(queryParameters: object): Uploader<ExecuteResultType, FetcherResultType> {
     this.queryParameters = {
       ...queryParameters,
       uploadType: this.queryParameters.uploadType,
@@ -65,11 +55,11 @@ export abstract class Uploader {
     return this
   }
 
-  setRequestBody(requestBody: object): Uploader {
+  setRequestBody(requestBody: object): Uploader<ExecuteResultType, FetcherResultType> {
     this.requestBody = requestBody
 
     return this
   }
 
-  protected abstract _execute(): FetchResultType
+  protected abstract _execute(): Promise<ExecuteResultType>
 }

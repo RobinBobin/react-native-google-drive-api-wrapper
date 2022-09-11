@@ -146,16 +146,17 @@ Name|Type|Description
 
 ### <a name="resumable_uploader"></a>[ResumableUploader](#c_resumable_uploader)
 
-An [Uploader](#uploader) descendant, this class handles resumable uploads.
+An [Uploader](#uploader) descendant, this class handles [`resumable`](https://developers.google.com/drive/api/guides/manage-uploads#resumable) uploads.
 
 Name|Type|Description
 -|-|-
+`execute()`|Method.<br>Returns `Promise<`[`UploadChunkResultType`](#upload_chunk_result_type)`>` if data was [set](#uploader_set_data).<br>Returns `Promise<this>` otherwise.|This method sends the [initial upload request](https://developers.google.com/drive/api/guides/manage-uploads#send_the_initial_request).
 <a name="resumable_uploader_request_upload_status"></a>`requestUploadStatus()`|Method, returns `Promise<`[`RequestUploadStatusResultType`](#request_upload_status_result_type)`>`|Returns the current upload status.
-setContentLength(contentLength: number)|Method|Optional. Sets the content length. **Can't be invoked after sending the initial upload request.**
-setDataType(dataType: string)|Method|Sets the data type when using [multiple requests](#resumable_uploader_should_use_multiple_requests).
-<a name="resumable_uploader_should_use_multiple_requests"></a>setShouldUseMultipleRequests(shouldUseMultipleRequests: boolean)|Method|Specifies whether multiple requests will be used to upload the data.
+`setContentLength(`<br>&nbsp;`  contentLength: number`<br>`)`|Method, returns `this`|This method must be invoked to set the content length.
+`setMimeType(`<br>&nbsp;`  mimeType:`&nbsp;&nbsp;[`string`](#mime_type)<br>`)`|Method, returns `this`|Sets the data MIME type when using [multiple requests](#resumable_uploader_should_use_multiple_requests).
+<a name="resumable_uploader_should_use_multiple_requests"></a>`setShouldUseMultipleRequests(`<br>&nbsp;`  shouldUseMultipleRequests: boolean`<br>`)`|Method, returns `this`|Specifies whether multiple requests will be used to upload the data.
 transferredByteCount|Read property (Number)|The current transferred byte count.
-<a name="resumable_uploader_upload_chunk"></a>uploadChunk(chunk: [DataType](#data_type))|Method|Uploads a chunk of data, returning [UploadChunkResultType](#upload_chunk_result_type), wrapped in a `Promise`.
+<a name="resumable_uploader_upload_chunk"></a>uploadChunk(chunk: [DataType](#data_type))|Method|Uploads a chunk of data, returning [`UploadChunkResultType`](#upload_chunk_result_type), wrapped in a `Promise`.
 
 ### <a name="simple_uploader"></a>[SimpleUploader](#c_simple_uploader)
 

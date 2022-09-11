@@ -2,5 +2,4 @@
 1.  `execute()` sends the initial chunk.
 1. ResumableUploader.ts - line 114 - what if [] / string is empty?
 1. `uploadChunk()` - `setContentLength()`- upload much more - consider this case.
-1.  `Uploader.execute()` returns `FetchResultType` - nope.
 1.  `setContentLength()` - throw if already sent.

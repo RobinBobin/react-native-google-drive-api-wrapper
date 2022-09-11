@@ -4,10 +4,10 @@ import { GDriveApi } from '../GDriveApi'
 import { Fetcher, fetch } from '../aux/Fetcher'
 import { FetchResponseType } from '../aux/Fetcher/types'
 import { MetadataOnlyUploader } from '../aux/uploaders/MetadataOnlyUploader'
-import { MultipartUploader } from '../aux/uploaders/MultipartUploader'
-import { ResumableUploader } from '../aux/uploaders/ResumableUploader'
-import { SimpleUploader } from '../aux/uploaders/SimpleUploader'
 import { Uploader } from '../aux/uploaders/Uploader'
+import { MultipartUploader } from '../aux/uploaders/withdata/MultipartUploader'
+import { SimpleUploader } from '../aux/uploaders/withdata/SimpleUploader'
+import { ResumableUploader } from '../aux/uploaders/withdatamimetype/ResumableUploader'
 import { Uris } from '../aux/Uris'
 import { MimeType } from '../../MimeType'
 
@@ -19,10 +19,10 @@ export class Files extends GDriveApi {
       .fetch(Uris.files({ fileId, method: 'copy', queryParameters }), 'json')
   }
 
-  async createIfNotExists(
+  async createIfNotExists<ExecuteResultType, FetcherResultType = ExecuteResultType>(
     queryParameters: object,
-    uploader: Uploader,
-  ): Promise<CreateIfNotExistsResultType> {
+    uploader: Uploader<ExecuteResultType, FetcherResultType>
+  ): Promise<CreateIfNotExistsResultType<ExecuteResultType>> {
     const files = (await this.list(queryParameters)).files
 
     switch (files.length) {
@@ -101,7 +101,7 @@ export class Files extends GDriveApi {
       }
     }
 
-    return fetch(this, Uris.files({ queryParameters: _queryParameters }), 'json')
+    return fetch<any>(this, Uris.files({ queryParameters: _queryParameters }), 'json')
   }
 
   newMetadataOnlyUploader() {

@@ -1,4 +1,4 @@
-export interface CreateIfNotExistsResultType {
+export interface CreateIfNotExistsResultType<ExecuteResultType> {
   alreadyExisted: boolean
-  result: object
+  result: ExecuteResultType
 }

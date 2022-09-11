@@ -1,31 +1,31 @@
 import { ArrayStringifier, StaticUtils } from 'simple-common-utils'
 import utf8 from 'utf8'
-import { Uploader } from './Uploader'
-import { Fetcher } from '../Fetcher'
-import { BodyType, FetchResultType } from '../Fetcher/types'
-import { MimeType } from '../../../MimeType'
+import { UploaderWithData } from './UploaderWithData'
+import { Fetcher } from '../../Fetcher'
+import { BodyType } from '../../Fetcher/types'
+import { MimeType } from '../../../../MimeType'
 
-export class MultipartUploader extends Uploader {
+export class MultipartUploader extends UploaderWithData {
   private isBase64 = false
   private multipartBoundary = 'foo_bar_baz'
 
-  constructor(fetcher: Fetcher) {
+  constructor(fetcher: Fetcher<any>) {
     super(fetcher, 'multipart')
   }
 
-  setIsBase64(isBase64: boolean): Uploader {
+  setIsBase64(isBase64: boolean): UploaderWithData {
     this.isBase64 = isBase64
 
     return this
   }
 
-  setMultipartBoundary(multipartBoundary: string) {
+  setMultipartBoundary(multipartBoundary: string): UploaderWithData {
     this.multipartBoundary = multipartBoundary
 
     return this
   }
 
-  protected _execute(): FetchResultType {
+  protected _execute(): Promise<any> {
     const dashDashBoundary = `--${this.multipartBoundary}`
     const ending = `\n${dashDashBoundary}--`
 
@@ -39,7 +39,7 @@ export class MultipartUploader extends Uploader {
       body.push('Content-Transfer-Encoding: base64\n')
     }
 
-    body.push(`Content-Type: ${this.mimeType}\n\n`)
+    body.push(`Content-Type: ${this.dataMimeType}\n\n`)
 
     body = new ArrayStringifier().setArray(body).setSeparator('').process()
 
