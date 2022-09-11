@@ -2,7 +2,7 @@ import { Uploader } from './Uploader'
 import { Fetcher } from '../Fetcher'
 import { FetchResultType } from '../Fetcher/types'
 
-export class MediaUploader extends Uploader {
+export class SimpleUploader extends Uploader {
   constructor(fetcher: Fetcher) {
     super(fetcher, 'media')
   }

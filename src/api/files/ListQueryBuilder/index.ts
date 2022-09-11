@@ -8,23 +8,23 @@ export class ListQueryBuilder {
     return this.__push('and')
   }
 
-  contains(key: Key, value: Value, quoteValueIfString: boolean = true) {
+  contains(key: Key, value: Value, quoteValueIfString = true) {
     return this.operator(key, 'contains', value, false, quoteValueIfString)
   }
 
-  e(key: Key, value: Value, quoteValueIfString: boolean = true) {
+  e(key: Key, value: Value, quoteValueIfString = true) {
     return this.operator(key, '=', value, false, quoteValueIfString)
   }
 
-  g(key: Key, value: Value, quoteValueIfString: boolean = true) {
+  g(key: Key, value: Value, quoteValueIfString = true) {
     return this.operator(key, '>', value, false, quoteValueIfString)
   }
 
-  in(value: Value, key: Key, quoteValueIfString: boolean = true) {
+  in(value: Value, key: Key, quoteValueIfString = true) {
     return this.operator(value, 'in', key, quoteValueIfString, false)
   }
 
-  l(key: Key, value: Value, quoteValueIfString: boolean = true) {
+  l(key: Key, value: Value, quoteValueIfString = true) {
     return this.operator(key, '<', value, false, quoteValueIfString)
   }
 

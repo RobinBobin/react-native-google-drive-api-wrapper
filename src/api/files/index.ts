@@ -3,10 +3,10 @@ import { CreateIfNotExistsResultType } from './types'
 import { GDriveApi } from '../GDriveApi'
 import { Fetcher, fetch } from '../aux/Fetcher'
 import { FetchResponseType } from '../aux/Fetcher/types'
-import { MediaUploader } from '../aux/uploaders/MediaUploader'
 import { MetadataOnlyUploader } from '../aux/uploaders/MetadataOnlyUploader'
 import { MultipartUploader } from '../aux/uploaders/MultipartUploader'
 import { ResumableUploader } from '../aux/uploaders/ResumableUploader'
+import { SimpleUploader } from '../aux/uploaders/SimpleUploader'
 import { Uploader } from '../aux/uploaders/Uploader'
 import { Uris } from '../aux/Uris'
 import { MimeType } from '../../MimeType'
@@ -104,10 +104,6 @@ export class Files extends GDriveApi {
     return fetch(this, Uris.files({ queryParameters: _queryParameters }), 'json')
   }
 
-  newMediaUploader() {
-    return new MediaUploader(new Fetcher(this))
-  }
-
   newMetadataOnlyUploader() {
     return new MetadataOnlyUploader(new Fetcher(this))
   }
@@ -118,6 +114,10 @@ export class Files extends GDriveApi {
 
   newResumableUploader() {
     return new ResumableUploader(new Fetcher(this))
+  }
+
+  newSimpleUploader() {
+    return new SimpleUploader(new Fetcher(this))
   }
 
   __get(
