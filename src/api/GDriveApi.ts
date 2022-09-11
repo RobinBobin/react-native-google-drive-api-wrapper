@@ -1,8 +1,8 @@
-interface GDriveApiAccessParameters {
+interface GDriveAccessParameters {
   accessToken: string
   fetchTimeout: number
 }
 
 export class GDriveApi {
-  constructor(public readonly accessParameters: GDriveApiAccessParameters) {}
+  constructor(public readonly accessParameters: GDriveAccessParameters) {}
 }

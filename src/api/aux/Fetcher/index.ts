@@ -92,8 +92,8 @@ export class Fetcher {
   }
 }
 
-async function exportedFetch<SomeGDriveApi extends GDriveApi>(
-  gDriveApi: SomeGDriveApi,
+async function exportedFetch(
+  gDriveApi: GDriveApi,
   resource: RequestInfo,
   responseType: FetchResponseType,
 ): FetchResultType {

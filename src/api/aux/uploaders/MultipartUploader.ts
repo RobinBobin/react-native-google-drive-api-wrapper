@@ -6,23 +6,21 @@ import { BodyType, FetchResultType } from '../Fetcher/types'
 import { MimeType } from '../../../MimeType'
 
 export class MultipartUploader extends Uploader {
-  private __multipartBoundary = 'foo_bar_baz'
   private isBase64 = false
+  private multipartBoundary = 'foo_bar_baz'
 
   constructor(fetcher: Fetcher) {
     super(fetcher, 'multipart')
   }
 
-  get multipartBoundary() {
-    return this.__multipartBoundary
-  }
-
-  set multipartBoundary(multipartBoundary) {
-    this.__multipartBoundary = multipartBoundary
-  }
-
   setIsBase64(isBase64: boolean): Uploader {
     this.isBase64 = isBase64
+
+    return this
+  }
+
+  setMultipartBoundary(multipartBoundary: string) {
+    this.multipartBoundary = multipartBoundary
 
     return this
   }
