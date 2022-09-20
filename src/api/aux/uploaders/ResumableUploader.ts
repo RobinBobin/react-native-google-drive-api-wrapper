@@ -96,13 +96,14 @@ export default class ResumableUploader extends Uploader {
     }
 
     if (response.status === 308) {
-      const transferredByteCount = this.processRange(response)
+      // const transferredByteCount = this.processRange(response)
+      const transferredByteCount = chunk.length
 
       this.__transferredByteCount += transferredByteCount
 
       return {
         isComplete: false,
-        transferredByteCount,
+        transferredByteCount:this.__transferredByteCount,
       }
     }
 
