@@ -18,10 +18,10 @@ export function blobToByteArray(blob: Blob): Promise<Uint8Array | null> {
         
         if (!b64) {
           reject({ reader })
+          return
         }
 
         resolve(toByteArray(b64))
-
         return
       }
 
