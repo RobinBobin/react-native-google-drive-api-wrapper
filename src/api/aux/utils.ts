@@ -15,6 +15,7 @@ export function blobToByteArray(blob: Blob): Promise<Uint8Array | null> {
 
       if (typeof reader.result === 'string') {
         const b64 = reader.result.split('base64,')[1]
+        
         if (!b64) {
           reject({ reader })
         }
