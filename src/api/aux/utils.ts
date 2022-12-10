@@ -14,10 +14,14 @@ export function blobToByteArray(blob: Blob): Promise<Uint8Array | null> {
       }
 
       if (typeof reader.result === 'string') {
-        const b64 = reader.result.split('data:application/octet-stream;base64,')[1]
+        const b64 = reader.result.split('base64,')[1]
+        
+        if (!b64) {
+          reject({ reader })
+          return
+        }
 
         resolve(toByteArray(b64))
-
         return
       }
 
