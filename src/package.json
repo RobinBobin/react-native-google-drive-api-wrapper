@@ -22,9 +22,10 @@
     "url": "git+ssh://git@github.com/RobinBobin/react-native-google-drive-api-wrapper.git"
   },
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.2.3",
+  "version": "1.2.4",
   "devDependencies": {
     "prettier": "2.7.1"
   }
