@@ -15,7 +15,7 @@ interface FilesParameters {
 interface PermissionsParameters {
   fileId: string
   permissionId?: string
-  queryParameters: object
+  queryParameters?: object
 }
 
 interface UriParameters {
