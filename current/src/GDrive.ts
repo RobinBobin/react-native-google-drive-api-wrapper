@@ -9,22 +9,6 @@ export class GDrive {
   public readonly permissions = new Permissions(this)
 
   // Access parameters.
-  private __accessToken = ''
-  private __fetchTimeout = 1500
-
-  get accessToken() {
-    return this.__accessToken
-  }
-
-  set accessToken(accessToken: string) {
-    this.__accessToken = accessToken
-  }
-
-  get fetchTimeout() {
-    return this.__fetchTimeout
-  }
-
-  set fetchTimeout(fetchTimeout: number) {
-    this.__fetchTimeout = fetchTimeout
-  }
+  public accessToken = ''
+  public fetchTimeout = 1500
 }

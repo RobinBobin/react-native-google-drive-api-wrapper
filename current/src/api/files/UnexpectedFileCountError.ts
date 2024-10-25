@@ -1,28 +1,17 @@
 type ExpectedCount = number[] | number
 
 export class UnexpectedFileCountError extends Error {
-  __expectedCount: ExpectedCount
-  __realCount: number
-
-  constructor(expectedCount: ExpectedCount, realCount: number) {
+  constructor(
+    readonly expectedCount: ExpectedCount,
+    readonly realCount: number
+  ) {
     super()
-
-    this.__expectedCount = expectedCount
-    this.__realCount = realCount
 
     const expected = Array.isArray(this.expectedCount)
       ? `[${this.expectedCount}]`
       : this.expectedCount
 
     this.message = `expected ${expected}, got ${this.realCount}`
-  }
-
-  get expectedCount() {
-    return this.__expectedCount
-  }
-
-  get realCount() {
-    return this.__realCount
   }
 }
 

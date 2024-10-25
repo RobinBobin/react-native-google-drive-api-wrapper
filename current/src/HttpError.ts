@@ -1,12 +1,10 @@
 export class HttpError extends Error {
-  readonly json: any
-  readonly response: Response
-
-  constructor(json: any, message: string, response: Response) {
+  constructor(
+    readonly json: any,
+    message: string,
+    readonly response: Response
+  ) {
     super(message)
-
-    this.json = json
-    this.response = response
   }
 
   static async create(response: Response) {
