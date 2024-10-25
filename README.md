@@ -1,1 +1,1 @@
-The readme is [here](./src/README.md).
+The readme is [here](./current/README.md).

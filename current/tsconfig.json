@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    // Type Checking
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+
+    // Modules
+    "moduleResolution": "Bundler",
+    "noUncheckedSideEffectImports": true,
+    "rootDir": ".",
+
+    // Emit
+    "noEmitOnError": true,
+    "outDir": "js",
+
+    // Interop Constraints
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
+
+    // Language and Environment
+    "target": "es2023",
+
+    // Output Formatting
+    "noErrorTruncation": true,
+
+    // Completeness
+    "skipLibCheck": true,
+  },
+  "include": ["src/**/*.ts"]
+}
