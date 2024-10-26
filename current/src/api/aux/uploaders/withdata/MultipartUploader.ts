@@ -1,8 +1,7 @@
-import { ArrayStringifier, StaticUtils } from 'simple-common-utils'
 import utf8 from 'utf8'
 import { UploaderWithData } from './UploaderWithData'
 import { Fetcher } from '../../Fetcher'
-import { BodyType } from '../../Fetcher/types'
+import type { TBodyType } from '../../Fetcher/types'
 import { MimeType } from '../../../../MimeType'
 
 export class MultipartUploader extends UploaderWithData {
@@ -29,7 +28,7 @@ export class MultipartUploader extends UploaderWithData {
     const dashDashBoundary = `--${this.multipartBoundary}`
     const ending = `\n${dashDashBoundary}--`
 
-    let body: BodyType | string[] = [
+    let body: TBodyType | string[] = [
       `\n${dashDashBoundary}\n`,
       `Content-Type: ${MimeType.JSON_UTF8}\n\n`,
       `${this.requestBody}\n\n${dashDashBoundary}\n`,
@@ -41,7 +40,7 @@ export class MultipartUploader extends UploaderWithData {
 
     body.push(`Content-Type: ${this.dataMimeType}\n\n`)
 
-    body = new ArrayStringifier().setArray(body).setSeparator('').process()
+    body = body.join('')
 
     if (typeof this.data === 'string') {
       body += `${this.data}${ending}`
@@ -51,9 +50,9 @@ export class MultipartUploader extends UploaderWithData {
       const encodedBody = utf8.encode(body)
       const encodedEnding = utf8.encode(ending)
 
-      const byteArray = StaticUtils.encodedUtf8ToByteArray(encodedBody)
+      const byteArray = encodedBody.split('').map(char => char.charCodeAt(0))
         .concat(converter(this.data!))
-        .concat(StaticUtils.encodedUtf8ToByteArray(encodedEnding))
+        .concat(encodedEnding.split('').map(char => char.charCodeAt(0)))
 
       body = new Uint8Array(byteArray)
     }
@@ -64,7 +63,7 @@ export class MultipartUploader extends UploaderWithData {
         'Content-Type',
         `multipart/related; boundary=${this.multipartBoundary}`,
       )
-      .setBody(body as BodyType)
+      .setBody(body as TBodyType)
       .fetch()
   }
 }

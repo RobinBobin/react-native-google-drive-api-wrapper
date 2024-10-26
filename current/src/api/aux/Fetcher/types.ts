@@ -1,2 +1,2 @@
-export type BodyType = Uint8Array | string
-export type FetchResponseType = 'blob' | 'json' | 'text'
+export type TBodyType = Uint8Array | string
+export type TFetchResponseType = 'blob' | 'json' | 'text'

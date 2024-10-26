@@ -1,8 +1,8 @@
 import { UnexpectedFileCountError } from './UnexpectedFileCountError'
-import { CreateIfNotExistsResultType } from './types'
+import type { ICreateIfNotExistsResultType, TListParams } from './types'
 import { GDriveApi } from '../GDriveApi'
 import { Fetcher, fetch } from '../aux/Fetcher'
-import { FetchResponseType } from '../aux/Fetcher/types'
+import type { TFetchResponseType } from '../aux/Fetcher/types'
 import { MetadataOnlyUploader } from '../aux/uploaders/MetadataOnlyUploader'
 import { Uploader } from '../aux/uploaders/Uploader'
 import { MultipartUploader } from '../aux/uploaders/withdata/MultipartUploader'
@@ -10,9 +10,10 @@ import { SimpleUploader } from '../aux/uploaders/withdata/SimpleUploader'
 import { ResumableUploader } from '../aux/uploaders/withdatamimetype/ResumableUploader'
 import { Uris } from '../aux/Uris'
 import { MimeType } from '../../MimeType'
+import type { TGenericQueryParameters } from '../aux/Uris/types'
 
 export class Files extends GDriveApi {
-  copy(fileId: string, queryParameters?: object, requestBody: object = {}) {
+  copy(fileId: string, queryParameters?: TGenericQueryParameters, requestBody: Record<string, unknown> = {}) {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MimeType.JSON)
       .setMethod('POST')
@@ -20,9 +21,9 @@ export class Files extends GDriveApi {
   }
 
   async createIfNotExists<ExecuteResultType, FetcherResultType = ExecuteResultType>(
-    queryParameters: object,
+    queryParameters: TListParams,
     uploader: Uploader<ExecuteResultType, FetcherResultType>
-  ): Promise<CreateIfNotExistsResultType<ExecuteResultType>> {
+  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType>> {
     const files = (await this.list(queryParameters)).files
 
     switch (files.length) {
@@ -51,31 +52,31 @@ export class Files extends GDriveApi {
     return new Fetcher(this).setMethod('DELETE').fetch(Uris.files({ method: 'trash' }), 'text')
   }
 
-  export(fileId: string, queryParameters: object) {
+  export(fileId: string, queryParameters: TGenericQueryParameters) {
     return fetch(this, Uris.files({ fileId, method: 'export', queryParameters }), 'text')
   }
 
-  generateIds(queryParameters?: object) {
+  generateIds(queryParameters?: TGenericQueryParameters) {
     return fetch(this, Uris.files({ method: 'generateIds', queryParameters }), 'json')
   }
 
-  get(fileId: string, queryParameters?: object, range?: string) {
+  get(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
     return this.__get(fileId, queryParameters, range)
   }
 
-  getBinary(fileId: string, queryParameters?: object, range?: string) {
+  getBinary(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
     return this.__getContent(fileId, queryParameters, range, 'blob')
   }
 
-  getContent(fileId: string, queryParameters?: object, range?: string) {
+  getContent(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
     return this.__getContent(fileId, queryParameters, range)
   }
 
-  getJson(fileId: string, queryParameters?: object) {
+  getJson(fileId: string, queryParameters?: TGenericQueryParameters) {
     return this.__getContent(fileId, queryParameters, undefined, 'json')
   }
 
-  getMetadata(fileId: string, queryParameters?: object) {
+  getMetadata(fileId: string, queryParameters?: TGenericQueryParameters) {
     return this.__get(
       fileId,
       {
@@ -87,18 +88,14 @@ export class Files extends GDriveApi {
     )
   }
 
-  getText(fileId: string, queryParameters?: object, range?: string) {
+  getText(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
     return this.__getContent(fileId, queryParameters, range, 'text')
   }
 
-  list(queryParameters?: object) {
-    let _queryParameters = queryParameters as { q: object | string }
-
-    if (_queryParameters?.q && typeof _queryParameters.q !== 'string') {
-      _queryParameters = {
-        ..._queryParameters,
-        q: _queryParameters.q.toString(),
-      }
+  list(queryParameters?: TListParams) {
+    const _queryParameters = !queryParameters?.q ? queryParameters : {
+      ...queryParameters,
+      q: queryParameters.q.toString()
     }
 
     return fetch<any>(this, Uris.files({ queryParameters: _queryParameters }), 'json')
@@ -122,9 +119,9 @@ export class Files extends GDriveApi {
 
   __get(
     fileId: string,
-    queryParameters?: object,
+    queryParameters?: TGenericQueryParameters,
     range?: string,
-    responseType?: FetchResponseType,
+    responseType?: TFetchResponseType,
   ) {
     const fetcher = new Fetcher(this)
 
@@ -137,9 +134,9 @@ export class Files extends GDriveApi {
 
   __getContent(
     fileId: string,
-    queryParameters?: object,
+    queryParameters?: TGenericQueryParameters,
     range?: string,
-    responseType?: FetchResponseType,
+    responseType?: TFetchResponseType,
   ) {
     return this.__get(
       fileId,

@@ -5,11 +5,11 @@
   },
   "dependencies": {
     "base64-js": "^1.5.1",
-    "simple-common-utils": "^2.3.0",
     "utf8": "^3.0.0"
   },
   "description": "This wrapper facilitates the use of the Google Drive API in React Native projects.",
   "devDependencies": {
+    "@types/utf8": "^3.0.3",
     "typescript": "^5.6.3"
   },
   "homepage": "https://github.com/RobinBobin/react-native-google-drive-api-wrapper#readme",

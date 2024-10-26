@@ -1,35 +1,37 @@
-import { UploadType } from './types'
+import type { TUploadType } from './types'
 import { Fetcher } from '../Fetcher'
 import { Uris } from '../Uris'
+import type { TGenericQueryParameters } from '../Uris/types'
+
+type TQueryParameters = TGenericQueryParameters & { uploadType?: never }
 
 export abstract class Uploader<ExecuteResultType, FetcherResultType = ExecuteResultType> {
-  protected readonly fetcher: Fetcher<FetcherResultType>
-  protected requestBody?: string | object
+  protected requestBody: string | Record<string, unknown> = {}
 
-  private idOfFileToUpdate?: string
-  private readonly isJsonResponseType: boolean
-  private queryParameters: { uploadType?: UploadType }
+  private idOfFileToUpdate = ''
+  private queryParameters = {}
 
   constructor(
-    fetcher: Fetcher<FetcherResultType>,
-    uploadType?: UploadType,
-    isJsonResponseType: boolean = true
+    protected readonly fetcher: Fetcher<FetcherResultType>,
+    private readonly uploadType?: TUploadType,
+    private readonly isJsonResponseType: boolean = true
   ) {
-    this.fetcher = fetcher
-    this.isJsonResponseType = isJsonResponseType
-    this.queryParameters = { uploadType }
+    // Nothing to do.
   }
 
   execute(): Promise<ExecuteResultType> {
-    const isMetadataOnly = !this.queryParameters.uploadType
+    const isMetadataOnly = !this.uploadType
 
-    this.requestBody = JSON.stringify(this.requestBody ?? {})
+    this.requestBody = JSON.stringify(this.requestBody)
 
     this.fetcher.setMethod(this.idOfFileToUpdate ? 'PATCH' : 'POST').setResource(
       Uris.files({
         fileId: this.idOfFileToUpdate,
         preDrivePath: isMetadataOnly ? undefined : 'upload',
-        queryParameters: this.queryParameters,
+        queryParameters: {
+          ...this.queryParameters,
+          uploadType: this.uploadType
+        }
       }),
     )
 
@@ -46,16 +48,13 @@ export abstract class Uploader<ExecuteResultType, FetcherResultType = ExecuteRes
     return this
   }
 
-  setQueryParameters(queryParameters: object): Uploader<ExecuteResultType, FetcherResultType> {
-    this.queryParameters = {
-      ...queryParameters,
-      uploadType: this.queryParameters.uploadType,
-    }
+  setQueryParameters(queryParameters: TQueryParameters): Uploader<ExecuteResultType, FetcherResultType> {
+    this.queryParameters = { ...queryParameters }
 
     return this
   }
 
-  setRequestBody(requestBody: object): Uploader<ExecuteResultType, FetcherResultType> {
+  setRequestBody(requestBody: Record<string, unknown>): Uploader<ExecuteResultType, FetcherResultType> {
     this.requestBody = requestBody
 
     return this

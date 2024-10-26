@@ -1,66 +1,51 @@
-import { StaticUtils } from 'simple-common-utils'
-import { Key, KeyOrValue, Value } from './types'
+import type { IListQueryBuilderSource, IListQueryBuilderTarget, TClause, TClauseFunctionCommand, TClauseFunctionWithClause, TKeyOrValue, TListQueryBuilder } from "./types"
 
-export class ListQueryBuilder {
-  __query: KeyOrValue[] = []
+const Factory = (): TListQueryBuilder => {
+  const queryClauses: TKeyOrValue[] = []
 
-  and() {
-    return this.__push('and')
+  const addClause: TClauseFunctionWithClause = (...[keyOrValue1, operator, keyOrValue2, valueQuotationFlag = true]) => {
+    const isIn = operator === 'in'
+    const key = isIn ? keyOrValue2 : keyOrValue1
+    const rawValue = isIn ? keyOrValue1 : keyOrValue2
+    const shouldQuotateValue = typeof rawValue === 'string' && valueQuotationFlag
+    const value = shouldQuotateValue ? `'${rawValue}'` : rawValue
+
+    queryClauses.push(isIn ? value : key)
+    queryClauses.push(operator)
+    queryClauses.push(isIn ? key : value)
+
+    return implementation
   }
 
-  contains(key: Key, value: Value, quoteValueIfString = true) {
-    return this.operator(key, 'contains', value, false, quoteValueIfString)
+  function clauseFunction(command: TClauseFunctionCommand, ...rest: unknown[]): TListQueryBuilder {
+    queryClauses.push(command === 'push' ? '(' : command)
+
+    return rest.length ? addClause(...[...rest] as TClause) : implementation
   }
 
-  e(key: Key, value: Value, quoteValueIfString = true) {
-    return this.operator(key, '=', value, false, quoteValueIfString)
+  const source: IListQueryBuilderSource = {
+    and() { return clauseFunction('and', ...arguments) },
+    or() { return clauseFunction('or', ...arguments)},
+    pop() {
+      queryClauses.push(')')
+
+      return implementation
+    },
+    push() { return clauseFunction('push', ...arguments)},
+    toString() {
+      const query = queryClauses.join(' ')
+
+      queryClauses.length = 0
+
+      return query
+    }
   }
 
-  g(key: Key, value: Value, quoteValueIfString = true) {
-    return this.operator(key, '>', value, false, quoteValueIfString)
-  }
+  const target: IListQueryBuilderTarget = (...clause) => addClause(...clause)
 
-  in(value: Value, key: Key, quoteValueIfString = true) {
-    return this.operator(value, 'in', key, quoteValueIfString, false)
-  }
+  const implementation = Object.assign(target, source)
 
-  l(key: Key, value: Value, quoteValueIfString = true) {
-    return this.operator(key, '<', value, false, quoteValueIfString)
-  }
-
-  operator(
-    left: KeyOrValue,
-    operator: string,
-    right: KeyOrValue,
-    quoteLeftIfString: boolean,
-    quoteRightIfString: boolean,
-  ) {
-    this.__query.push(StaticUtils.safeQuoteIfString(left, quoteLeftIfString, "'"))
-    this.__query.push(operator)
-    this.__query.push(StaticUtils.safeQuoteIfString(right, quoteRightIfString, "'"))
-
-    return this
-  }
-
-  or() {
-    return this.__push('or')
-  }
-
-  pop() {
-    return this.__push(')')
-  }
-
-  push() {
-    return this.__push('(')
-  }
-
-  toString() {
-    return this.__query.join(' ')
-  }
-
-  __push(entity: KeyOrValue) {
-    this.__query.push(entity)
-
-    return this
-  }
+  return implementation
 }
+
+export const ListQueryBuilder = Factory()

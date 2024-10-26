@@ -1,26 +1,28 @@
-type PreDrivePath = string | string[]
+type TPreDrivePath = string | string[] | undefined
 
-export interface AboutParameters {
-  queryParameters: object
+export type TGenericQueryParameters = Record<string, { toString(): string } | undefined>
+
+export interface IAboutParameters {
+  queryParameters: TGenericQueryParameters
 }
 
-export interface FilesParameters {
+export interface IFilesParameters {
   fileId?: string
   method?: string
-  preDrivePath?: PreDrivePath
-  queryParameters?: object
+  preDrivePath?: TPreDrivePath
+  queryParameters?: TGenericQueryParameters | undefined
 }
 
-export interface PermissionsParameters {
+export interface IPermissionsParameters {
   fileId: string
   permissionId?: string
-  queryParameters?: object
+  queryParameters: TGenericQueryParameters | undefined
 }
 
-export interface UriParameters {
+export interface IUriParameters {
   api: string
-  fileId?: string | null
-  path?: string | null
-  preDrivePath?: PreDrivePath | null
-  queryParameters?: object
+  fileId?: string | undefined
+  path?: string | undefined
+  preDrivePath?: TPreDrivePath
+  queryParameters?: TGenericQueryParameters | undefined
 }

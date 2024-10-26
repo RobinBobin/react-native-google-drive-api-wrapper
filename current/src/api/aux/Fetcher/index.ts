@@ -1,4 +1,4 @@
-import { BodyType, FetchResponseType } from './types'
+import type { TBodyType, TFetchResponseType } from './types'
 import { blobToByteArray } from '../utils'
 import { GDriveApi } from '../../GDriveApi'
 import { HttpError } from '../../../HttpError'
@@ -17,7 +17,7 @@ export class Fetcher<T> {
   private readonly abortController = new AbortController()
   private readonly init: RequestInit
   private resource?: RequestInfo
-  private responseType?: FetchResponseType
+  private responseType?: TFetchResponseType
 
   constructor(gDriveApi: GDriveApi) {
     this.gDriveApi = gDriveApi
@@ -36,7 +36,7 @@ export class Fetcher<T> {
     return this
   }
 
-  async fetch(resource?: RequestInfo, responseType?: FetchResponseType): Promise<T> {
+  async fetch(resource?: RequestInfo, responseType?: TFetchResponseType): Promise<T> {
     if (resource) {
       this.setResource(resource)
     }
@@ -64,7 +64,7 @@ export class Fetcher<T> {
     return this.responseType === 'blob' ? blobToByteArray(result) : result
   }
 
-  setBody(body: BodyType, contentType?: string): Fetcher<T> {
+  setBody(body: TBodyType, contentType?: string): Fetcher<T> {
     this.init.body = body
 
     if (contentType) {
@@ -87,7 +87,7 @@ export class Fetcher<T> {
     return this
   }
 
-  setResponseType(responseType: FetchResponseType): Fetcher<T> {
+  setResponseType(responseType: TFetchResponseType): Fetcher<T> {
     this.responseType = responseType
 
     return this
@@ -97,7 +97,7 @@ export class Fetcher<T> {
 async function exportedFetch<T>(
   gDriveApi: GDriveApi,
   resource: RequestInfo,
-  responseType: FetchResponseType,
+  responseType: TFetchResponseType,
 ): Promise<T> {
   return new Fetcher<T>(gDriveApi).fetch(resource, responseType)
 }

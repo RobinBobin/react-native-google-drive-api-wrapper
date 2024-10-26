@@ -1,5 +1,5 @@
 import { Uploader } from '../Uploader'
-import { UploadType } from '../types'
+import type { TUploadType } from '../types'
 import { Fetcher } from '../../Fetcher'
 
 export abstract class UploaderWithDataMimeType<ExecuteResultType, FetcherResultType = ExecuteResultType> extends Uploader<ExecuteResultType, FetcherResultType> {
@@ -7,7 +7,7 @@ export abstract class UploaderWithDataMimeType<ExecuteResultType, FetcherResultT
 
   constructor(
     fetcher: Fetcher<FetcherResultType>,
-    uploadType: UploadType,
+    uploadType: TUploadType,
     isJsonResponseType: boolean = true
   ) {
     super(fetcher, uploadType, isJsonResponseType)

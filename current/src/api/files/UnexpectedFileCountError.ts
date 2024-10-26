@@ -1,8 +1,8 @@
-type ExpectedCount = number[] | number
+type TExpectedCount = number[] | number
 
 export class UnexpectedFileCountError extends Error {
   constructor(
-    readonly expectedCount: ExpectedCount,
+    readonly expectedCount: TExpectedCount,
     readonly realCount: number
   ) {
     super()

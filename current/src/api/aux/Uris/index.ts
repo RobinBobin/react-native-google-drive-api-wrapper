@@ -1,13 +1,12 @@
-import { ArrayStringifier } from 'simple-common-utils'
-import { AboutParameters, FilesParameters, PermissionsParameters, UriParameters } from './types'
-import { stringifyQueryParameters } from '../utils'
+import type { IAboutParameters, IFilesParameters, IPermissionsParameters, IUriParameters } from './types'
+import { isNonEmptyString } from '../utils'
 
 export class Uris {
-  static about({ queryParameters }: AboutParameters) {
+  static about({ queryParameters }: IAboutParameters) {
     return Uris.__makeUri({ api: 'about', queryParameters })
   }
 
-  static files({ fileId, method, preDrivePath, queryParameters }: FilesParameters) {
+  static files({ fileId, method, preDrivePath, queryParameters }: IFilesParameters) {
     return Uris.__makeUri({
       api: 'files',
       fileId,
@@ -17,46 +16,38 @@ export class Uris {
     })
   }
 
-  static permissions({ fileId, permissionId, queryParameters }: PermissionsParameters) {
-    const path = ['permissions']
-
-    if (permissionId) {
-      path.push(permissionId)
-    }
+  static permissions({ fileId, permissionId, queryParameters }: IPermissionsParameters) {
+    const path = ['permissions', permissionId].filter(isNonEmptyString).join('/')
 
     return Uris.__makeUri({
       api: 'files',
       fileId,
-      path: path.join('/'),
+      path,
       queryParameters,
     })
   }
 
   static __makeUri({
     api,
-    fileId = null,
-    path = null,
-    preDrivePath = null,
+    fileId,
+    path,
+    preDrivePath,
     queryParameters = {},
-  }: UriParameters): string {
+  }: IUriParameters): string {
     const uri = ['https://www.googleapis.com']
 
     if (Array.isArray(preDrivePath)) {
       uri.push(...preDrivePath)
-    } else if (preDrivePath !== null) {
+    } else if (preDrivePath) {
       uri.push(preDrivePath)
     }
 
-    for (const element of ['drive/v3', api, fileId, path]) {
-      if (element !== null) {
-        uri.push(element)
-      }
-    }
+    uri.push(...['drive/v3', api, fileId, path].filter(isNonEmptyString))
 
-    return new ArrayStringifier()
-      .setArray(uri)
-      .setPostfix(stringifyQueryParameters(queryParameters))
-      .setSeparator('/')
-      .process()
+    const url = new URL(uri.join('/'))
+
+    Object.entries(queryParameters).forEach(([key, value]) => url.searchParams.append(key, value?.toString() ?? typeof undefined))
+
+    return url.toString()
   }
 }

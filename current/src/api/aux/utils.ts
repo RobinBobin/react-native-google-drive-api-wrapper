@@ -1,5 +1,4 @@
 import { toByteArray } from 'base64-js'
-import { ArrayStringifier, StaticUtils } from 'simple-common-utils'
 
 export function blobToByteArray(blob: Blob): Promise<Uint8Array | null> {
   return new Promise((resolve, reject) => {
@@ -9,14 +8,14 @@ export function blobToByteArray(blob: Blob): Promise<Uint8Array | null> {
 
     reader.onload = () => {
       if (!reader.result) {
-        resolve(null)
+        reject(null)
         return
       }
 
       if (typeof reader.result === 'string') {
         const b64 = reader.result.split('data:application/octet-stream;base64,')[1]
 
-        resolve(toByteArray(b64))
+        resolve(toByteArray(b64!))
 
         return
       }
@@ -28,15 +27,6 @@ export function blobToByteArray(blob: Blob): Promise<Uint8Array | null> {
   })
 }
 
-export function stringifyQueryParameters(
-  queryParameters: object,
-  prefix: string = '?',
-  separator: string = '&',
-  quoteIfString: boolean = false,
-) {
-  const array = Object.entries(queryParameters).map(
-    ([key, value]) => `${key}=${StaticUtils.safeQuoteIfString(value, quoteIfString)}`,
-  )
-
-  return new ArrayStringifier(array).setPrefix(prefix).setSeparator(separator).process()
+export function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && Boolean(value)
 }

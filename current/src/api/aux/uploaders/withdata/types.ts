@@ -1,1 +1,1 @@
-export type Data = Uint8Array | number[] | string
+export type TData = Uint8Array | number[] | string

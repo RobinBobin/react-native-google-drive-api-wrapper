@@ -1,1 +1,1 @@
-export type UploadType = 'media' | 'multipart' | 'resumable'
+export type TUploadType = 'media' | 'multipart' | 'resumable'

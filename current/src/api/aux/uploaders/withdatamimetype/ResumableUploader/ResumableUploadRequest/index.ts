@@ -1,9 +1,8 @@
-import { RequestUploadStatusResultType, UploadChunkResultType } from './types'
-import { Data } from '../../../withdata/types'
+import type { IRequestUploadStatusResultType, IUploadChunkResultType } from './types'
+import type { TData } from '../../../withdata/types'
 import { Fetcher } from '../../../../Fetcher'
 import { GDriveApi } from '../../../../../GDriveApi'
 import { HttpError } from '../../../../../../HttpError'
-import { MimeType } from '../../../../../../MimeType'
 
 export class ResumableUploadRequest {
   private readonly dataMimeType: string
@@ -28,7 +27,7 @@ export class ResumableUploadRequest {
     this.shouldUseMultipleRequests = shouldUseMultipleRequests
   }
 
-  async requestUploadStatus(): Promise<RequestUploadStatusResultType> {
+  async requestUploadStatus(): Promise<IRequestUploadStatusResultType> {
     const response = await new Fetcher<Response>(this.gDriveApi)
       .appendHeader('Content-Range', `bytes */${this.contentLength || '*'}`)
       .setMethod('PUT')
@@ -62,7 +61,7 @@ export class ResumableUploadRequest {
     return this.__transferredByteCount
   }
 
-  async uploadChunk(chunk: Data): Promise<UploadChunkResultType> {
+  async uploadChunk(chunk: TData): Promise<IUploadChunkResultType> {
     const fetcher = new Fetcher<Response>(this.gDriveApi)
       .setMethod('PUT')
       .setBody(Array.isArray(chunk) ? new Uint8Array(chunk) : chunk, this.dataMimeType)
@@ -105,7 +104,7 @@ export class ResumableUploadRequest {
   private processRange(response: Response) {
     return response.headers
       .get('Range')!
-      .split('=')[1]
+      .split('=')[1]!
       .split('-')
       .map(Number)
       .reduce((previousValue, currentValue) => currentValue - previousValue + 1)

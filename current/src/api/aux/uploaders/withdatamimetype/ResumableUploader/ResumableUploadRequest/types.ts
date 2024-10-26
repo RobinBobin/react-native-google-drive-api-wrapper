@@ -1,8 +1,8 @@
-export interface RequestUploadStatusResultType {
+export interface IRequestUploadStatusResultType {
   isComplete: boolean
   transferredByteCount: number
 }
 
-export interface UploadChunkResultType extends RequestUploadStatusResultType {
+export interface IUploadChunkResultType extends IRequestUploadStatusResultType {
   json?: any
 }
