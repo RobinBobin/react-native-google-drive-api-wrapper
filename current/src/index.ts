@@ -1,7 +1,7 @@
-import { GDrive } from './GDrive'
-import { HttpError } from './HttpError'
-import { MimeType } from './MimeType'
-import { ListQueryBuilder } from './api/files/ListQueryBuilder'
-import { UnexpectedFileCountError } from './api/files/UnexpectedFileCountError'
-
-export { GDrive, HttpError, ListQueryBuilder, MimeType, UnexpectedFileCountError }
+export { GDrive } from './GDrive'
+export { MimeType } from './MimeType'
+export { ListQueryBuilder } from 'api/files/ListQueryBuilder'
+export { UnexpectedFileCountError } from 'api/files/errors/UnexpectedFileCountError'
+export { FetchResponseError } from 'aux/Fetcher/errors/FetchResponseError'
+export { BlobToByteArrayError } from 'aux/Fetcher/errors/BlobToByteArrayError'
+export { blobToByteArray } from 'aux/Fetcher/blobToByteArray'

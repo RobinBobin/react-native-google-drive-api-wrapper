@@ -1,6 +1,6 @@
-import { About } from './api/about/About'
-import { Files } from './api/files'
-import { Permissions } from './api/permissions/Permissions'
+import { About } from 'api/about'
+import { Files } from 'api/files'
+import { Permissions } from 'api/permissions'
 
 export class GDrive {
   // GDrive apis.

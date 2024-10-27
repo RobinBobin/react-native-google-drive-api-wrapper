@@ -1,151 +1,129 @@
-import { UnexpectedFileCountError } from './UnexpectedFileCountError'
-import type { ICreateIfNotExistsResultType, TListParams } from './types'
+import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
+import type { ICreateIfNotExistsResultType, ICreateGetFetcherParams, TListParams } from './types'
 import { GDriveApi } from '../GDriveApi'
-import { Fetcher, fetch } from '../aux/Fetcher'
-import type { TFetchResponseType } from '../aux/Fetcher/types'
-import { MetadataOnlyUploader } from '../aux/uploaders/MetadataOnlyUploader'
-import { Uploader } from '../aux/uploaders/Uploader'
-import { MultipartUploader } from '../aux/uploaders/withdata/MultipartUploader'
-import { SimpleUploader } from '../aux/uploaders/withdata/SimpleUploader'
-import { ResumableUploader } from '../aux/uploaders/withdatamimetype/ResumableUploader'
-import { makeFilesUri } from '../aux/Uris'
-import { MimeType } from '../../MimeType'
-import type { TGenericQueryParameters } from '../aux/Uris/types'
+import { Fetcher, fetchJson, fetchText } from 'aux/Fetcher'
+import { MetadataOnlyUploader } from 'uploaders/implementations/MetadataOnlyUploader'
+import { Uploader } from 'uploaders/base/Uploader'
+import { MultipartUploader } from 'uploaders/implementations/MultipartUploader'
+import { SimpleUploader } from 'uploaders/implementations/SimpleUploader'
+import { ResumableUploader } from 'uploaders/implementations/ResumableUploader'
+import { makeFilesUri } from 'aux/uriMakers'
+import { MimeType } from 'src/MimeType'
+import type { TQueryParameters } from 'src/types'
+import type { TJson } from 'src/types'
+import type { TBlobToByteArrayResultType } from 'aux/Fetcher/types'
 
 export class Files extends GDriveApi {
-  copy(fileId: string, queryParameters?: TGenericQueryParameters, requestBody: Record<string, unknown> = {}) {
+  copy(fileId: string, queryParameters?: TQueryParameters, requestBody: TJson = {}): Promise<TJson> {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MimeType.JSON)
       .setMethod('POST')
-      .fetch(makeFilesUri({ fileId, method: 'copy', queryParameters }), 'json')
+      .fetchJson(makeFilesUri({ fileId, method: 'copy', queryParameters }))
   }
 
-  async createIfNotExists<ExecuteResultType, FetcherResultType = ExecuteResultType>(
+  async createIfNotExists<ExecuteResultType>(
     queryParameters: TListParams,
-    uploader: Uploader<ExecuteResultType, FetcherResultType>
-  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType>> {
-    const files = (await this.list(queryParameters)).files
+    uploader: Uploader<ExecuteResultType>
+  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType | TJson>> {
+    const list = await this.list(queryParameters)
+    const files = list['files'] as TJson[]
 
-    switch (files.length) {
-      case 0:
-        return {
-          alreadyExisted: false,
-          result: await uploader.execute(),
-        }
-
-      case 1:
-        return {
-          alreadyExisted: true,
-          result: files[0],
-        }
-
-      default:
-        throw new UnexpectedFileCountError([0, 1], files.length)
+    if (!files.length) {
+      return {
+        alreadyExisted: false,
+        result: await uploader.execute(),
+      }
     }
+
+    if (files.length === 1) {
+      return {
+        alreadyExisted: true,
+        result: files[0] as TJson,
+      }
+    }
+
+    throw new UnexpectedFileCountError(files.length)
   }
 
-  delete(fileId: string) {
-    return new Fetcher(this).setMethod('DELETE').fetch(makeFilesUri({ fileId }), 'text')
+  delete(fileId: string): Promise<string> {
+    return new Fetcher(this).setMethod('DELETE').fetchText(makeFilesUri({ fileId }))
   }
 
-  emptyTrash() {
-    return new Fetcher(this).setMethod('DELETE').fetch(makeFilesUri({ method: 'trash' }), 'text')
+  emptyTrash(): Promise<string> {
+    return new Fetcher(this).setMethod('DELETE').fetchText(makeFilesUri({ method: 'trash' }))
   }
 
-  export(fileId: string, queryParameters: TGenericQueryParameters) {
-    return fetch(this, makeFilesUri({ fileId, method: 'export', queryParameters }), 'text')
+  export(fileId: string, queryParameters: TQueryParameters): Promise<string> {
+    return fetchText(this, makeFilesUri({ fileId, method: 'export', queryParameters }))
   }
 
-  generateIds(queryParameters?: TGenericQueryParameters) {
-    return fetch(this, makeFilesUri({ method: 'generateIds', queryParameters }), 'json')
+  generateIds(queryParameters?: TQueryParameters): Promise<TJson> {
+    return fetchJson(this, makeFilesUri({ method: 'generateIds', queryParameters }))
   }
 
-  get(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
-    return this.__get(fileId, queryParameters, range)
+  get(fileId: string, queryParameters?: TQueryParameters, range?: string): Promise<Response> {
+    return this.createGetFetcher({ fileId, queryParameters, range }).fetch()
   }
 
-  getBinary(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
-    return this.__getContent(fileId, queryParameters, range, 'blob')
+  getBinary(fileId: string, queryParameters?: TQueryParameters, range?: string): Promise<TBlobToByteArrayResultType> {
+    return this.createGetFetcher({ fileId, isContent: true, queryParameters, range}).fetchBlob()
   }
 
-  getContent(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
-    return this.__getContent(fileId, queryParameters, range)
+  getContent(fileId: string, queryParameters?: TQueryParameters, range?: string): Promise<Response> {
+    return this.createGetFetcher({ fileId, isContent: true, queryParameters, range}).fetch()
   }
 
-  getJson(fileId: string, queryParameters?: TGenericQueryParameters) {
-    return this.__getContent(fileId, queryParameters, undefined, 'json')
+  getJson<T = TJson>(fileId: string, queryParameters?: TQueryParameters): Promise<T> {
+    return this.createGetFetcher({ fileId, isContent: true, queryParameters }).fetchJson<T>()
   }
 
-  getMetadata(fileId: string, queryParameters?: TGenericQueryParameters) {
-    return this.__get(
-      fileId,
-      {
-        ...queryParameters,
-        alt: 'json',
-      },
-      undefined,
-      'json',
-    )
+  getMetadata(fileId: string, queryParameters?: TQueryParameters): Promise<TJson> {
+    return this.createGetFetcher({ fileId, isContent: false, queryParameters }).fetchJson()
   }
 
-  getText(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
-    return this.__getContent(fileId, queryParameters, range, 'text')
+  getText(fileId: string, queryParameters?: TQueryParameters, range?: string): Promise<string> {
+    return this.createGetFetcher({ fileId, isContent: true, queryParameters, range }).fetchText()
   }
 
-  list(queryParameters?: TListParams) {
+  list(queryParameters?: TListParams): Promise<TJson> {
     const _queryParameters = !queryParameters?.q ? queryParameters : {
       ...queryParameters,
       q: queryParameters.q.toString()
     }
 
-    return fetch<any>(this, makeFilesUri({ queryParameters: _queryParameters }), 'json')
+    return fetchJson(this, makeFilesUri({ queryParameters: _queryParameters }))
   }
 
-  newMetadataOnlyUploader() {
+  newMetadataOnlyUploader(): MetadataOnlyUploader {
     return new MetadataOnlyUploader(new Fetcher(this))
   }
 
-  newMultipartUploader() {
+  newMultipartUploader(): MultipartUploader {
     return new MultipartUploader(new Fetcher(this))
   }
 
-  newResumableUploader() {
+  newResumableUploader(): ResumableUploader {
     return new ResumableUploader(new Fetcher(this))
   }
 
-  newSimpleUploader() {
+  newSimpleUploader(): SimpleUploader {
     return new SimpleUploader(new Fetcher(this))
   }
 
-  __get(
-    fileId: string,
-    queryParameters?: TGenericQueryParameters,
-    range?: string,
-    responseType?: TFetchResponseType,
-  ) {
-    const fetcher = new Fetcher(this)
+  private createGetFetcher({ fileId, isContent, queryParameters, range }: ICreateGetFetcherParams): Fetcher {
+    const canSetAlt = typeof isContent === 'boolean'
+
+    const _queryParameters = canSetAlt ? {
+      ...queryParameters,
+      alt: isContent ? 'media' : 'json'
+    } : queryParameters
+
+    const fetcher = new Fetcher(this).setResource(makeFilesUri({ fileId, queryParameters: _queryParameters }))
 
     if (range) {
       fetcher.appendHeader('Range', `bytes=${range}`)
     }
 
-    return fetcher.fetch(makeFilesUri({ fileId, queryParameters }), responseType)
-  }
-
-  __getContent(
-    fileId: string,
-    queryParameters?: TGenericQueryParameters,
-    range?: string,
-    responseType?: TFetchResponseType,
-  ) {
-    return this.__get(
-      fileId,
-      {
-        ...queryParameters,
-        alt: 'media',
-      },
-      range,
-      responseType,
-    )
+    return fetcher
   }
 }

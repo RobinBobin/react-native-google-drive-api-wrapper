@@ -16,6 +16,12 @@
     // Modules
     "moduleResolution": "Bundler",
     "noUncheckedSideEffectImports": true,
+    "paths": {
+      "api/*": ["./src/api/*"],
+      "aux/*": ["./src/aux/*"],
+      "src/*": ["./src/*"],
+      "uploaders/*": ["./src/aux/uploaders/*"]
+    },
     "rootDir": ".",
 
     // Emit

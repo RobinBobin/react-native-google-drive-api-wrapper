@@ -20,18 +20,18 @@ const Factory = (): TListQueryBuilder => {
   function clauseFunction(command: TClauseFunctionCommand, ...rest: unknown[]): TListQueryBuilder {
     queryClauses.push(command === 'push' ? '(' : command)
 
-    return rest.length ? addClause(...[...rest] as TClause) : implementation
+    return rest.length ? addClause(...rest as TClause) : implementation
   }
 
   const source: IListQueryBuilderSource = {
-    and() { return clauseFunction('and', ...arguments) },
-    or() { return clauseFunction('or', ...arguments)},
+    and(...clause: unknown[]) { return clauseFunction('and', ...clause) },
+    or(...clause: unknown[]) { return clauseFunction('or', ...clause)},
     pop() {
       queryClauses.push(')')
 
       return implementation
     },
-    push() { return clauseFunction('push', ...arguments)},
+    push(...clause) { return clauseFunction('push', ...clause)},
     toString() {
       const query = queryClauses.join(' ')
 

@@ -7,7 +7,9 @@ export default tsEslint.config(
   ...tsEslint.configs.stylistic,
   {
     rules: {
-      "@typescript-eslint/explicit-function-return-type": ["error"]
+      "@typescript-eslint/explicit-function-return-type": ["error"],
+      "no-throw-literal": ["error"],
+      "prefer-promise-reject-errors": ["error"]
     }
   }
 );

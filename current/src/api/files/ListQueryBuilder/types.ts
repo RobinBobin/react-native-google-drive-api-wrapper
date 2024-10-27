@@ -13,13 +13,14 @@ export type TClauseFunctionCommand = 'and' | 'or' | 'push'
 export type TClauseFunctionWithClause = (...clause: TClause) => TListQueryBuilder
 export type TKeyOrValue = TKey | TValue
 
-export interface IListQueryBuilderSource extends Record<TClauseFunctionCommand, TClauseFunction<TClauseFunctionCommand>> {
+export interface IListQueryBuilderSource {
+  and(): TClauseFunction<'and'>
+  or(): TClauseFunction<'or'>
   pop(): TListQueryBuilder
+  push(): TClauseFunction<'push'>
   toString(): string
 }
 
-export interface IListQueryBuilderTarget {
-  (...clause: TClause): TListQueryBuilder
-}
+export type IListQueryBuilderTarget = (...clause: TClause) => TListQueryBuilder
 
 export type TListQueryBuilder = IListQueryBuilderSource & IListQueryBuilderTarget
