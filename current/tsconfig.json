@@ -22,6 +22,10 @@
     "noEmitOnError": true,
     "outDir": "js",
 
+    // JavaScript Support
+    "allowJs": true,
+    "checkJs": true,
+
     // Interop Constraints
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,
@@ -35,5 +39,5 @@
     // Completeness
     "skipLibCheck": true,
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "eslint.config.mjs"]
 }

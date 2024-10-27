@@ -8,7 +8,7 @@ export abstract class UploaderWithDataMimeType<ExecuteResultType, FetcherResultT
   constructor(
     fetcher: Fetcher<FetcherResultType>,
     uploadType: TUploadType,
-    isJsonResponseType: boolean = true
+    isJsonResponseType = true
   ) {
     super(fetcher, uploadType, isJsonResponseType)
   }

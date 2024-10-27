@@ -3,14 +3,6 @@ import { blobToByteArray } from '../utils'
 import { GDriveApi } from '../../GDriveApi'
 import { HttpError } from '../../../HttpError'
 
-/*
- * A weird workaround of an equally weird bug:
- *
- * Require cycle: node_modules/react-native/Libraries/Network/fetch.js -> node_modules/whatwg-fetch/dist/fetch.umd.js -> node_modules/react-native/Libraries/Network/fetch.js
- */
-
-fetch
-
 export class Fetcher<T> {
   public readonly gDriveApi: GDriveApi
 
@@ -49,7 +41,7 @@ export class Fetcher<T> {
       setTimeout(() => this.abortController.abort(), this.gDriveApi.accessParameters.fetchTimeout)
     }
 
-    let response: Response = await fetch(this.resource as RequestInfo, this.init)
+    const response: Response = await fetch(this.resource as RequestInfo, this.init)
 
     if (!response.ok) {
       throw await HttpError.create(response)
@@ -94,7 +86,7 @@ export class Fetcher<T> {
   }
 }
 
-async function exportedFetch<T>(
+function exportedFetch<T>(
   gDriveApi: GDriveApi,
   resource: RequestInfo,
   responseType: TFetchResponseType,

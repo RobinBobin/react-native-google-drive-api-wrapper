@@ -8,7 +8,7 @@ import { Uploader } from '../aux/uploaders/Uploader'
 import { MultipartUploader } from '../aux/uploaders/withdata/MultipartUploader'
 import { SimpleUploader } from '../aux/uploaders/withdata/SimpleUploader'
 import { ResumableUploader } from '../aux/uploaders/withdatamimetype/ResumableUploader'
-import { Uris } from '../aux/Uris'
+import { makeFilesUri } from '../aux/Uris'
 import { MimeType } from '../../MimeType'
 import type { TGenericQueryParameters } from '../aux/Uris/types'
 
@@ -17,7 +17,7 @@ export class Files extends GDriveApi {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MimeType.JSON)
       .setMethod('POST')
-      .fetch(Uris.files({ fileId, method: 'copy', queryParameters }), 'json')
+      .fetch(makeFilesUri({ fileId, method: 'copy', queryParameters }), 'json')
   }
 
   async createIfNotExists<ExecuteResultType, FetcherResultType = ExecuteResultType>(
@@ -45,19 +45,19 @@ export class Files extends GDriveApi {
   }
 
   delete(fileId: string) {
-    return new Fetcher(this).setMethod('DELETE').fetch(Uris.files({ fileId }), 'text')
+    return new Fetcher(this).setMethod('DELETE').fetch(makeFilesUri({ fileId }), 'text')
   }
 
   emptyTrash() {
-    return new Fetcher(this).setMethod('DELETE').fetch(Uris.files({ method: 'trash' }), 'text')
+    return new Fetcher(this).setMethod('DELETE').fetch(makeFilesUri({ method: 'trash' }), 'text')
   }
 
   export(fileId: string, queryParameters: TGenericQueryParameters) {
-    return fetch(this, Uris.files({ fileId, method: 'export', queryParameters }), 'text')
+    return fetch(this, makeFilesUri({ fileId, method: 'export', queryParameters }), 'text')
   }
 
   generateIds(queryParameters?: TGenericQueryParameters) {
-    return fetch(this, Uris.files({ method: 'generateIds', queryParameters }), 'json')
+    return fetch(this, makeFilesUri({ method: 'generateIds', queryParameters }), 'json')
   }
 
   get(fileId: string, queryParameters?: TGenericQueryParameters, range?: string) {
@@ -98,7 +98,7 @@ export class Files extends GDriveApi {
       q: queryParameters.q.toString()
     }
 
-    return fetch<any>(this, Uris.files({ queryParameters: _queryParameters }), 'json')
+    return fetch<any>(this, makeFilesUri({ queryParameters: _queryParameters }), 'json')
   }
 
   newMetadataOnlyUploader() {
@@ -129,7 +129,7 @@ export class Files extends GDriveApi {
       fetcher.appendHeader('Range', `bytes=${range}`)
     }
 
-    return fetcher.fetch(Uris.files({ fileId, queryParameters }), responseType)
+    return fetcher.fetch(makeFilesUri({ fileId, queryParameters }), responseType)
   }
 
   __getContent(

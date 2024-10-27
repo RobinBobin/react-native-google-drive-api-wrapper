@@ -1,6 +1,6 @@
 import type { TUploadType } from './types'
 import { Fetcher } from '../Fetcher'
-import { Uris } from '../Uris'
+import { makeFilesUri } from '../Uris'
 import type { TGenericQueryParameters } from '../Uris/types'
 
 type TQueryParameters = TGenericQueryParameters & { uploadType?: never }
@@ -14,7 +14,7 @@ export abstract class Uploader<ExecuteResultType, FetcherResultType = ExecuteRes
   constructor(
     protected readonly fetcher: Fetcher<FetcherResultType>,
     private readonly uploadType?: TUploadType,
-    private readonly isJsonResponseType: boolean = true
+    private readonly isJsonResponseType = true
   ) {
     // Nothing to do.
   }
@@ -25,7 +25,7 @@ export abstract class Uploader<ExecuteResultType, FetcherResultType = ExecuteRes
     this.requestBody = JSON.stringify(this.requestBody)
 
     this.fetcher.setMethod(this.idOfFileToUpdate ? 'PATCH' : 'POST').setResource(
-      Uris.files({
+      makeFilesUri({
         fileId: this.idOfFileToUpdate,
         preDrivePath: isMetadataOnly ? undefined : 'upload',
         queryParameters: {
