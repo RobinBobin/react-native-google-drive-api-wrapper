@@ -1,4 +1,4 @@
-import type { TJson } from "src/types"
+import type { TJson } from 'src/types'
 
 export class FetchResponseError extends Error {
   constructor(
@@ -22,7 +22,7 @@ export class FetchResponseError extends Error {
 
     try {
       json = JSON.parse(message)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // Nothing to do.
     }
@@ -34,7 +34,8 @@ export class FetchResponseError extends Error {
     try {
       return await response.text()
     } catch (error) {
-      let message = "Something insane happened when trying to 'await response.text()'"
+      let message =
+        "Something insane happened when trying to 'await response.text()'"
 
       if (error instanceof Error) {
         message = error.message

@@ -18,7 +18,9 @@ export class ResumableUploader extends UploaderWithDataMimeType<ResumableUploadR
     return this
   }
 
-  setShouldUseMultipleRequests(shouldUseMultipleRequests: boolean): ResumableUploader {
+  setShouldUseMultipleRequests(
+    shouldUseMultipleRequests: boolean
+  ): ResumableUploader {
     this.shouldUseMultipleRequests = shouldUseMultipleRequests
 
     return this
@@ -26,7 +28,10 @@ export class ResumableUploader extends UploaderWithDataMimeType<ResumableUploadR
 
   protected async _execute(): Promise<ResumableUploadRequest> {
     if (this.contentLength) {
-      this.fetcher.appendHeader('X-Upload-Content-Length', this.contentLength.toString())
+      this.fetcher.appendHeader(
+        'X-Upload-Content-Length',
+        this.contentLength.toString()
+      )
     }
 
     this.fetcher.appendHeader('X-Upload-Content-Type', this.dataMimeType)
@@ -39,7 +44,10 @@ export class ResumableUploader extends UploaderWithDataMimeType<ResumableUploadR
     const location = response.headers.get('Location')
 
     if (!location) {
-      throw new ResumableUploaderError("No 'Location' header in the original response", response)
+      throw new ResumableUploaderError(
+        "No 'Location' header in the original response",
+        response
+      )
     }
 
     return new ResumableUploadRequest(

@@ -10,7 +10,7 @@ export abstract class Uploader<ExecuteResultType> {
 
   constructor(
     protected readonly fetcher: Fetcher,
-    private readonly uploadType?: TUploadType,
+    private readonly uploadType?: TUploadType
   ) {
     // Nothing to do.
   }
@@ -19,16 +19,18 @@ export abstract class Uploader<ExecuteResultType> {
     const isMetadataOnly = !this.uploadType
     const preDrivePath = isMetadataOnly ? undefined : 'upload'
 
-    this.fetcher.setMethod(this.idOfFileToUpdate ? 'PATCH' : 'POST').setResource(
-      makeFilesUri({
-        fileId: this.idOfFileToUpdate,
-        preDrivePath,
-        queryParameters: {
-          ...this.queryParameters,
-          uploadType: this.uploadType
-        }
-      }),
-    )
+    this.fetcher
+      .setMethod(this.idOfFileToUpdate ? 'PATCH' : 'POST')
+      .setResource(
+        makeFilesUri({
+          fileId: this.idOfFileToUpdate,
+          preDrivePath,
+          queryParameters: {
+            ...this.queryParameters,
+            uploadType: this.uploadType
+          }
+        })
+      )
 
     return this._execute()
   }
@@ -39,7 +41,9 @@ export abstract class Uploader<ExecuteResultType> {
     return this
   }
 
-  setQueryParameters(queryParameters: TUploadQueryParameters): Uploader<ExecuteResultType> {
+  setQueryParameters(
+    queryParameters: TUploadQueryParameters
+  ): Uploader<ExecuteResultType> {
     this.queryParameters = queryParameters
 
     return this

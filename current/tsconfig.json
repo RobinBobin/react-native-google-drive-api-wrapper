@@ -43,7 +43,7 @@
     "noErrorTruncation": true,
 
     // Completeness
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "eslint.config.mjs"]
 }

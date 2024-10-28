@@ -1,4 +1,4 @@
-import type { TJson } from "src/types"
+import type { TJson } from 'src/types'
 
 export interface IRequestUploadStatusResultType {
   isComplete: boolean

@@ -1,4 +1,7 @@
-import type { IRequestUploadStatusResultType, IUploadChunkResultType } from './types'
+import type {
+  IRequestUploadStatusResultType,
+  IUploadChunkResultType
+} from './types'
 import type { TSimpleData } from 'uploaders/types'
 import { Fetcher } from 'aux/Fetcher'
 import type { GDriveApi } from 'api/GDriveApi'
@@ -34,7 +37,7 @@ export class ResumableUploadRequest {
 
       return {
         isComplete: true,
-        transferredByteCount: this._transferredByteCount,
+        transferredByteCount: this._transferredByteCount
       }
     } catch (error) {
       if (!(error instanceof FetchResponseError)) {
@@ -49,7 +52,7 @@ export class ResumableUploadRequest {
 
       return {
         isComplete: false,
-        transferredByteCount: this.processRange(response),
+        transferredByteCount: this.processRange(response)
       }
     }
   }
@@ -67,7 +70,10 @@ export class ResumableUploadRequest {
   async uploadChunk(chunk: TSimpleData): Promise<IUploadChunkResultType> {
     const fetcher = new Fetcher(this.gDriveApi)
       .setMethod('PUT')
-      .setBody(Array.isArray(chunk) ? new Uint8Array(chunk) : chunk, this.dataMimeType)
+      .setBody(
+        Array.isArray(chunk) ? new Uint8Array(chunk) : chunk,
+        this.dataMimeType
+      )
       .setResource(this.location)
 
     if (this.shouldUseMultipleRequests) {
@@ -86,7 +92,7 @@ export class ResumableUploadRequest {
       return {
         isComplete: true,
         json: await response.json(),
-        transferredByteCount: chunk.length,
+        transferredByteCount: chunk.length
       }
     } catch (error) {
       if (!(error instanceof FetchResponseError)) {
@@ -105,7 +111,7 @@ export class ResumableUploadRequest {
 
       return {
         isComplete: false,
-        transferredByteCount,
+        transferredByteCount
       }
     }
   }
@@ -120,7 +126,10 @@ export class ResumableUploadRequest {
     const rightExpression = range.split('=')[1]
 
     if (!rightExpression) {
-      throw new ResumableUploaderError("'!rightExpression', examine the 'Range' header", response)
+      throw new ResumableUploaderError(
+        "'!rightExpression', examine the 'Range' header",
+        response
+      )
     }
 
     return rightExpression

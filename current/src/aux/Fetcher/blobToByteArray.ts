@@ -2,11 +2,14 @@ import { toByteArray } from 'base64-js'
 import { BlobToByteArrayError } from './errors/BlobToByteArrayError'
 import type { TBlobToByteArrayResultType } from './types'
 
-export function blobToByteArray(blob: Blob): Promise<TBlobToByteArrayResultType> {
+export function blobToByteArray(
+  blob: Blob
+): Promise<TBlobToByteArrayResultType> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
 
-    reader.onerror = (event): void => reject(new BlobToByteArrayError(event, 'reader.onerror', reader))
+    reader.onerror = (event): void =>
+      reject(new BlobToByteArrayError(event, 'reader.onerror', reader))
 
     reader.onload = (event): void => {
       if (!reader.result) {
@@ -19,12 +22,20 @@ export function blobToByteArray(blob: Blob): Promise<TBlobToByteArrayResultType>
         return
       }
 
-      const b64 = reader.result.split('data:application/octet-stream;base64,')[1]
+      const b64 = reader.result.split(
+        'data:application/octet-stream;base64,'
+      )[1]
 
       if (b64) {
         resolve(toByteArray(b64))
       } else {
-        reject(new BlobToByteArrayError(event, "'!b64', examine 'reader.result'", reader))
+        reject(
+          new BlobToByteArrayError(
+            event,
+            "'!b64', examine 'reader.result'",
+            reader
+          )
+        )
       }
     }
 

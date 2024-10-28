@@ -8,7 +8,8 @@ export class SimpleUploader extends UploaderWithSimpleData {
   }
 
   protected _execute(): Promise<TJson> {
-    const body = Array.isArray(this.data) ? new Uint8Array(this.data) : this.data
+    const body =
+      Array.isArray(this.data) ? new Uint8Array(this.data) : this.data
 
     return this.fetcher.setBody(body, this.dataMimeType).fetchJson()
   }

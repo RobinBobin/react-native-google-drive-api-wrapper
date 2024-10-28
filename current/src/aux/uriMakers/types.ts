@@ -1,4 +1,4 @@
-import type { TQueryParameters } from "src/types"
+import type { TQueryParameters } from 'src/types'
 
 type TPreDrivePath = string | string[] | undefined
 

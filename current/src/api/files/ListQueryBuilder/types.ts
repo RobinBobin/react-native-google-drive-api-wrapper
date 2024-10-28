@@ -4,13 +4,19 @@ type TValueQuotationFlag = boolean
 
 type TClauseFunctionWithoutClause = () => TListQueryBuilder
 
-type TClauseFunction<T extends TClauseFunctionCommand> = T extends 'push' ? TClauseFunctionWithClause : TClauseFunctionWithClause | TClauseFunctionWithoutClause
+type TClauseFunction<T extends TClauseFunctionCommand> =
+  T extends 'push' ? TClauseFunctionWithClause
+  : TClauseFunctionWithClause | TClauseFunctionWithoutClause
 
 type TOperator = 'contains' | '=' | '>' | '<'
 
-export type TClause = [TKey, TOperator, TValue, TValueQuotationFlag?] | [TValue, 'in', TKey, TValueQuotationFlag?]
+export type TClause =
+  | [TKey, TOperator, TValue, TValueQuotationFlag?]
+  | [TValue, 'in', TKey, TValueQuotationFlag?]
 export type TClauseFunctionCommand = 'and' | 'or' | 'push'
-export type TClauseFunctionWithClause = (...clause: TClause) => TListQueryBuilder
+export type TClauseFunctionWithClause = (
+  ...clause: TClause
+) => TListQueryBuilder
 export type TKeyOrValue = TKey | TValue
 
 export interface IListQueryBuilderSource {
@@ -23,4 +29,5 @@ export interface IListQueryBuilderSource {
 
 export type IListQueryBuilderTarget = (...clause: TClause) => TListQueryBuilder
 
-export type TListQueryBuilder = IListQueryBuilderSource & IListQueryBuilderTarget
+export type TListQueryBuilder = IListQueryBuilderSource &
+  IListQueryBuilderTarget

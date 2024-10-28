@@ -12,10 +12,13 @@ export class Fetcher {
   constructor(public readonly gDriveApi: GDriveApi) {
     this.init = {
       headers: new Headers(),
-      signal: this.abortController.signal,
+      signal: this.abortController.signal
     }
 
-    this.appendHeader('Authorization', `Bearer ${this.gDriveApi.accessParameters.accessToken}`)
+    this.appendHeader(
+      'Authorization',
+      `Bearer ${this.gDriveApi.accessParameters.accessToken}`
+    )
   }
 
   appendHeader(name: string, value: string): Fetcher {
@@ -30,7 +33,10 @@ export class Fetcher {
     }
 
     if (this.gDriveApi.accessParameters.fetchTimeout >= 0) {
-      setTimeout(() => this.abortController.abort(), this.gDriveApi.accessParameters.fetchTimeout)
+      setTimeout(
+        () => this.abortController.abort(),
+        this.gDriveApi.accessParameters.fetchTimeout
+      )
     }
 
     const response: Response = await fetch(this.resource, this.init)
@@ -84,14 +90,23 @@ export class Fetcher {
   }
 }
 
-export const fetchBlob = (gDriveApi: GDriveApi, resource: RequestInfo): Promise<TBlobToByteArrayResultType> => {
+export const fetchBlob = (
+  gDriveApi: GDriveApi,
+  resource: RequestInfo
+): Promise<TBlobToByteArrayResultType> => {
   return new Fetcher(gDriveApi).fetchBlob(resource)
 }
 
-export const fetchText = (gDriveApi: GDriveApi, resource: RequestInfo): Promise<string> => {
+export const fetchText = (
+  gDriveApi: GDriveApi,
+  resource: RequestInfo
+): Promise<string> => {
   return new Fetcher(gDriveApi).fetchText(resource)
 }
 
-export const fetchJson = <T = TJson>(gDriveApi: GDriveApi, resource: RequestInfo): Promise<T> => {
+export const fetchJson = <T = TJson>(
+  gDriveApi: GDriveApi,
+  resource: RequestInfo
+): Promise<T> => {
   return new Fetcher(gDriveApi).fetchJson<T>(resource)
 }

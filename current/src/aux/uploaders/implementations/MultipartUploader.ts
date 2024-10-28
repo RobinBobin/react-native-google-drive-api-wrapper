@@ -32,7 +32,7 @@ export class MultipartUploader extends UploaderWithSimpleData {
     let body: TBodyType | string[] = [
       `\n${dashDashBoundary}\n`,
       `Content-Type: ${MimeType.JSON_UTF8}\n\n`,
-      `${this.requestBody}\n\n${dashDashBoundary}\n`,
+      `${this.requestBody}\n\n${dashDashBoundary}\n`
     ]
 
     if (this.isBase64) {
@@ -46,15 +46,24 @@ export class MultipartUploader extends UploaderWithSimpleData {
     if (typeof this.data === 'string') {
       body += `${this.data}${ending}`
     } else {
-      const byteArray = [body, this.data, ending].reduce<number[]>((previousValue, rawCurrentValue) => {
-        const isString = typeof rawCurrentValue === 'string'
+      const byteArray = [body, this.data, ending].reduce<number[]>(
+        (previousValue, rawCurrentValue) => {
+          const isString = typeof rawCurrentValue === 'string'
 
-        const processedCurrentValue = isString ? utf8.encode(rawCurrentValue).split('').map(char => char.charCodeAt(0)) : Array.from(rawCurrentValue)
+          const processedCurrentValue =
+            isString ?
+              utf8
+                .encode(rawCurrentValue)
+                .split('')
+                .map(char => char.charCodeAt(0))
+            : Array.from(rawCurrentValue)
 
-        previousValue.push(...processedCurrentValue)
+          previousValue.push(...processedCurrentValue)
 
-        return previousValue
-      }, [])
+          return previousValue
+        },
+        []
+      )
 
       body = new Uint8Array(byteArray)
     }
@@ -63,7 +72,7 @@ export class MultipartUploader extends UploaderWithSimpleData {
       .appendHeader('Content-Length', body.length.toString())
       .appendHeader(
         'Content-Type',
-        `multipart/related; boundary=${this.multipartBoundary}`,
+        `multipart/related; boundary=${this.multipartBoundary}`
       )
       .setBody(body)
       .fetchJson()

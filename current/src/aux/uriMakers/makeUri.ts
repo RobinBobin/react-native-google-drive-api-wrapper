@@ -1,12 +1,12 @@
-import { isNonEmptyString } from "./isNonEmptyString"
-import type { IUriParameters } from "./types"
+import { isNonEmptyString } from './isNonEmptyString'
+import type { IUriParameters } from './types'
 
 export const makeUri = ({
   api,
   fileId,
   path,
   preDrivePath,
-  queryParameters = {},
+  queryParameters = {}
 }: IUriParameters): string => {
   const uri = ['https://www.googleapis.com']
 
@@ -20,7 +20,9 @@ export const makeUri = ({
 
   const url = new URL(uri.join('/'))
 
-  Object.entries(queryParameters).forEach(([key, value]) => url.searchParams.append(key, value?.toString() ?? typeof undefined))
+  Object.entries(queryParameters).forEach(([key, value]) =>
+    url.searchParams.append(key, value?.toString() ?? typeof undefined)
+  )
 
   return url.toString()
 }

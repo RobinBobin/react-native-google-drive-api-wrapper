@@ -5,5 +5,5 @@ export enum MimeType {
   JSON = 'application/json',
   JSON_UTF8 = 'application/json; charset=UTF-8',
   PDF = 'application/pdf',
-  TEXT = 'text/plain',
+  TEXT = 'text/plain'
 }

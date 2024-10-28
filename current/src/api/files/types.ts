@@ -13,4 +13,6 @@ export interface ICreateIfNotExistsResultType<ExecuteResultType> {
   result: ExecuteResultType
 }
 
-export type TListParams = TQueryParameters & { q: string | typeof ListQueryBuilder}
+export type TListParams = TQueryParameters & {
+  q: string | typeof ListQueryBuilder
+}
