@@ -1,4 +1,4 @@
-export class BlobToByteArrayError extends Error {
+class BlobToByteArrayError extends Error {
   constructor(
     readonly event: ProgressEvent<FileReader>,
     message: string,
@@ -9,3 +9,5 @@ export class BlobToByteArrayError extends Error {
 }
 
 BlobToByteArrayError.prototype.name = 'BlobToByteArrayError'
+
+export { BlobToByteArrayError }

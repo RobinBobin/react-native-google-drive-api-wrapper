@@ -1,9 +1,11 @@
 import type { TJson } from 'src/types'
+
+import { MIME_TYPE_JSON } from 'src/constants'
+
 import { Uploader } from '../base/Uploader'
-import { MimeType } from 'src/MimeType'
 
 export class MetadataOnlyUploader extends Uploader<TJson> {
   protected _execute(): Promise<TJson> {
-    return this.fetcher.setBody(this.requestBody, MimeType.JSON).fetchJson()
+    return this.fetcher.setBody(this.requestBody, MIME_TYPE_JSON).fetchJson()
   }
 }

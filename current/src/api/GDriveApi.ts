@@ -4,5 +4,7 @@ interface IGDriveAccessParameters {
 }
 
 export class GDriveApi {
+  public static readonly INFINITE_TIMEOUT = -1
+
   constructor(public readonly accessParameters: IGDriveAccessParameters) {}
 }

@@ -1,14 +1,13 @@
-import { MimeType } from 'src/MimeType'
+import { MIME_TYPE_OCTET_STREAM } from 'src/constants'
+
 import { Uploader } from './Uploader'
 
 export abstract class UploaderWithDataMimeType<
   ExecuteResultType
 > extends Uploader<ExecuteResultType> {
-  protected dataMimeType: string = MimeType.BINARY
+  protected dataMimeType: string = MIME_TYPE_OCTET_STREAM
 
-  setDataMimeType(
-    dataMimeType: string
-  ): UploaderWithDataMimeType<ExecuteResultType> {
+  setDataMimeType(dataMimeType: string): this {
     this.dataMimeType = dataMimeType
 
     return this

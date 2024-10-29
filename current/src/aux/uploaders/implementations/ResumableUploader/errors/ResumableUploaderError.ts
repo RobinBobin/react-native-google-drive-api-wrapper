@@ -1,4 +1,4 @@
-export class ResumableUploaderError extends Error {
+class ResumableUploaderError extends Error {
   constructor(
     message: string,
     readonly response: Response
@@ -8,3 +8,5 @@ export class ResumableUploaderError extends Error {
 }
 
 ResumableUploaderError.prototype.name = 'ResumableUploaderError'
+
+export { ResumableUploaderError }

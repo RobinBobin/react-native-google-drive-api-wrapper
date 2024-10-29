@@ -1,5 +1,6 @@
-import { isNonEmptyString } from './isNonEmptyString'
 import type { IUriParameters } from './types'
+
+import { isNonEmptyString } from './isNonEmptyString'
 
 export const makeUri = ({
   api,
@@ -20,9 +21,9 @@ export const makeUri = ({
 
   const url = new URL(uri.join('/'))
 
-  Object.entries(queryParameters).forEach(([key, value]) =>
+  Object.entries(queryParameters).forEach(([key, value]) => {
     url.searchParams.append(key, value?.toString() ?? typeof undefined)
-  )
+  })
 
   return url.toString()
 }

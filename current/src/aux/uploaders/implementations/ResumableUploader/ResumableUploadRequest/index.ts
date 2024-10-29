@@ -1,11 +1,14 @@
+import type { GDriveApi } from 'api/GDriveApi'
+import type { TJson } from 'src/types'
+import type { TSimpleData } from 'uploaders/types'
 import type {
   IRequestUploadStatusResultType,
   IUploadChunkResultType
 } from './types'
-import type { TSimpleData } from 'uploaders/types'
+
 import { Fetcher } from 'aux/Fetcher'
-import type { GDriveApi } from 'api/GDriveApi'
 import { FetchResponseError } from 'aux/Fetcher/errors/FetchResponseError'
+
 import { ResumableUploaderError } from '../errors/ResumableUploaderError'
 
 const HTTP_RESUME_INCOMPLETE = 308
@@ -14,6 +17,7 @@ export class ResumableUploadRequest {
   private contentLength: number
   private _transferredByteCount = 0
 
+  // eslint-disable-next-line @typescript-eslint/max-params
   constructor(
     contentLength: number,
     private readonly dataMimeType: string,
@@ -52,12 +56,12 @@ export class ResumableUploadRequest {
 
       return {
         isComplete: false,
-        transferredByteCount: this.processRange(response)
+        transferredByteCount: ResumableUploadRequest.processRange(response)
       }
     }
   }
 
-  setContentLength(contentLength: number): ResumableUploadRequest {
+  setContentLength(contentLength: number): this {
     this.contentLength = contentLength
 
     return this
@@ -78,6 +82,7 @@ export class ResumableUploadRequest {
 
     if (this.shouldUseMultipleRequests) {
       const from = this.transferredByteCount
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const to = from + chunk.length - 1
       const total = this.contentLength || '*'
 
@@ -91,7 +96,7 @@ export class ResumableUploadRequest {
 
       return {
         isComplete: true,
-        json: await response.json(),
+        json: (await response.json()) as TJson,
         transferredByteCount: chunk.length
       }
     } catch (error) {
@@ -105,7 +110,7 @@ export class ResumableUploadRequest {
         throw error
       }
 
-      const transferredByteCount = this.processRange(response)
+      const transferredByteCount = ResumableUploadRequest.processRange(response)
 
       this._transferredByteCount += transferredByteCount
 
@@ -116,7 +121,7 @@ export class ResumableUploadRequest {
     }
   }
 
-  private processRange(response: Response): number {
+  private static processRange(response: Response): number {
     const range = response.headers.get('Range')
 
     if (!range) {
@@ -135,6 +140,9 @@ export class ResumableUploadRequest {
     return rightExpression
       .split('-')
       .map(Number)
-      .reduce((previousValue, currentValue) => currentValue - previousValue + 1)
+      .reduce(
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+        (previousValue, currentValue) => currentValue - previousValue + 1
+      )
   }
 }

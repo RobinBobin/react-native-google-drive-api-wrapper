@@ -14,6 +14,7 @@
     "strict": true,
 
     // Modules
+    "module": "ES2022",
     "moduleResolution": "Bundler",
     "noUncheckedSideEffectImports": true,
     "paths": {
@@ -45,5 +46,6 @@
     // Completeness
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "eslint.config.mjs"]
+  "files": ["eslint.config.mjs", "namingConventionOptions.mjs"],
+  "include": ["src/**/*.ts"]
 }

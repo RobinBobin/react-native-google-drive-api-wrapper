@@ -1,21 +1,22 @@
-import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
+import type { TBlobToByteArrayResultType } from 'aux/Fetcher/types'
+import type { TJson, TQueryParameters } from 'src/types'
+import type { Uploader } from 'uploaders/base/Uploader'
 import type {
-  ICreateIfNotExistsResultType,
   ICreateGetFetcherParams,
+  ICreateIfNotExistsResultType,
   TListParams
 } from './types'
-import { GDriveApi } from '../GDriveApi'
+
 import { Fetcher, fetchJson, fetchText } from 'aux/Fetcher'
-import { MetadataOnlyUploader } from 'uploaders/implementations/MetadataOnlyUploader'
-import { Uploader } from 'uploaders/base/Uploader'
-import { MultipartUploader } from 'uploaders/implementations/MultipartUploader'
-import { SimpleUploader } from 'uploaders/implementations/SimpleUploader'
-import { ResumableUploader } from 'uploaders/implementations/ResumableUploader'
 import { makeFilesUri } from 'aux/uriMakers'
-import { MimeType } from 'src/MimeType'
-import type { TQueryParameters } from 'src/types'
-import type { TJson } from 'src/types'
-import type { TBlobToByteArrayResultType } from 'aux/Fetcher/types'
+import { MIME_TYPE_JSON } from 'src/constants'
+import { MetadataOnlyUploader } from 'uploaders/implementations/MetadataOnlyUploader'
+import { MultipartUploader } from 'uploaders/implementations/MultipartUploader'
+import { ResumableUploader } from 'uploaders/implementations/ResumableUploader'
+import { SimpleUploader } from 'uploaders/implementations/SimpleUploader'
+
+import { GDriveApi } from '../GDriveApi'
+import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
 
 export class Files extends GDriveApi {
   copy(
@@ -24,7 +25,7 @@ export class Files extends GDriveApi {
     requestBody: TJson = {}
   ): Promise<TJson> {
     return new Fetcher(this)
-      .setBody(JSON.stringify(requestBody), MimeType.JSON)
+      .setBody(JSON.stringify(requestBody), MIME_TYPE_JSON)
       .setMethod('POST')
       .fetchJson(makeFilesUri({ fileId, method: 'copy', queryParameters }))
   }
@@ -34,6 +35,7 @@ export class Files extends GDriveApi {
     uploader: Uploader<ExecuteResultType>
   ): Promise<ICreateIfNotExistsResultType<ExecuteResultType | TJson>> {
     const list = await this.list(queryParameters)
+    // eslint-disable-next-line dot-notation
     const files = list['files'] as TJson[]
 
     if (!files.length) {
@@ -43,10 +45,17 @@ export class Files extends GDriveApi {
       }
     }
 
-    if (files.length === 1) {
+    const theOnlyOne = 1
+
+    if (files.length === theOnlyOne) {
+      if (!files[0]) {
+        const somethingWeird = -1
+        throw new UnexpectedFileCountError(somethingWeird)
+      }
+
       return {
         alreadyExisted: true,
-        result: files[0] as TJson
+        result: files[0]
       }
     }
 
@@ -154,6 +163,7 @@ export class Files extends GDriveApi {
         queryParameters
       : {
           ...queryParameters,
+          // eslint-disable-next-line id-length
           q: queryParameters.q.toString()
         }
 

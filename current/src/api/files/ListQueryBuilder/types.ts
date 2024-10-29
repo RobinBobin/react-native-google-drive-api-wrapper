@@ -1,3 +1,6 @@
+/* eslint-disable import-x/group-exports */
+/* eslint-disable no-use-before-define */
+
 type TKey = string
 type TValue = boolean | number | string
 type TValueQuotationFlag = boolean
@@ -20,14 +23,14 @@ export type TClauseFunctionWithClause = (
 export type TKeyOrValue = TKey | TValue
 
 export interface IListQueryBuilderSource {
-  and(): TClauseFunction<'and'>
-  or(): TClauseFunction<'or'>
-  pop(): TListQueryBuilder
-  push(): TClauseFunction<'push'>
-  toString(): string
+  and: () => TClauseFunction<'and'>
+  or: () => TClauseFunction<'or'>
+  pop: () => TListQueryBuilder
+  push: () => TClauseFunction<'push'>
+  toString: () => string
 }
 
-export type IListQueryBuilderTarget = (...clause: TClause) => TListQueryBuilder
+export type TListQueryBuilderTarget = (...clause: TClause) => TListQueryBuilder
 
 export type TListQueryBuilder = IListQueryBuilderSource &
-  IListQueryBuilderTarget
+  TListQueryBuilderTarget

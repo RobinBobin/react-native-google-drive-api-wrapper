@@ -1,7 +1,8 @@
-import type { TUploadQueryParameters, TUploadType } from './types'
-import { Fetcher } from 'aux/Fetcher'
-import { makeFilesUri } from 'aux/uriMakers'
+import type { Fetcher } from 'aux/Fetcher'
 import type { TJson } from 'src/types'
+import type { TUploadQueryParameters, TUploadType } from './types'
+
+import { makeFilesUri } from 'aux/uriMakers'
 
 export abstract class Uploader<ExecuteResultType> {
   private idOfFileToUpdate = ''
@@ -35,21 +36,19 @@ export abstract class Uploader<ExecuteResultType> {
     return this._execute()
   }
 
-  setIdOfFileToUpdate(fileId: string): Uploader<ExecuteResultType> {
+  setIdOfFileToUpdate(fileId: string): this {
     this.idOfFileToUpdate = fileId
 
     return this
   }
 
-  setQueryParameters(
-    queryParameters: TUploadQueryParameters
-  ): Uploader<ExecuteResultType> {
+  setQueryParameters(queryParameters: TUploadQueryParameters): this {
     this.queryParameters = queryParameters
 
     return this
   }
 
-  setRequestBody(requestBody: TJson): Uploader<ExecuteResultType> {
+  setRequestBody(requestBody: TJson): this {
     this._requestBody = requestBody
 
     return this

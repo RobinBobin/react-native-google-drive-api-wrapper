@@ -1,6 +1,8 @@
-import { toByteArray } from 'base64-js'
-import { BlobToByteArrayError } from './errors/BlobToByteArrayError'
 import type { TBlobToByteArrayResultType } from './types'
+
+import { toByteArray } from 'base64-js'
+
+import { BlobToByteArrayError } from './errors/BlobToByteArrayError'
 
 export function blobToByteArray(
   blob: Blob
@@ -8,8 +10,9 @@ export function blobToByteArray(
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
 
-    reader.onerror = (event): void =>
+    reader.onerror = (event): void => {
       reject(new BlobToByteArrayError(event, 'reader.onerror', reader))
+    }
 
     reader.onload = (event): void => {
       if (!reader.result) {

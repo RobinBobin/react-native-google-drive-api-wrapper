@@ -1,6 +1,6 @@
 import type { TJson } from 'src/types'
 
-export class FetchResponseError extends Error {
+class FetchResponseError extends Error {
   constructor(
     readonly json: TJson | null,
     message: string,
@@ -10,7 +10,7 @@ export class FetchResponseError extends Error {
   }
 
   static async create(response: Response): Promise<FetchResponseError> {
-    let message = ''
+    let message: string
 
     try {
       message = await FetchResponseError.getResponseText(response)
@@ -21,7 +21,7 @@ export class FetchResponseError extends Error {
     let json: TJson | null = null
 
     try {
-      json = JSON.parse(message)
+      json = JSON.parse(message) as TJson
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // Nothing to do.
@@ -49,3 +49,5 @@ export class FetchResponseError extends Error {
 }
 
 FetchResponseError.prototype.name = 'HttpError'
+
+export { FetchResponseError }

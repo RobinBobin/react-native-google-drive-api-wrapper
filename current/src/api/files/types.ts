@@ -1,18 +1,24 @@
 import type { TQueryParameters } from 'src/types'
 import type { ListQueryBuilder } from './ListQueryBuilder'
 
-export interface ICreateGetFetcherParams {
+interface ICreateGetFetcherParams {
   fileId: string
   isContent?: boolean
   queryParameters: TQueryParameters | undefined
   range?: string | undefined
 }
 
-export interface ICreateIfNotExistsResultType<ExecuteResultType> {
+interface ICreateIfNotExistsResultType<ExecuteResultType> {
   alreadyExisted: boolean
   result: ExecuteResultType
 }
 
-export type TListParams = TQueryParameters & {
+type TListParams = TQueryParameters & {
   q: string | typeof ListQueryBuilder
+}
+
+export type {
+  ICreateGetFetcherParams,
+  ICreateIfNotExistsResultType,
+  TListParams
 }

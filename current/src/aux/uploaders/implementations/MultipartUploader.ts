@@ -1,9 +1,11 @@
-import utf8 from 'utf8'
-import { UploaderWithSimpleData } from '../base/UploaderWithSimpleData'
-import { Fetcher } from 'aux/Fetcher'
+import type { Fetcher } from 'aux/Fetcher'
 import type { TBodyType } from 'aux/Fetcher/types'
-import { MimeType } from 'src/MimeType'
 import type { TJson } from 'src/types'
+
+import { MIME_TYPE_JSON_UTF8 } from 'src/constants'
+import { encode } from 'utf8'
+
+import { UploaderWithSimpleData } from '../base/UploaderWithSimpleData'
 
 export class MultipartUploader extends UploaderWithSimpleData {
   private isBase64 = false
@@ -31,7 +33,7 @@ export class MultipartUploader extends UploaderWithSimpleData {
 
     let body: TBodyType | string[] = [
       `\n${dashDashBoundary}\n`,
-      `Content-Type: ${MimeType.JSON_UTF8}\n\n`,
+      `Content-Type: ${MIME_TYPE_JSON_UTF8}\n\n`,
       `${this.requestBody}\n\n${dashDashBoundary}\n`
     ]
 
@@ -52,10 +54,9 @@ export class MultipartUploader extends UploaderWithSimpleData {
 
           const processedCurrentValue =
             isString ?
-              utf8
-                .encode(rawCurrentValue)
+              encode(rawCurrentValue)
                 .split('')
-                .map(char => char.charCodeAt(0))
+                .map((char, index) => char.charCodeAt(index))
             : Array.from(rawCurrentValue)
 
           previousValue.push(...processedCurrentValue)

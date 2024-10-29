@@ -1,14 +1,14 @@
 import type {
   IListQueryBuilderSource,
-  IListQueryBuilderTarget,
   TClause,
   TClauseFunctionCommand,
   TClauseFunctionWithClause,
   TKeyOrValue,
-  TListQueryBuilder
+  TListQueryBuilder,
+  TListQueryBuilderTarget
 } from './types'
 
-const Factory = (): TListQueryBuilder => {
+const factory = (): TListQueryBuilder => {
   const queryClauses: TKeyOrValue[] = []
 
   const addClause: TClauseFunctionWithClause = (
@@ -25,6 +25,7 @@ const Factory = (): TListQueryBuilder => {
     queryClauses.push(operator)
     queryClauses.push(isIn ? key : value)
 
+    // eslint-disable-next-line no-use-before-define
     return implementation
   }
 
@@ -34,6 +35,7 @@ const Factory = (): TListQueryBuilder => {
   ): TListQueryBuilder {
     queryClauses.push(command === 'push' ? '(' : command)
 
+    // eslint-disable-next-line no-use-before-define
     return rest.length ? addClause(...(rest as TClause)) : implementation
   }
 
@@ -47,6 +49,7 @@ const Factory = (): TListQueryBuilder => {
     pop() {
       queryClauses.push(')')
 
+      // eslint-disable-next-line no-use-before-define
       return implementation
     },
     push(...clause) {
@@ -61,11 +64,11 @@ const Factory = (): TListQueryBuilder => {
     }
   }
 
-  const target: IListQueryBuilderTarget = (...clause) => addClause(...clause)
+  const target: TListQueryBuilderTarget = (...clause) => addClause(...clause)
 
   const implementation = Object.assign(target, source)
 
   return implementation
 }
 
-export const ListQueryBuilder = Factory()
+export const ListQueryBuilder = factory()

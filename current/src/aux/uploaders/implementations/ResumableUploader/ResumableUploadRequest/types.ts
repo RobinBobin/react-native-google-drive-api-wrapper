@@ -1,10 +1,12 @@
 import type { TJson } from 'src/types'
 
-export interface IRequestUploadStatusResultType {
+interface IRequestUploadStatusResultType {
   isComplete: boolean
   transferredByteCount: number
 }
 
-export interface IUploadChunkResultType extends IRequestUploadStatusResultType {
+interface IUploadChunkResultType extends IRequestUploadStatusResultType {
   json?: TJson
 }
+
+export type { IRequestUploadStatusResultType, IUploadChunkResultType }

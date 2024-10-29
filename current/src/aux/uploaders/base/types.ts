@@ -1,4 +1,6 @@
 import type { TQueryParameters } from 'src/types'
 
-export type TUploadQueryParameters = TQueryParameters & { uploadType?: never }
-export type TUploadType = 'media' | 'multipart' | 'resumable'
+type TUploadQueryParameters = TQueryParameters & { uploadType?: never }
+type TUploadType = 'media' | 'multipart' | 'resumable'
+
+export type { TUploadQueryParameters, TUploadType }

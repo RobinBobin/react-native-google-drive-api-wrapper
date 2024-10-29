@@ -1,6 +1,7 @@
+import type { IPermissionsParameters } from './types'
+
 import { isNonEmptyString } from './isNonEmptyString'
 import { makeUri } from './makeUri'
-import type { IPermissionsParameters } from './types'
 
 export const makePermissionsUri = ({
   fileId,

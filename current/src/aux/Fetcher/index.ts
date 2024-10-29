@@ -1,10 +1,12 @@
+import type { TJson } from 'src/types'
 import type { TBlobToByteArrayResultType, TBodyType } from './types'
+
+import { GDriveApi } from 'api/GDriveApi'
+
 import { blobToByteArray } from './blobToByteArray'
 import { FetchResponseError } from './errors/FetchResponseError'
-import type { GDriveApi } from 'api/GDriveApi'
-import type { TJson } from 'src/types'
 
-export class Fetcher {
+class Fetcher {
   private readonly abortController = new AbortController()
   private readonly init: RequestInit
   private resource: RequestInfo = ''
@@ -21,7 +23,7 @@ export class Fetcher {
     )
   }
 
-  appendHeader(name: string, value: string): Fetcher {
+  appendHeader(name: string, value: string): this {
     ;(this.init.headers as Headers).append(name, value)
 
     return this
@@ -32,7 +34,10 @@ export class Fetcher {
       this.setResource(resource)
     }
 
-    if (this.gDriveApi.accessParameters.fetchTimeout >= 0) {
+    if (
+      this.gDriveApi.accessParameters.fetchTimeout !==
+      GDriveApi.INFINITE_TIMEOUT
+    ) {
       setTimeout(
         () => this.abortController.abort(),
         this.gDriveApi.accessParameters.fetchTimeout
@@ -63,10 +68,10 @@ export class Fetcher {
   async fetchJson<T = TJson>(resource?: RequestInfo): Promise<T> {
     const response = await this.fetch(resource)
 
-    return await response.json()
+    return (await response.json()) as T
   }
 
-  setBody(body: TBodyType, contentType?: string): Fetcher {
+  setBody(body: TBodyType, contentType?: string): this {
     this.init.body = body
 
     if (contentType) {
@@ -77,36 +82,38 @@ export class Fetcher {
     return this
   }
 
-  setMethod(method: string): Fetcher {
+  setMethod(method: string): this {
     this.init.method = method
 
     return this
   }
 
-  setResource(resource: RequestInfo): Fetcher {
+  setResource(resource: RequestInfo): this {
     this.resource = resource
 
     return this
   }
 }
 
-export const fetchBlob = (
+const fetchBlob = (
   gDriveApi: GDriveApi,
   resource: RequestInfo
 ): Promise<TBlobToByteArrayResultType> => {
   return new Fetcher(gDriveApi).fetchBlob(resource)
 }
 
-export const fetchText = (
+const fetchText = (
   gDriveApi: GDriveApi,
   resource: RequestInfo
 ): Promise<string> => {
   return new Fetcher(gDriveApi).fetchText(resource)
 }
 
-export const fetchJson = <T = TJson>(
+const fetchJson = <T = TJson>(
   gDriveApi: GDriveApi,
   resource: RequestInfo
 ): Promise<T> => {
   return new Fetcher(gDriveApi).fetchJson<T>(resource)
 }
+
+export { fetchBlob, Fetcher, fetchJson, fetchText }

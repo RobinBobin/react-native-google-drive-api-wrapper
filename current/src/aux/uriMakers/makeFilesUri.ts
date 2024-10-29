@@ -1,5 +1,6 @@
-import { makeUri } from './makeUri'
 import type { IFilesParameters } from './types'
+
+import { makeUri } from './makeUri'
 
 export const makeFilesUri = ({
   fileId,

@@ -1,5 +1,6 @@
+import type { Fetcher } from 'aux/Fetcher'
 import type { TJson } from 'src/types'
-import { Fetcher } from 'aux/Fetcher'
+
 import { UploaderWithSimpleData } from '../base/UploaderWithSimpleData'
 
 export class SimpleUploader extends UploaderWithSimpleData {
