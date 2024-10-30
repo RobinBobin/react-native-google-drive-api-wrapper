@@ -1,15 +1,18 @@
 import type { TJson } from 'src/types'
+import type { ReadonlyDeep } from 'type-fest'
 
 class FetchResponseError extends Error {
   constructor(
-    readonly json: TJson | null,
+    readonly json: Readonly<TJson> | null,
     message: string,
-    readonly response: Response
+    readonly response: ReadonlyDeep<Response>
   ) {
     super(message)
   }
 
-  static async create(response: Response): Promise<FetchResponseError> {
+  static async create(
+    response: ReadonlyDeep<Response>
+  ): Promise<FetchResponseError> {
     let message: string
 
     try {
@@ -30,7 +33,9 @@ class FetchResponseError extends Error {
     return new FetchResponseError(json, message, response)
   }
 
-  private static async getResponseText(response: Response): Promise<string> {
+  private static async getResponseText(
+    response: ReadonlyDeep<Response>
+  ): Promise<string> {
     try {
       return await response.text()
     } catch (error) {

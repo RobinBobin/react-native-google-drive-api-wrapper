@@ -1,4 +1,5 @@
 import type { TJson } from 'src/types'
+import type { ReadonlyDeep } from 'type-fest'
 import type { TBlobToByteArrayResultType, TBodyType } from './types'
 
 import { GDriveApi } from 'api/GDriveApi'
@@ -71,7 +72,7 @@ class Fetcher {
     return (await response.json()) as T
   }
 
-  setBody(body: TBodyType, contentType?: string): this {
+  setBody(body: ReadonlyDeep<TBodyType>, contentType?: string): this {
     this.init.body = body
 
     if (contentType) {

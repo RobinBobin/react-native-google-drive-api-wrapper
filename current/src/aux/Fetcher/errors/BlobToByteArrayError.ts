@@ -1,8 +1,10 @@
+import type { ReadonlyDeep } from 'type-fest'
+
 class BlobToByteArrayError extends Error {
   constructor(
     readonly event: ProgressEvent<FileReader>,
     message: string,
-    readonly reader: FileReader
+    readonly reader: ReadonlyDeep<FileReader>
   ) {
     super(message)
   }

@@ -1,7 +1,5 @@
 import type { TQueryParameters } from 'src/types'
 
-type TPreDrivePath = string | string[] | undefined
-
 interface IAboutParameters {
   queryParameters: TQueryParameters
 }
@@ -9,7 +7,7 @@ interface IAboutParameters {
 interface IFilesParameters {
   fileId?: string
   method?: string
-  preDrivePath?: TPreDrivePath
+  preDrivePath?: string | undefined
   queryParameters?: TQueryParameters | undefined
 }
 
@@ -23,7 +21,7 @@ interface IUriParameters {
   api: string
   fileId?: string | undefined
   path?: string | undefined
-  preDrivePath?: TPreDrivePath
+  preDrivePath?: string | undefined
   queryParameters?: TQueryParameters | undefined
 }
 

@@ -1,5 +1,5 @@
 /* eslint-disable import-x/group-exports */
-/* eslint-disable no-use-before-define */
+ 
 
 type TKey = string
 type TValue = boolean | number | string

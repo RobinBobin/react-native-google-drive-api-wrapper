@@ -1,5 +1,6 @@
 import type { GDriveApi } from 'api/GDriveApi'
 import type { TJson } from 'src/types'
+import type { ReadonlyDeep } from 'type-fest'
 import type { TSimpleData } from 'uploaders/types'
 import type {
   IRequestUploadStatusResultType,
@@ -9,6 +10,7 @@ import type {
 import { Fetcher } from 'aux/Fetcher'
 import { FetchResponseError } from 'aux/Fetcher/errors/FetchResponseError'
 
+import { convertReadonlyDeepTSimpleDataToTBodyType } from '../../convertReadonlyDeepTSimpleDataToTBodyType'
 import { ResumableUploaderError } from '../errors/ResumableUploaderError'
 
 const HTTP_RESUME_INCOMPLETE = 308
@@ -71,11 +73,13 @@ export class ResumableUploadRequest {
     return this._transferredByteCount
   }
 
-  async uploadChunk(chunk: TSimpleData): Promise<IUploadChunkResultType> {
+  async uploadChunk(
+    chunk: ReadonlyDeep<TSimpleData>
+  ): Promise<IUploadChunkResultType> {
     const fetcher = new Fetcher(this.gDriveApi)
       .setMethod('PUT')
       .setBody(
-        Array.isArray(chunk) ? new Uint8Array(chunk) : chunk,
+        convertReadonlyDeepTSimpleDataToTBodyType(chunk),
         this.dataMimeType
       )
       .setResource(this.location)
@@ -121,7 +125,7 @@ export class ResumableUploadRequest {
     }
   }
 
-  private static processRange(response: Response): number {
+  private static processRange(response: ReadonlyDeep<Response>): number {
     const range = response.headers.get('Range')
 
     if (!range) {

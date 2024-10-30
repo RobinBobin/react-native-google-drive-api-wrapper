@@ -11,7 +11,7 @@ export class MultipartUploader extends UploaderWithSimpleData {
   private isBase64 = false
   private multipartBoundary = 'foo_bar_baz'
 
-  constructor(fetcher: Fetcher) {
+  constructor(fetcher: Readonly<Fetcher>) {
     super(fetcher, 'multipart')
   }
 
@@ -48,25 +48,17 @@ export class MultipartUploader extends UploaderWithSimpleData {
     if (typeof this.data === 'string') {
       body += `${this.data}${ending}`
     } else {
-      const byteArray = [body, this.data, ending].reduce<number[]>(
-        (previousValue, rawCurrentValue) => {
-          const isString = typeof rawCurrentValue === 'string'
+      const convertStringToNumberArray = (string: string): number[] => {
+        return encode(string)
+          .split('')
+          .map((char, index) => char.charCodeAt(index))
+      }
 
-          const processedCurrentValue =
-            isString ?
-              encode(rawCurrentValue)
-                .split('')
-                .map((char, index) => char.charCodeAt(index))
-            : Array.from(rawCurrentValue)
-
-          previousValue.push(...processedCurrentValue)
-
-          return previousValue
-        },
-        []
+      body = new Uint8Array(
+        convertStringToNumberArray(body)
+          .concat(Array.from(this.data))
+          .concat(convertStringToNumberArray(ending))
       )
-
-      body = new Uint8Array(byteArray)
     }
 
     return this.fetcher

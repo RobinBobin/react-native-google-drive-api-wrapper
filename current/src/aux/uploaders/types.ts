@@ -1,1 +1,3 @@
-export type TSimpleData = Uint8Array | number[] | string
+import type { TBodyType } from 'aux/Fetcher/types'
+
+export type TSimpleData = TBodyType | number[]

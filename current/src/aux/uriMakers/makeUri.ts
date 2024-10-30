@@ -1,3 +1,4 @@
+import type { IterableElement, ReadonlyDeep } from 'type-fest'
 import type { IUriParameters } from './types'
 
 import { isNonEmptyString } from './isNonEmptyString'
@@ -8,20 +9,23 @@ export const makeUri = ({
   path,
   preDrivePath,
   queryParameters = {}
-}: IUriParameters): string => {
-  const uri = ['https://www.googleapis.com']
+}: ReadonlyDeep<IUriParameters>): string => {
+  const uri = [
+    'https://www.googleapis.com',
+    preDrivePath,
+    'drive/v3',
+    api,
+    fileId,
+    path
+  ]
+    .filter(isNonEmptyString)
+    .join('/')
 
-  if (Array.isArray(preDrivePath)) {
-    uri.push(...preDrivePath)
-  } else if (preDrivePath) {
-    uri.push(preDrivePath)
-  }
+  const url = new URL(uri)
 
-  uri.push(...['drive/v3', api, fileId, path].filter(isNonEmptyString))
+  const entries = Object.entries(queryParameters)
 
-  const url = new URL(uri.join('/'))
-
-  Object.entries(queryParameters).forEach(([key, value]) => {
+  entries.forEach(([key, value]: Readonly<IterableElement<typeof entries>>) => {
     url.searchParams.append(key, value?.toString() ?? typeof undefined)
   })
 

@@ -1,5 +1,6 @@
 import type { Fetcher } from 'aux/Fetcher'
 import type { TJson } from 'src/types'
+import type { ReadonlyDeep } from 'type-fest'
 import type { TUploadQueryParameters, TUploadType } from './types'
 
 import { makeFilesUri } from 'aux/uriMakers'
@@ -10,7 +11,7 @@ export abstract class Uploader<ExecuteResultType> {
   private queryParameters = {}
 
   constructor(
-    protected readonly fetcher: Fetcher,
+    protected readonly fetcher: Readonly<Fetcher>,
     private readonly uploadType?: TUploadType
   ) {
     // Nothing to do.
@@ -42,13 +43,15 @@ export abstract class Uploader<ExecuteResultType> {
     return this
   }
 
-  setQueryParameters(queryParameters: TUploadQueryParameters): this {
+  setQueryParameters(
+    queryParameters: ReadonlyDeep<TUploadQueryParameters>
+  ): this {
     this.queryParameters = queryParameters
 
     return this
   }
 
-  setRequestBody(requestBody: TJson): this {
+  setRequestBody(requestBody: Readonly<TJson>): this {
     this._requestBody = requestBody
 
     return this

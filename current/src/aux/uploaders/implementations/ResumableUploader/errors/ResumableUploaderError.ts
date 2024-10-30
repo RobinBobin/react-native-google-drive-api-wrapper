@@ -1,7 +1,9 @@
+import type { ReadonlyDeep } from 'type-fest'
+
 class ResumableUploaderError extends Error {
   constructor(
     message: string,
-    readonly response: Response
+    readonly response: ReadonlyDeep<Response>
   ) {
     super(message)
   }

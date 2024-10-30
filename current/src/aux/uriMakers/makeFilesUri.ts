@@ -1,3 +1,4 @@
+import type { ReadonlyDeep } from 'type-fest'
 import type { IFilesParameters } from './types'
 
 import { makeUri } from './makeUri'
@@ -7,7 +8,7 @@ export const makeFilesUri = ({
   method,
   preDrivePath,
   queryParameters
-}: IFilesParameters): string => {
+}: ReadonlyDeep<IFilesParameters>): string => {
   return makeUri({
     api: 'files',
     fileId,

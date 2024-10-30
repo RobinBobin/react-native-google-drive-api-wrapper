@@ -22,6 +22,9 @@ export default typescriptEslintConfig(
   ...typescriptEslintConfigs.strictTypeChecked,
   ...typescriptEslintConfigs.stylisticTypeChecked,
   {
+    ignores: ['js/']
+  },
+  {
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -77,6 +80,21 @@ export default typescriptEslintConfig(
       '@typescript-eslint/no-unnecessary-parameter-property-assignment':
         'error',
       '@typescript-eslint/no-unnecessary-qualifier': 'error',
+      '@typescript-eslint/no-use-before-define': [
+        'error',
+        { ignoreTypeReferences: false }
+      ],
+      '@typescript-eslint/no-useless-empty-export': 'error',
+      '@typescript-eslint/prefer-readonly': 'error',
+      '@typescript-eslint/prefer-readonly-parameter-types': [
+        'error',
+        {
+          allow: [
+            { from: 'lib', name: 'ProgressEvent' },
+            { from: 'lib', name: 'Request' }
+          ]
+        }
+      ],
       '@typescript-eslint/restrict-template-expressions': [
         'error',
         { allowNumber: true }
@@ -142,7 +160,6 @@ export default typescriptEslintConfig(
       'no-unneeded-ternary': 'error',
       'no-unreachable-loop': 'error',
       'no-unused-expressions': 'error',
-      'no-use-before-define': 'error',
       'no-useless-assignment': 'error',
       'no-useless-call': 'error',
       'no-useless-computed-key': 'error',

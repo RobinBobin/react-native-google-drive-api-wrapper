@@ -10,7 +10,7 @@ export class ResumableUploader extends UploaderWithDataMimeType<ResumableUploadR
   private contentLength = 0
   private shouldUseMultipleRequests = false
 
-  constructor(fetcher: Fetcher) {
+  constructor(fetcher: Readonly<Fetcher>) {
     super(fetcher, 'resumable')
   }
 

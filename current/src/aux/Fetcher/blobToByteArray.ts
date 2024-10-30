@@ -5,7 +5,7 @@ import { toByteArray } from 'base64-js'
 import { BlobToByteArrayError } from './errors/BlobToByteArrayError'
 
 export function blobToByteArray(
-  blob: Blob
+  blob: Readonly<Blob>
 ): Promise<TBlobToByteArrayResultType> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()

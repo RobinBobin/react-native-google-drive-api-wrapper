@@ -1,5 +1,6 @@
 import type { TBlobToByteArrayResultType } from 'aux/Fetcher/types'
 import type { TJson, TQueryParameters } from 'src/types'
+import type { ReadonlyDeep } from 'type-fest'
 import type { Uploader } from 'uploaders/base/Uploader'
 import type {
   ICreateGetFetcherParams,
@@ -21,8 +22,8 @@ import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
 export class Files extends GDriveApi {
   copy(
     fileId: string,
-    queryParameters?: TQueryParameters,
-    requestBody: TJson = {}
+    queryParameters?: ReadonlyDeep<TQueryParameters>,
+    requestBody: Readonly<TJson> = {}
   ): Promise<TJson> {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MIME_TYPE_JSON)
@@ -31,8 +32,8 @@ export class Files extends GDriveApi {
   }
 
   async createIfNotExists<ExecuteResultType>(
-    queryParameters: TListParams,
-    uploader: Uploader<ExecuteResultType>
+    queryParameters: ReadonlyDeep<TListParams>,
+    uploader: ReadonlyDeep<Uploader<ExecuteResultType>>
   ): Promise<ICreateIfNotExistsResultType<ExecuteResultType | TJson>> {
     const list = await this.list(queryParameters)
     // eslint-disable-next-line dot-notation
@@ -74,14 +75,19 @@ export class Files extends GDriveApi {
       .fetchText(makeFilesUri({ method: 'trash' }))
   }
 
-  export(fileId: string, queryParameters: TQueryParameters): Promise<string> {
+  export(
+    fileId: string,
+    queryParameters: ReadonlyDeep<TQueryParameters>
+  ): Promise<string> {
     return fetchText(
       this,
       makeFilesUri({ fileId, method: 'export', queryParameters })
     )
   }
 
-  generateIds(queryParameters?: TQueryParameters): Promise<TJson> {
+  generateIds(
+    queryParameters?: ReadonlyDeep<TQueryParameters>
+  ): Promise<TJson> {
     return fetchJson(
       this,
       makeFilesUri({ method: 'generateIds', queryParameters })
@@ -90,7 +96,7 @@ export class Files extends GDriveApi {
 
   get(
     fileId: string,
-    queryParameters?: TQueryParameters,
+    queryParameters?: ReadonlyDeep<TQueryParameters>,
     range?: string
   ): Promise<Response> {
     return this.createGetFetcher({ fileId, queryParameters, range }).fetch()
@@ -98,7 +104,7 @@ export class Files extends GDriveApi {
 
   getBinary(
     fileId: string,
-    queryParameters?: TQueryParameters,
+    queryParameters?: ReadonlyDeep<TQueryParameters>,
     range?: string
   ): Promise<TBlobToByteArrayResultType> {
     return this.createGetFetcher({
@@ -111,7 +117,7 @@ export class Files extends GDriveApi {
 
   getContent(
     fileId: string,
-    queryParameters?: TQueryParameters,
+    queryParameters?: ReadonlyDeep<TQueryParameters>,
     range?: string
   ): Promise<Response> {
     return this.createGetFetcher({
@@ -124,7 +130,7 @@ export class Files extends GDriveApi {
 
   getJson<T = TJson>(
     fileId: string,
-    queryParameters?: TQueryParameters
+    queryParameters?: ReadonlyDeep<TQueryParameters>
   ): Promise<T> {
     return this.createGetFetcher({
       fileId,
@@ -135,7 +141,7 @@ export class Files extends GDriveApi {
 
   getMetadata(
     fileId: string,
-    queryParameters?: TQueryParameters
+    queryParameters?: ReadonlyDeep<TQueryParameters>
   ): Promise<TJson> {
     return this.createGetFetcher({
       fileId,
@@ -146,7 +152,7 @@ export class Files extends GDriveApi {
 
   getText(
     fileId: string,
-    queryParameters?: TQueryParameters,
+    queryParameters?: ReadonlyDeep<TQueryParameters>,
     range?: string
   ): Promise<string> {
     return this.createGetFetcher({
@@ -157,7 +163,7 @@ export class Files extends GDriveApi {
     }).fetchText()
   }
 
-  list(queryParameters?: TListParams): Promise<TJson> {
+  list(queryParameters?: ReadonlyDeep<TListParams>): Promise<TJson> {
     const _queryParameters =
       !queryParameters?.q ?
         queryParameters
@@ -191,7 +197,7 @@ export class Files extends GDriveApi {
     isContent,
     queryParameters,
     range
-  }: ICreateGetFetcherParams): Fetcher {
+  }: ReadonlyDeep<ICreateGetFetcherParams>): Fetcher {
     const canSetAlt = typeof isContent === 'boolean'
 
     const _queryParameters =

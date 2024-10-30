@@ -25,7 +25,7 @@ const factory = (): TListQueryBuilder => {
     queryClauses.push(operator)
     queryClauses.push(isIn ? key : value)
 
-    // eslint-disable-next-line no-use-before-define
+     
     return implementation
   }
 
@@ -35,7 +35,7 @@ const factory = (): TListQueryBuilder => {
   ): TListQueryBuilder {
     queryClauses.push(command === 'push' ? '(' : command)
 
-    // eslint-disable-next-line no-use-before-define
+     
     return rest.length ? addClause(...(rest as TClause)) : implementation
   }
 
@@ -49,7 +49,7 @@ const factory = (): TListQueryBuilder => {
     pop() {
       queryClauses.push(')')
 
-      // eslint-disable-next-line no-use-before-define
+       
       return implementation
     },
     push(...clause) {
