@@ -3,6 +3,7 @@ import type { ReadonlyDeep } from 'type-fest'
 import type { TBlobToByteArrayResultType, TBodyType } from './types'
 
 import { GDriveApi } from 'api/GDriveApi'
+import { isNonEmptyString } from 'aux/isNonEmptyString'
 
 import { blobToByteArray } from './blobToByteArray'
 import { FetchResponseError } from './errors/FetchResponseError'
@@ -31,7 +32,7 @@ class Fetcher {
   }
 
   async fetch(resource?: RequestInfo): Promise<Response> {
-    if (resource) {
+    if (typeof resource !== 'undefined') {
       this.setResource(resource)
     }
 
@@ -75,7 +76,7 @@ class Fetcher {
   setBody(body: ReadonlyDeep<TBodyType>, contentType?: string): this {
     this.init.body = body
 
-    if (contentType) {
+    if (isNonEmptyString(contentType)) {
       this.appendHeader('Content-Length', body.length.toString())
       this.appendHeader('Content-Type', contentType)
     }

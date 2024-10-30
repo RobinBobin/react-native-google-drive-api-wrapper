@@ -1,7 +1,7 @@
 import type { ReadonlyDeep } from 'type-fest'
 import type { IPermissionsParameters } from './types'
 
-import { isNonEmptyString } from './isNonEmptyString'
+import { isNonEmptyString } from '../isNonEmptyString'
 import { makeUri } from './makeUri'
 
 export const makePermissionsUri = ({

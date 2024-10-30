@@ -165,13 +165,13 @@ export class Files extends GDriveApi {
 
   list(queryParameters?: ReadonlyDeep<TListParams>): Promise<TJson> {
     const _queryParameters =
-      !queryParameters?.q ?
-        queryParameters
-      : {
+      queryParameters && 'q' in queryParameters ?
+        {
           ...queryParameters,
           // eslint-disable-next-line id-length
           q: queryParameters.q.toString()
         }
+      : queryParameters
 
     return fetchJson(this, makeFilesUri({ queryParameters: _queryParameters }))
   }
@@ -212,7 +212,7 @@ export class Files extends GDriveApi {
       makeFilesUri({ fileId, queryParameters: _queryParameters })
     )
 
-    if (range) {
+    if (Boolean(range)) {
       fetcher.appendHeader('Range', `bytes=${range}`)
     }
 

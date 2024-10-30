@@ -15,7 +15,7 @@ export function blobToByteArray(
     }
 
     reader.onload = (event): void => {
-      if (!reader.result) {
+      if (reader.result === null) {
         resolve(null)
         return
       }
@@ -29,7 +29,7 @@ export function blobToByteArray(
         'data:application/octet-stream;base64,'
       )[1]
 
-      if (b64) {
+      if (typeof b64 === 'string') {
         resolve(toByteArray(b64))
       } else {
         reject(

@@ -25,7 +25,6 @@ const factory = (): TListQueryBuilder => {
     queryClauses.push(operator)
     queryClauses.push(isIn ? key : value)
 
-     
     return implementation
   }
 
@@ -35,7 +34,6 @@ const factory = (): TListQueryBuilder => {
   ): TListQueryBuilder {
     queryClauses.push(command === 'push' ? '(' : command)
 
-     
     return rest.length ? addClause(...(rest as TClause)) : implementation
   }
 
@@ -49,7 +47,6 @@ const factory = (): TListQueryBuilder => {
     pop() {
       queryClauses.push(')')
 
-       
       return implementation
     },
     push(...clause) {

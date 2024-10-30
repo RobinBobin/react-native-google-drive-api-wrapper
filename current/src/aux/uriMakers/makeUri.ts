@@ -1,7 +1,7 @@
 import type { IterableElement, ReadonlyDeep } from 'type-fest'
 import type { IUriParameters } from './types'
 
-import { isNonEmptyString } from './isNonEmptyString'
+import { isNonEmptyString } from '../isNonEmptyString'
 
 export const makeUri = ({
   api,

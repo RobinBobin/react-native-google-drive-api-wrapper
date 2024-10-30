@@ -1,3 +1,5 @@
+/* eslint-disable id-length */
+
 import eslintJs from '@eslint/js'
 import tsParser from '@typescript-eslint/parser'
 import eslintConfigPrettier from 'eslint-config-prettier'
@@ -72,7 +74,6 @@ export default typescriptEslintConfig(
         'error',
         {
           builtinGlobals: true,
-          // eslint-disable-next-line id-length
           ignoreFunctionTypeParameterNameValueShadow: false,
           ignoreTypeValueShadow: false
         }
@@ -98,6 +99,15 @@ export default typescriptEslintConfig(
       '@typescript-eslint/restrict-template-expressions': [
         'error',
         { allowNumber: true }
+      ],
+      '@typescript-eslint/strict-boolean-expressions': 'error',
+      '@typescript-eslint/switch-exhaustiveness-check': [
+        'error',
+        {
+          allowDefaultCaseForExhaustiveSwitch: false,
+          considerDefaultExhaustiveForUnions: true,
+          requireDefaultForNonUnion: true
+        }
       ],
 
       // @eslint/js
@@ -132,6 +142,7 @@ export default typescriptEslintConfig(
       'no-eval': 'error',
       'no-extend-native': 'error',
       'no-extra-bind': 'error',
+      'no-extra-boolean-cast': 'off',
       'no-extra-label': 'error',
       'no-implicit-coercion': 'error',
       'no-implicit-globals': 'error',

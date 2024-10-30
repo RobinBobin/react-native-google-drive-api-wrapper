@@ -9,6 +9,7 @@ import type {
 
 import { Fetcher } from 'aux/Fetcher'
 import { FetchResponseError } from 'aux/Fetcher/errors/FetchResponseError'
+import { isNonEmptyString } from 'aux/isNonEmptyString'
 
 import { convertReadonlyDeepTSimpleDataToTBodyType } from '../../convertReadonlyDeepTSimpleDataToTBodyType'
 import { ResumableUploaderError } from '../errors/ResumableUploaderError'
@@ -128,13 +129,13 @@ export class ResumableUploadRequest {
   private static processRange(response: ReadonlyDeep<Response>): number {
     const range = response.headers.get('Range')
 
-    if (!range) {
+    if (!isNonEmptyString(range)) {
       throw new ResumableUploaderError("No 'Range' header to process", response)
     }
 
     const rightExpression = range.split('=')[1]
 
-    if (!rightExpression) {
+    if (!isNonEmptyString(rightExpression)) {
       throw new ResumableUploaderError(
         "'!rightExpression', examine the 'Range' header",
         response

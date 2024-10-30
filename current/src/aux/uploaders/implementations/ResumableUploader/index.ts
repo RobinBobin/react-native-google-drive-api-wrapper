@@ -1,5 +1,6 @@
 import type { Fetcher } from 'aux/Fetcher'
 
+import { isNonEmptyString } from 'aux/isNonEmptyString'
 import { MIME_TYPE_JSON_UTF8 } from 'src/constants'
 import { UploaderWithDataMimeType } from 'uploaders/base/UploaderWithDataMimeType'
 
@@ -43,7 +44,7 @@ export class ResumableUploader extends UploaderWithDataMimeType<ResumableUploadR
     const response = await this.fetcher.fetch()
     const location = response.headers.get('Location')
 
-    if (!location) {
+    if (!isNonEmptyString(location)) {
       throw new ResumableUploaderError(
         "No 'Location' header in the original response",
         response
