@@ -1,17 +1,12 @@
-import type {
-  IListQueryBuilderSource,
-  TClause,
-  TClauseFunctionCommand,
-  TClauseFunctionWithClause,
-  TKeyOrValue,
-  TListQueryBuilder,
-  TListQueryBuilderTarget
-} from './types'
+import type { IListQueryBuilder, TClauseFunction, TKeyOrValue } from './types'
 
-const factory = (): TListQueryBuilder => {
+const factory = (): IListQueryBuilder => {
   const queryClauses: TKeyOrValue[] = []
+  queryClauses.toString()
+  const listQueryBuilder: Partial<IListQueryBuilder> = {}
 
-  const addClause: TClauseFunctionWithClause = (
+  const addClause: TClauseFunction<true> = (
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
     ...[keyOrValue1, operator, keyOrValue2, valueQuotationFlag = true]
   ) => {
     const isIn = operator === 'in'
@@ -25,47 +20,50 @@ const factory = (): TListQueryBuilder => {
     queryClauses.push(operator)
     queryClauses.push(isIn ? key : value)
 
-    return implementation
+    return listQueryBuilder
   }
 
-  function clauseFunction(
-    command: TClauseFunctionCommand,
-    ...rest: unknown[]
-  ): TListQueryBuilder {
-    queryClauses.push(command === 'push' ? '(' : command)
+  const target: TClauseFunction<true> = addClause
+  target.toString()
 
-    return rest.length ? addClause(...(rest as TClause)) : implementation
-  }
+  const source: Pick<IListQueryBuilder, 'pop'> = {}
 
-  const source: IListQueryBuilderSource = {
-    and(...clause: unknown[]) {
-      return clauseFunction('and', ...clause)
-    },
-    or(...clause: unknown[]) {
-      return clauseFunction('or', ...clause)
-    },
-    pop() {
-      queryClauses.push(')')
+  return listQueryBuilder as IListQueryBuilder
 
-      return implementation
-    },
-    push(...clause) {
-      return clauseFunction('push', ...clause)
-    },
-    toString() {
-      const query = queryClauses.join(' ')
+  // function clauseFunction(
+  //   command: TClauseFunctionCommand,
+  //   ...rest: unknown[]
+  // ): TListQueryBuilder {
+  //   queryClauses.push(command === 'push' ? '(' : command)
 
-      queryClauses.length = 0
+  //   return rest.length ? addClause(...(rest as TClause)) : implementation
+  // }
 
-      return query
-    }
-  }
+  // const source: IListQueryBuilderSource = {
+  //   and(...clause: unknown[]) {
+  //     return clauseFunction('and', ...clause)
+  //   },
+  //   or(...clause: unknown[]) {
+  //     return clauseFunction('or', ...clause)
+  //   },
+  //   pop() {
+  //     queryClauses.push(')')
 
-  const target: TListQueryBuilderTarget = (...clause) => addClause(...clause)
+  //     return implementation
+  //   },
+  //   push(...clause) {
+  //     return clauseFunction('push', ...clause)
+  //   },
+  //   toString() {
+  //     const query = queryClauses.join(' ')
 
-  const implementation = Object.assign(target, source)
+  //     queryClauses.length = 0
 
-  return implementation
+  //     return query
+  //   }
+  // }
+
+  //
 }
 
 export const ListQueryBuilder = factory()

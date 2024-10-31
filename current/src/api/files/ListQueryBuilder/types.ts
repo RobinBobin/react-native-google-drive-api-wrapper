@@ -1,35 +1,32 @@
-/* eslint-disable import-x/group-exports */
+import type { JsonValue } from 'type-fest'
 
 type TKey = string
-type TValue = boolean | number | string
+type TValue = JsonValue
 type TValueQuotationFlag = boolean
+type TKeyOrValue = TKey | TValue
 
-type TClauseFunctionWithoutClause = () => TListQueryBuilder
+type TClauseFunctionCommand = 'and' | 'or' | 'push'
+type TKeyValueOperator = 'contains' | '=' | '>' | '<'
+type TValueKeyOperator = 'in'
 
-type TClauseFunction<T extends TClauseFunctionCommand> =
-  T extends 'push' ? TClauseFunctionWithClause
-  : TClauseFunctionWithClause | TClauseFunctionWithoutClause
+type TClause =
+  | [TKey, TKeyValueOperator, TValue, TValueQuotationFlag?]
+  | [TValue, TValueKeyOperator, TKey, TValueQuotationFlag?]
 
-type TOperator = 'contains' | '=' | '>' | '<'
+interface IListQueryBuilder {
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+  (...clause: TClause): IListQueryBuilder
+  pop: () => IListQueryBuilder
+}
 
-export type TClause =
-  | [TKey, TOperator, TValue, TValueQuotationFlag?]
-  | [TValue, 'in', TKey, TValueQuotationFlag?]
-export type TClauseFunctionCommand = 'and' | 'or' | 'push'
-export type TClauseFunctionWithClause = (
+type TClauseFunction<TIsPartial extends boolean = false> = (
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   ...clause: TClause
-) => TListQueryBuilder
-export type TKeyOrValue = TKey | TValue
+) => TIsPartial extends true ? Partial<IListQueryBuilder> : IListQueryBuilder
 
-export interface IListQueryBuilderSource {
-  and: () => TClauseFunction<'and'>
-  or: () => TClauseFunction<'or'>
-  pop: () => TListQueryBuilder
-  push: () => TClauseFunction<'push'>
+interface IListQueryBuilder
+  extends Record<TClauseFunctionCommand, TClauseFunction> {
   toString: () => string
 }
 
-export type TListQueryBuilderTarget = (...clause: TClause) => TListQueryBuilder
-
-export type TListQueryBuilder = IListQueryBuilderSource &
-  TListQueryBuilderTarget
+export type { IListQueryBuilder, TClauseFunction, TKeyOrValue }
