@@ -19,6 +19,7 @@ import { SimpleUploader } from 'uploaders/implementations/SimpleUploader'
 
 import { GDriveApi } from '../GDriveApi'
 import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
+import { ListQueryBuilder } from './ListQueryBuilder'
 
 export class Files extends GDriveApi {
   copy(
@@ -165,8 +166,10 @@ export class Files extends GDriveApi {
   }
 
   list(queryParameters?: ReadonlyDeep<TListParams>): Promise<TJson> {
+    const isListQueryBuilder = queryParameters?.q instanceof ListQueryBuilder
+
     const _queryParameters =
-      queryParameters && 'q' in queryParameters ?
+      isListQueryBuilder ?
         {
           ...queryParameters,
           q: queryParameters.q.toString()
