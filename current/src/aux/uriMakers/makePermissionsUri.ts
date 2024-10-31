@@ -1,7 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest'
 import type { IPermissionsParameters } from './types'
 
-import { isNonEmptyString } from '../isNonEmptyString'
 import { makeUri } from './makeUri'
 
 export const makePermissionsUri = ({
@@ -9,7 +8,7 @@ export const makePermissionsUri = ({
   permissionId,
   queryParameters
 }: ReadonlyDeep<IPermissionsParameters>): string => {
-  const path = ['permissions', permissionId].filter(isNonEmptyString).join('/')
+  const path = ['permissions', permissionId].filter(Boolean).join('/')
 
   return makeUri({
     api: 'files',

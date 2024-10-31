@@ -81,6 +81,10 @@ export default typescriptEslintConfig(
       '@typescript-eslint/no-unnecessary-parameter-property-assignment':
         'error',
       '@typescript-eslint/no-unnecessary-qualifier': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { caughtErrorsIgnorePattern: 'error' }
+      ],
       '@typescript-eslint/no-use-before-define': [
         'error',
         { ignoreTypeReferences: false }
@@ -142,7 +146,7 @@ export default typescriptEslintConfig(
       'no-eval': 'error',
       'no-extend-native': 'error',
       'no-extra-bind': 'error',
-      'no-extra-boolean-cast': 'off',
+      'no-extra-boolean-cast': 'error',
       'no-extra-label': 'error',
       'no-implicit-coercion': 'error',
       'no-implicit-globals': 'error',

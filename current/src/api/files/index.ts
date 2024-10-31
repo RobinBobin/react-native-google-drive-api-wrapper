@@ -9,6 +9,7 @@ import type {
 } from './types'
 
 import { Fetcher, fetchJson, fetchText } from 'aux/Fetcher'
+import { isNonEmptyString } from 'aux/isNonEmptyString'
 import { makeFilesUri } from 'aux/uriMakers'
 import { MIME_TYPE_JSON } from 'src/constants'
 import { MetadataOnlyUploader } from 'uploaders/implementations/MetadataOnlyUploader'
@@ -212,7 +213,7 @@ export class Files extends GDriveApi {
       makeFilesUri({ fileId, queryParameters: _queryParameters })
     )
 
-    if (Boolean(range)) {
+    if (isNonEmptyString(range)) {
       fetcher.appendHeader('Range', `bytes=${range}`)
     }
 

@@ -25,7 +25,6 @@ class FetchResponseError extends Error {
 
     try {
       json = JSON.parse(message) as TJson
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // Nothing to do.
     }
