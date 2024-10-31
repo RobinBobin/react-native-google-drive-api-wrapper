@@ -169,7 +169,6 @@ export class Files extends GDriveApi {
       queryParameters && 'q' in queryParameters ?
         {
           ...queryParameters,
-          // eslint-disable-next-line id-length
           q: queryParameters.q.toString()
         }
       : queryParameters

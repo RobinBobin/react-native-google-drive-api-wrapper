@@ -130,7 +130,7 @@ export default typescriptEslintConfig(
       'func-names': 'error',
       'grouped-accessor-pairs': ['error', 'getBeforeSet'],
       'guard-for-in': 'error',
-      'id-length': ['error', { max: 30, min: 2 }],
+      'id-length': ['error', { exceptions: ['q'], max: 30, min: 2 }],
       'max-depth': 'error',
       'max-lines': 'error',
       'max-lines-per-function': ['error', { max: 65 }],
