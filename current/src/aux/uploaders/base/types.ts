@@ -1,6 +1,6 @@
-import type { TQueryParameters } from 'src/types'
+import type { JsonObject } from 'type-fest'
 
-type TUploadQueryParameters = TQueryParameters & { uploadType?: never }
+type TUploadQueryParameters = JsonObject & { uploadType?: never }
 type TUploadType = 'media' | 'multipart' | 'resumable'
 
 export type { TUploadQueryParameters, TUploadType }

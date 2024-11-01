@@ -1,5 +1,4 @@
-import type { ReadonlyDeep } from 'type-fest'
-import type { IPermissionsParameters } from './types'
+import type { IMakePermissionsUriParameters } from './types'
 
 import { makeUri } from './makeUri'
 
@@ -7,7 +6,7 @@ export const makePermissionsUri = ({
   fileId,
   permissionId,
   queryParameters
-}: ReadonlyDeep<IPermissionsParameters>): string => {
+}: Readonly<IMakePermissionsUriParameters>): string => {
   const path = ['permissions', permissionId].filter(Boolean).join('/')
 
   return makeUri({

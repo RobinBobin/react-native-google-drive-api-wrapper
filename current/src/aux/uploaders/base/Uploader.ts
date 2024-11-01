@@ -1,6 +1,5 @@
 import type { Fetcher } from 'aux/Fetcher'
-import type { TJson } from 'src/types'
-import type { ReadonlyDeep } from 'type-fest'
+import type { JsonObject } from 'type-fest'
 import type { TUploadQueryParameters, TUploadType } from './types'
 
 import { makeFilesUri } from 'aux/uriMakers'
@@ -43,15 +42,13 @@ export abstract class Uploader<ExecuteResultType> {
     return this
   }
 
-  setQueryParameters(
-    queryParameters: ReadonlyDeep<TUploadQueryParameters>
-  ): this {
+  setQueryParameters(queryParameters: TUploadQueryParameters): this {
     this.queryParameters = queryParameters
 
     return this
   }
 
-  setRequestBody(requestBody: Readonly<TJson>): this {
+  setRequestBody(requestBody: JsonObject): this {
     this._requestBody = requestBody
 
     return this

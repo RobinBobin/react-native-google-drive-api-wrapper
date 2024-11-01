@@ -1,33 +1,33 @@
-import type { TQueryParameters } from 'src/types'
+import type { JsonObject } from 'type-fest'
 
-interface IAboutParameters {
-  queryParameters: TQueryParameters
+interface IMakeAboutUriParameters {
+  queryParameters: JsonObject
 }
 
-interface IFilesParameters {
+interface IMakeFilesUriParameters {
   fileId?: string
   method?: string
   preDrivePath?: string | undefined
-  queryParameters?: TQueryParameters | undefined
+  queryParameters?: JsonObject | undefined
 }
 
-interface IPermissionsParameters {
+interface IMakePermissionsUriParameters {
   fileId: string
   permissionId?: string
-  queryParameters: TQueryParameters | undefined
+  queryParameters: JsonObject | undefined
 }
 
-interface IUriParameters {
+interface IMakeUriParameters {
   api: string
   fileId?: string | undefined
   path?: string | undefined
   preDrivePath?: string | undefined
-  queryParameters?: TQueryParameters | undefined
+  queryParameters?: JsonObject | undefined
 }
 
 export type {
-  IAboutParameters,
-  IFilesParameters,
-  IPermissionsParameters,
-  IUriParameters
+  IMakeAboutUriParameters,
+  IMakeFilesUriParameters,
+  IMakePermissionsUriParameters,
+  IMakeUriParameters
 }

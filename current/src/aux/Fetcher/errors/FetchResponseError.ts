@@ -1,9 +1,8 @@
-import type { TJson } from 'src/types'
-import type { ReadonlyDeep } from 'type-fest'
+import type { JsonObject, ReadonlyDeep } from 'type-fest'
 
 class FetchResponseError extends Error {
   constructor(
-    readonly json: Readonly<TJson> | null,
+    readonly json: JsonObject | null,
     message: string,
     readonly response: ReadonlyDeep<Response>
   ) {
@@ -21,10 +20,10 @@ class FetchResponseError extends Error {
       return error as FetchResponseError
     }
 
-    let json: TJson | null = null
+    let json: JsonObject | null = null
 
     try {
-      json = JSON.parse(message) as TJson
+      json = JSON.parse(message) as JsonObject
     } catch (error) {
       // Nothing to do.
     }

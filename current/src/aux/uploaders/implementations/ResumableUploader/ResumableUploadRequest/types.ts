@@ -1,4 +1,4 @@
-import type { TJson } from 'src/types'
+import type { JsonObject } from 'type-fest'
 
 interface IRequestUploadStatusResultType {
   isComplete: boolean
@@ -6,7 +6,7 @@ interface IRequestUploadStatusResultType {
 }
 
 interface IUploadChunkResultType extends IRequestUploadStatusResultType {
-  json?: TJson
+  json?: JsonObject
 }
 
 export type { IRequestUploadStatusResultType, IUploadChunkResultType }

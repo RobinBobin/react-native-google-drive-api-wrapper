@@ -1,6 +1,5 @@
 import type { TBlobToByteArrayResultType } from 'aux/Fetcher/types'
-import type { TJson, TQueryParameters } from 'src/types'
-import type { ReadonlyDeep } from 'type-fest'
+import type { JsonObject, ReadonlyDeep } from 'type-fest'
 import type { Uploader } from 'uploaders/base/Uploader'
 import type {
   ICreateGetFetcherParams,
@@ -24,9 +23,9 @@ import { ListQueryBuilder } from './ListQueryBuilder'
 export class Files extends GDriveApi {
   copy(
     fileId: string,
-    queryParameters?: ReadonlyDeep<TQueryParameters>,
-    requestBody: Readonly<TJson> = {}
-  ): Promise<TJson> {
+    queryParameters?: JsonObject,
+    requestBody: JsonObject = {}
+  ): Promise<JsonObject> {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MIME_TYPE_JSON)
       .setMethod('POST')
@@ -36,10 +35,10 @@ export class Files extends GDriveApi {
   async createIfNotExists<ExecuteResultType>(
     queryParameters: ReadonlyDeep<TListParams>,
     uploader: ReadonlyDeep<Uploader<ExecuteResultType>>
-  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType | TJson>> {
+  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType | JsonObject>> {
     const list = await this.list(queryParameters)
     // eslint-disable-next-line dot-notation
-    const files = list['files'] as TJson[]
+    const files = list['files'] as JsonObject[]
 
     if (!files.length) {
       return {
@@ -77,19 +76,14 @@ export class Files extends GDriveApi {
       .fetchText(makeFilesUri({ method: 'trash' }))
   }
 
-  export(
-    fileId: string,
-    queryParameters: ReadonlyDeep<TQueryParameters>
-  ): Promise<string> {
+  export(fileId: string, queryParameters: JsonObject): Promise<string> {
     return fetchText(
       this,
       makeFilesUri({ fileId, method: 'export', queryParameters })
     )
   }
 
-  generateIds(
-    queryParameters?: ReadonlyDeep<TQueryParameters>
-  ): Promise<TJson> {
+  generateIds(queryParameters?: JsonObject): Promise<JsonObject> {
     return fetchJson(
       this,
       makeFilesUri({ method: 'generateIds', queryParameters })
@@ -98,7 +92,7 @@ export class Files extends GDriveApi {
 
   get(
     fileId: string,
-    queryParameters?: ReadonlyDeep<TQueryParameters>,
+    queryParameters?: JsonObject,
     range?: string
   ): Promise<Response> {
     return this.createGetFetcher({ fileId, queryParameters, range }).fetch()
@@ -106,7 +100,7 @@ export class Files extends GDriveApi {
 
   getBinary(
     fileId: string,
-    queryParameters?: ReadonlyDeep<TQueryParameters>,
+    queryParameters?: JsonObject,
     range?: string
   ): Promise<TBlobToByteArrayResultType> {
     return this.createGetFetcher({
@@ -119,7 +113,7 @@ export class Files extends GDriveApi {
 
   getContent(
     fileId: string,
-    queryParameters?: ReadonlyDeep<TQueryParameters>,
+    queryParameters?: JsonObject,
     range?: string
   ): Promise<Response> {
     return this.createGetFetcher({
@@ -130,9 +124,9 @@ export class Files extends GDriveApi {
     }).fetch()
   }
 
-  getJson<T = TJson>(
+  geJsonObject<T = JsonObject>(
     fileId: string,
-    queryParameters?: ReadonlyDeep<TQueryParameters>
+    queryParameters?: JsonObject
   ): Promise<T> {
     return this.createGetFetcher({
       fileId,
@@ -143,8 +137,8 @@ export class Files extends GDriveApi {
 
   getMetadata(
     fileId: string,
-    queryParameters?: ReadonlyDeep<TQueryParameters>
-  ): Promise<TJson> {
+    queryParameters?: JsonObject
+  ): Promise<JsonObject> {
     return this.createGetFetcher({
       fileId,
       isContent: false,
@@ -154,7 +148,7 @@ export class Files extends GDriveApi {
 
   getText(
     fileId: string,
-    queryParameters?: ReadonlyDeep<TQueryParameters>,
+    queryParameters?: JsonObject,
     range?: string
   ): Promise<string> {
     return this.createGetFetcher({
@@ -165,7 +159,7 @@ export class Files extends GDriveApi {
     }).fetchText()
   }
 
-  list(queryParameters?: ReadonlyDeep<TListParams>): Promise<TJson> {
+  list(queryParameters?: ReadonlyDeep<TListParams>): Promise<JsonObject> {
     const isListQueryBuilder = queryParameters?.q instanceof ListQueryBuilder
 
     const _queryParameters =
@@ -200,7 +194,7 @@ export class Files extends GDriveApi {
     isContent,
     queryParameters,
     range
-  }: ReadonlyDeep<ICreateGetFetcherParams>): Fetcher {
+  }: Readonly<ICreateGetFetcherParams>): Fetcher {
     const canSetAlt = typeof isContent === 'boolean'
 
     const _queryParameters =

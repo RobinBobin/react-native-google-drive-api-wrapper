@@ -1,10 +1,10 @@
-import type { TQueryParameters } from 'src/types'
+import type { JsonObject } from 'type-fest'
 import type { ListQueryBuilder } from './ListQueryBuilder'
 
 interface ICreateGetFetcherParams {
   fileId: string
   isContent?: boolean
-  queryParameters: TQueryParameters | undefined
+  queryParameters: JsonObject | undefined
   range?: string | undefined
 }
 
@@ -13,9 +13,10 @@ interface ICreateIfNotExistsResultType<ExecuteResultType> {
   result: ExecuteResultType
 }
 
-type TListParams = TQueryParameters & {
-  q?: string | Readonly<typeof ListQueryBuilder>
-}
+type TListParams = JsonObject &
+  Readonly<{
+    q?: string | Readonly<typeof ListQueryBuilder>
+  }>
 
 export type {
   ICreateGetFetcherParams,

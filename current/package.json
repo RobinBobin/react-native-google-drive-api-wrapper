@@ -13,6 +13,7 @@
     "@types/eslint__js": "^8.42.3",
     "@types/eslint-config-prettier": "^6.11.3",
     "@types/utf8": "^3.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
     "@typescript-eslint/parser": "^8.12.2",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",

@@ -1,6 +1,5 @@
 import type { GDriveApi } from 'api/GDriveApi'
-import type { TJson } from 'src/types'
-import type { ReadonlyDeep } from 'type-fest'
+import type { JsonObject, ReadonlyDeep } from 'type-fest'
 import type { TSimpleData } from 'uploaders/types'
 import type {
   IRequestUploadStatusResultType,
@@ -100,7 +99,7 @@ export class ResumableUploadRequest {
 
       return {
         isComplete: true,
-        json: (await response.json()) as TJson,
+        json: (await response.json()) as JsonObject,
         transferredByteCount: chunk.length
       }
     } catch (error) {

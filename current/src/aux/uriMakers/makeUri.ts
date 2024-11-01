@@ -1,5 +1,4 @@
-import type { IterableElement, ReadonlyDeep } from 'type-fest'
-import type { IUriParameters } from './types'
+import type { IMakeUriParameters } from './types'
 
 export const makeUri = ({
   api,
@@ -7,7 +6,7 @@ export const makeUri = ({
   path,
   preDrivePath,
   queryParameters = {}
-}: ReadonlyDeep<IUriParameters>): string => {
+}: Readonly<IMakeUriParameters>): string => {
   const uri = [
     'https://www.googleapis.com',
     preDrivePath,
@@ -21,11 +20,9 @@ export const makeUri = ({
 
   const url = new URL(uri)
 
-  const entries = Object.entries(queryParameters)
-
-  entries.forEach(([key, value]: Readonly<IterableElement<typeof entries>>) => {
-    url.searchParams.append(key, value?.toString() ?? typeof undefined)
-  })
+  for (const [key, value] of Object.entries(queryParameters)) {
+    url.searchParams.append(key, value?.toString() ?? 'null')
+  }
 
   return url.toString()
 }

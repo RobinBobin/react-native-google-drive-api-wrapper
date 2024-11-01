@@ -96,7 +96,8 @@ export default typescriptEslintConfig(
         {
           allow: [
             { from: 'lib', name: 'ProgressEvent' },
-            { from: 'lib', name: 'Request' }
+            { from: 'lib', name: 'Request' },
+            { from: 'package', name: 'JsonObject', package: 'type-fest' }
           ]
         }
       ],
@@ -108,8 +109,6 @@ export default typescriptEslintConfig(
       '@typescript-eslint/switch-exhaustiveness-check': [
         'error',
         {
-          allowDefaultCaseForExhaustiveSwitch: false,
-          considerDefaultExhaustiveForUnions: true,
           requireDefaultForNonUnion: true
         }
       ],
@@ -122,7 +121,6 @@ export default typescriptEslintConfig(
       'consistent-return': 'error',
       'consistent-this': 'error',
       curly: 'error',
-      'default-case': 'error',
       'default-case-last': 'error',
       'dot-notation': 'error',
       eqeqeq: 'error',

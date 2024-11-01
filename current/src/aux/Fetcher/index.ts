@@ -1,5 +1,4 @@
-import type { TJson } from 'src/types'
-import type { ReadonlyDeep } from 'type-fest'
+import type { JsonObject, ReadonlyDeep } from 'type-fest'
 import type { TBlobToByteArrayResultType, TBodyType } from './types'
 
 import { GDriveApi } from 'api/GDriveApi'
@@ -67,7 +66,7 @@ class Fetcher {
     return await response.text()
   }
 
-  async fetchJson<T = TJson>(resource?: RequestInfo): Promise<T> {
+  async fetchJson<T = JsonObject>(resource?: RequestInfo): Promise<T> {
     const response = await this.fetch(resource)
 
     return (await response.json()) as T
@@ -111,7 +110,7 @@ const fetchText = (
   return new Fetcher(gDriveApi).fetchText(resource)
 }
 
-const fetchJson = <T = TJson>(
+const fetchJson = <T = JsonObject>(
   gDriveApi: GDriveApi,
   resource: RequestInfo
 ): Promise<T> => {
