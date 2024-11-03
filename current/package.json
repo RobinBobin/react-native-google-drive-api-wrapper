@@ -10,6 +10,7 @@
   "description": "This wrapper facilitates the use of the Google Drive API in React Native projects.",
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@stylistic/eslint-plugin-js": "^2.10.1",
     "@types/eslint__js": "^8.42.3",
     "@types/eslint-config-prettier": "^6.11.3",
     "@types/utf8": "^3.0.3",

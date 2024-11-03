@@ -1,6 +1,7 @@
 /* eslint-disable id-length */
 
 import eslintJs from '@eslint/js'
+import stylisticJs from '@stylistic/eslint-plugin-js'
 import tsParser from '@typescript-eslint/parser'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginImportX from 'eslint-plugin-import-x'
@@ -37,9 +38,13 @@ export default typescriptEslintConfig(
       }
     },
     plugins: {
+      '@stylistic/js': stylisticJs,
       'simple-import-sort': eslintPluginSimpleImportSort
     },
     rules: {
+      // @stylistic/js
+      '@stylistic/js/no-trailing-spaces': 'error',
+
       // typescript-eslint
       '@typescript-eslint/class-methods-use-this': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
