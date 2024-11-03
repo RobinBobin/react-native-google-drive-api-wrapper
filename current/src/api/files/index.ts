@@ -4,12 +4,15 @@ import type { Uploader } from 'uploaders/base/Uploader'
 import type {
   ICreateGetFetcherParams,
   ICreateIfNotExistsResultType,
-  TListParams
+  IFileOutput,
+  IFilesListQueryParameters,
+  IFilesListResultType
 } from './types'
 
 import { Fetcher, fetchJson, fetchText } from 'aux/Fetcher'
-import { isNonEmptyString } from 'aux/isNonEmptyString'
-import { makeFilesUri } from 'aux/uriMakers'
+import { isNonEmptyString } from 'aux/helpers/isNonEmptyString'
+import { FilesUriBuilder } from 'aux/uriBuilders/files/FilesUriBuilder'
+import { processListQueryParameters } from 'aux/uriBuilders/files/processListQueryParameters'
 import { MIME_TYPE_JSON } from 'src/constants'
 import { MetadataOnlyUploader } from 'uploaders/implementations/MetadataOnlyUploader'
 import { MultipartUploader } from 'uploaders/implementations/MultipartUploader'
@@ -18,7 +21,6 @@ import { SimpleUploader } from 'uploaders/implementations/SimpleUploader'
 
 import { GDriveApi } from '../GDriveApi'
 import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
-import { ListQueryBuilder } from './ListQueryBuilder'
 
 export class Files extends GDriveApi {
   copy(
@@ -29,16 +31,16 @@ export class Files extends GDriveApi {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MIME_TYPE_JSON)
       .setMethod('POST')
-      .fetchJson(makeFilesUri({ fileId, method: 'copy', queryParameters }))
+      .fetchJson(
+        new FilesUriBuilder('copy').setFileId(fileId).build({ queryParameters })
+      )
   }
 
   async createIfNotExists<ExecuteResultType>(
-    queryParameters: ReadonlyDeep<TListParams>,
+    queryParameters: ReadonlyDeep<IFilesListQueryParameters>,
     uploader: ReadonlyDeep<Uploader<ExecuteResultType>>
-  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType | JsonObject>> {
-    const list = await this.list(queryParameters)
-    // eslint-disable-next-line dot-notation
-    const files = list['files'] as JsonObject[]
+  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType | IFileOutput>> {
+    const { files } = await this.list(queryParameters)
 
     if (!files.length) {
       return {
@@ -67,26 +69,26 @@ export class Files extends GDriveApi {
   delete(fileId: string): Promise<string> {
     return new Fetcher(this)
       .setMethod('DELETE')
-      .fetchText(makeFilesUri({ fileId }))
+      .fetchText(new FilesUriBuilder().setFileId(fileId).build())
   }
 
   emptyTrash(): Promise<string> {
     return new Fetcher(this)
       .setMethod('DELETE')
-      .fetchText(makeFilesUri({ method: 'trash' }))
+      .fetchText(new FilesUriBuilder('trash').build())
   }
 
   export(fileId: string, queryParameters: JsonObject): Promise<string> {
     return fetchText(
       this,
-      makeFilesUri({ fileId, method: 'export', queryParameters })
+      new FilesUriBuilder('export').setFileId(fileId).build({ queryParameters })
     )
   }
 
   generateIds(queryParameters?: JsonObject): Promise<JsonObject> {
     return fetchJson(
       this,
-      makeFilesUri({ method: 'generateIds', queryParameters })
+      new FilesUriBuilder('generateIds').build({ queryParameters })
     )
   }
 
@@ -159,18 +161,16 @@ export class Files extends GDriveApi {
     }).fetchText()
   }
 
-  list(queryParameters?: ReadonlyDeep<TListParams>): Promise<JsonObject> {
-    const isListQueryBuilder = queryParameters?.q instanceof ListQueryBuilder
-
-    const _queryParameters =
-      isListQueryBuilder ?
-        {
-          ...queryParameters,
-          q: queryParameters.q.toString()
-        }
-      : queryParameters
-
-    return fetchJson(this, makeFilesUri({ queryParameters: _queryParameters }))
+  list(
+    queryParameters?: ReadonlyDeep<IFilesListQueryParameters>
+  ): Promise<IFilesListResultType> {
+    return fetchJson(
+      this,
+      new FilesUriBuilder().build({
+        process: processListQueryParameters,
+        queryParameters
+      })
+    )
   }
 
   newMetadataOnlyUploader(): MetadataOnlyUploader {
@@ -195,18 +195,17 @@ export class Files extends GDriveApi {
     queryParameters,
     range
   }: Readonly<ICreateGetFetcherParams>): Fetcher {
-    const canSetAlt = typeof isContent === 'boolean'
+    const _queryParameters = { ...queryParameters }
 
-    const _queryParameters =
-      canSetAlt ?
-        {
-          ...queryParameters,
-          alt: isContent ? 'media' : 'json'
-        }
-      : queryParameters
+    // Process `alt`.
+    if (typeof isContent === 'boolean') {
+      // _queryParameters.alt = isContent ? 'media' : 'json'
+    }
 
     const fetcher = new Fetcher(this).setResource(
-      makeFilesUri({ fileId, queryParameters: _queryParameters })
+      new FilesUriBuilder()
+        .setFileId(fileId)
+        .build({ queryParameters: _queryParameters })
     )
 
     if (isNonEmptyString(range)) {

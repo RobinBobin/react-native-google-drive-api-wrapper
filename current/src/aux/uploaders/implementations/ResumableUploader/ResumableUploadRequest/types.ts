@@ -1,4 +1,4 @@
-import type { JsonObject } from 'type-fest'
+import type { IFileOutput } from 'api/files/types'
 
 interface IRequestUploadStatusResultType {
   isComplete: boolean
@@ -6,7 +6,7 @@ interface IRequestUploadStatusResultType {
 }
 
 interface IUploadChunkResultType extends IRequestUploadStatusResultType {
-  json?: JsonObject
+  json?: IFileOutput
 }
 
 export type { IRequestUploadStatusResultType, IUploadChunkResultType }

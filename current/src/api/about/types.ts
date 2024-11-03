@@ -1,23 +1,28 @@
-import type { IUser, TFields, TStandardParameters } from 'api/types'
+import type { IStandardParameters, IUser, TFields } from 'api/types'
 import type { JsonValue, SetRequired } from 'type-fest'
 
 type TAboutGetQueryParameters =
-  | SetRequired<TStandardParameters, 'fields'>
+  | SetRequired<IStandardParameters, 'fields'>
   | TFields
 
-interface IAboutGetResultType {
-  kind: string
-  storageQuota: {
-    limit: string
-    usageInDrive: string
-    usageInDriveTrash: string
-    usage: string
-  }
-  driveThemes: {
-    id: string
-    backgroundImageLink: string
-    colorRgb: string
-  }[]
+type TAboutKind = 'drive#about'
+
+interface IAboutDriveTheme {
+  id: string
+  backgroundImageLink: string
+  colorRgb: string
+}
+interface IAboutStorageQuota {
+  limit?: string
+  usageInDrive: string
+  usageInDriveTrash: string
+  usage: string
+}
+
+interface IAbout {
+  kind: TAboutKind
+  storageQuota: IAboutStorageQuota
+  driveThemes: IAboutDriveTheme[]
   canCreateDrives: boolean
   importFormats: Record<string, JsonValue>
   exportFormats: Record<string, JsonValue>
@@ -26,12 +31,12 @@ interface IAboutGetResultType {
   folderColorPalette: string[]
   maxImportSizes: Record<string, string>
   maxUploadSize: string
-  teamDriveThemes: {
-    id: string
-    backgroundImageLink: string
-    colorRgb: string
-  }[]
-  canCreateTeamDrives: boolean
 }
 
-export type { IAboutGetResultType, TAboutGetQueryParameters }
+export type {
+  IAbout,
+  IAboutDriveTheme,
+  IAboutStorageQuota,
+  TAboutGetQueryParameters,
+  TAboutKind
+}

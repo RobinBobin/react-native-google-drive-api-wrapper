@@ -103,7 +103,8 @@ export default typescriptEslintConfig(
             { from: 'lib', name: 'ProgressEvent' },
             { from: 'lib', name: 'Request' },
             { from: 'package', name: 'JsonObject', package: 'type-fest' }
-          ]
+          ],
+          ignoreInferredTypes: true
         }
       ],
       '@typescript-eslint/restrict-template-expressions': [

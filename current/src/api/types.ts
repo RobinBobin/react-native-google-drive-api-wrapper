@@ -5,11 +5,10 @@ interface IGDriveAccessParameters {
 
 type TAlt = 'json' | 'media' | 'proto' | 'sse'
 type TFields = string | string[]
+type TPublished = 'published'
 
 // https://cloud.google.com/apis/docs/system-parameters
-// Index signature for type 'string' is missing in type 'TStandardParameters'
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type TStandardParameters = {
+interface IStandardParameters {
   alt?: TAlt
   fields?: TFields
   prettyPrint?: boolean
@@ -26,8 +25,9 @@ interface IUser {
 
 export type {
   IGDriveAccessParameters,
+  IStandardParameters,
   IUser,
   TAlt,
   TFields,
-  TStandardParameters
+  TPublished
 }

@@ -1,5 +1,6 @@
+import type { IFileOutput } from 'api/files/types'
 import type { GDriveApi } from 'api/GDriveApi'
-import type { JsonObject, ReadonlyDeep } from 'type-fest'
+import type { ReadonlyDeep } from 'type-fest'
 import type { TSimpleData } from 'uploaders/types'
 import type {
   IRequestUploadStatusResultType,
@@ -9,7 +10,7 @@ import type {
 import { Fetcher } from 'aux/Fetcher'
 import { FetchResponseError } from 'aux/Fetcher/errors/FetchResponseError'
 
-import { convertReadonlyDeepTSimpleDataToTBodyType } from '../../convertReadonlyDeepTSimpleDataToTBodyType'
+import { convertReadonlyDeepTSimpleDataToTBodyType } from '../../helpers/convertReadonlyDeepTSimpleDataToTBodyType'
 import { ResumableUploaderError } from '../errors/ResumableUploaderError'
 
 const HTTP_RESUME_INCOMPLETE = 308
@@ -99,7 +100,7 @@ export class ResumableUploadRequest {
 
       return {
         isComplete: true,
-        json: (await response.json()) as JsonObject,
+        json: (await response.json()) as IFileOutput,
         transferredByteCount: chunk.length
       }
     } catch (error) {

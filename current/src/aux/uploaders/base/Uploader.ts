@@ -1,13 +1,16 @@
+import type { IFileInput, IFilesCreateQueryParameters } from 'api/files/types'
 import type { Fetcher } from 'aux/Fetcher'
-import type { JsonObject } from 'type-fest'
-import type { TUploadQueryParameters, TUploadType } from './types'
+import type { ReadonlyDeep } from 'type-fest'
+import type { TUploadType } from './types'
 
-import { makeFilesUri } from 'aux/uriMakers'
+import { isNonEmptyString } from 'aux/helpers/isNonEmptyString'
+import { FilesUriBuilder } from 'aux/uriBuilders/files/FilesUriBuilder'
+import { processCreateQueryParameters } from 'uriBuilders/files/processCreateQueryParameters'
 
 export abstract class Uploader<ExecuteResultType> {
-  private idOfFileToUpdate = ''
-  private _requestBody = {}
-  private queryParameters = {}
+  private idOfFileToUpdate?: string
+  private _requestBody?: ReadonlyDeep<IFileInput>
+  private queryParameters?: ReadonlyDeep<IFilesCreateQueryParameters>
 
   constructor(
     protected readonly fetcher: Readonly<Fetcher>,
@@ -17,20 +20,18 @@ export abstract class Uploader<ExecuteResultType> {
   }
 
   execute(): Promise<ExecuteResultType> {
-    const isMetadataOnly = !this.uploadType
-    const preDrivePath = isMetadataOnly ? undefined : 'upload'
+    const preDrivePath = this.uploadType ? 'upload' : undefined
 
     this.fetcher
-      .setMethod(this.idOfFileToUpdate ? 'PATCH' : 'POST')
+      .setMethod(isNonEmptyString(this.idOfFileToUpdate) ? 'PATCH' : 'POST')
       .setResource(
-        makeFilesUri({
-          fileId: this.idOfFileToUpdate,
-          preDrivePath,
-          queryParameters: {
-            ...this.queryParameters,
-            uploadType: this.uploadType
-          }
-        })
+        new FilesUriBuilder()
+          .setFileId(this.idOfFileToUpdate)
+          .setPreDrivePath(preDrivePath)
+          .build({
+            process: processCreateQueryParameters(this.uploadType),
+            queryParameters: this.queryParameters
+          })
       )
 
     return this._execute()
@@ -42,13 +43,15 @@ export abstract class Uploader<ExecuteResultType> {
     return this
   }
 
-  setQueryParameters(queryParameters: TUploadQueryParameters): this {
+  setQueryParameters(
+    queryParameters: ReadonlyDeep<IFilesCreateQueryParameters>
+  ): this {
     this.queryParameters = queryParameters
 
     return this
   }
 
-  setRequestBody(requestBody: JsonObject): this {
+  setRequestBody(requestBody: ReadonlyDeep<IFileInput>): this {
     this._requestBody = requestBody
 
     return this
@@ -57,6 +60,6 @@ export abstract class Uploader<ExecuteResultType> {
   protected abstract _execute(): Promise<ExecuteResultType>
 
   protected get requestBody(): string {
-    return JSON.stringify(this._requestBody)
+    return JSON.stringify(this._requestBody ?? {})
   }
 }

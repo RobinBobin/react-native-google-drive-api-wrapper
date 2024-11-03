@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
+
 import type {
   TClauseFunctionCommand,
   TClauseFunctionParameterType,

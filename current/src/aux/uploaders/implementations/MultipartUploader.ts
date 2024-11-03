@@ -1,6 +1,6 @@
+import type { IFileOutput } from 'api/files/types'
 import type { Fetcher } from 'aux/Fetcher'
 import type { TBodyType } from 'aux/Fetcher/types'
-import type { JsonObject } from 'type-fest'
 
 import { MIME_TYPE_JSON_UTF8 } from 'src/constants'
 import { encode } from 'utf8'
@@ -27,7 +27,7 @@ export class MultipartUploader extends UploaderWithSimpleData {
     return this
   }
 
-  protected _execute(): Promise<JsonObject> {
+  protected _execute(): Promise<IFileOutput> {
     const dashDashBoundary = `--${this.multipartBoundary}`
     const ending = `\n${dashDashBoundary}--`
 

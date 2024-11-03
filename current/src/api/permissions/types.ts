@@ -1,4 +1,4 @@
-import type { TStandardParameters } from 'api/types'
+import type { IStandardParameters, TPublished } from 'api/types'
 
 type TPermissionKind = 'drive#permission'
 type TPermissionType = 'anyone' | 'domain' | 'group' | 'user'
@@ -21,7 +21,7 @@ interface IPermissionInput {
   domain?: string
   // RFC 3339 date-time
   expirationTime?: string
-  view?: 'published'
+  view?: TPublished
   pendingOwner?: boolean
 }
 
@@ -41,7 +41,7 @@ interface IPermissionOutput extends IPermissionInput {
   deleted?: boolean
 }
 
-interface IPermissionsCreateQueryParameters extends TStandardParameters {
+interface IPermissionsCreateQueryParameters extends IStandardParameters {
   emailMessage?: string
   moveToNewOwnersRoot?: boolean
   sendNotificationEmail?: boolean
@@ -50,7 +50,7 @@ interface IPermissionsCreateQueryParameters extends TStandardParameters {
   useDomainAdminAccess?: boolean
 }
 
-interface IPermissionsDeleteQueryParameters extends TStandardParameters {
+interface IPermissionsDeleteQueryParameters extends IStandardParameters {
   supportsAllDrives?: boolean
   useDomainAdminAccess?: boolean
 }

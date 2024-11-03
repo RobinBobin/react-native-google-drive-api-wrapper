@@ -21,7 +21,8 @@
       "api/*": ["./src/api/*"],
       "aux/*": ["./src/aux/*"],
       "src/*": ["./src/*"],
-      "uploaders/*": ["./src/aux/uploaders/*"]
+      "uploaders/*": ["./src/aux/uploaders/*"],
+      "uriBuilders/*": ["./src/aux/uriBuilders/*"]
     },
     "rootDir": ".",
 

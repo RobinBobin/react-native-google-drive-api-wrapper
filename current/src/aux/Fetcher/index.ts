@@ -2,7 +2,7 @@ import type { JsonObject, ReadonlyDeep } from 'type-fest'
 import type { TBlobToByteArrayResultType, TBodyType } from './types'
 
 import { GDriveApi } from 'api/GDriveApi'
-import { isNonEmptyString } from 'aux/isNonEmptyString'
+import { isNonEmptyString } from 'aux/helpers/isNonEmptyString'
 
 import { blobToByteArray } from './blobToByteArray'
 import { FetchResponseError } from './errors/FetchResponseError'

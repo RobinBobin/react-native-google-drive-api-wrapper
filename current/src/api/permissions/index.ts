@@ -7,7 +7,7 @@ import type {
 } from './types'
 
 import { Fetcher } from 'aux/Fetcher'
-import { makePermissionsUri } from 'aux/uriMakers'
+import { PermissionsUriBuilder } from 'aux/uriBuilders/permissions/PermissionsUriBuilder'
 import { MIME_TYPE_JSON } from 'src/constants'
 
 import { GDriveApi } from '../GDriveApi'
@@ -15,13 +15,13 @@ import { GDriveApi } from '../GDriveApi'
 export class PermissionApi extends GDriveApi {
   create(
     fileId: string,
-    requestBody: Readonly<IPermissionInput>,
-    queryParameters?: ReadonlyDeep<IPermissionsCreateQueryParameters>
+    queryParameters: ReadonlyDeep<IPermissionsCreateQueryParameters>,
+    requestBody: Readonly<IPermissionInput>
   ): Promise<IPermissionOutput> {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MIME_TYPE_JSON)
       .setMethod('POST')
-      .fetchJson(makePermissionsUri({ fileId, queryParameters }))
+      .fetchJson(new PermissionsUriBuilder(fileId).build({ queryParameters }))
   }
 
   async delete(
@@ -29,8 +29,10 @@ export class PermissionApi extends GDriveApi {
     permissionId: string,
     queryParameters?: ReadonlyDeep<IPermissionsDeleteQueryParameters>
   ): Promise<void> {
-    await new Fetcher(this)
-      .setMethod('DELETE')
-      .fetchText(makePermissionsUri({ fileId, permissionId, queryParameters }))
+    await new Fetcher(this).setMethod('DELETE').fetchText(
+      new PermissionsUriBuilder(fileId, permissionId).build({
+        queryParameters
+      })
+    )
   }
 }
