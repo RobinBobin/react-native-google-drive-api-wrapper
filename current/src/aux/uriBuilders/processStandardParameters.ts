@@ -1,9 +1,9 @@
 import type { IStandardParameters } from 'api/types'
-import type { TProcessQueryParameters } from './types'
+import type { TQueryParameterProcessor } from './types'
 
 import { isArray } from 'radashi'
 
-export const processStandardParameters: TProcessQueryParameters<
+export const processStandardParameters: TQueryParameterProcessor<
   IStandardParameters
 > = queryParameters => {
   if (isArray(queryParameters.fields)) {

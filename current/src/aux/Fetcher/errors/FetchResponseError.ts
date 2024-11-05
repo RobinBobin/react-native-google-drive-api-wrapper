@@ -4,6 +4,7 @@ import { isError } from 'radashi'
 
 class FetchResponseError extends Error {
   constructor(
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
     readonly json: JsonObject | null,
     message: string,
     readonly response: ReadonlyDeep<Response>

@@ -1,25 +1,23 @@
 import type { IFilesCreateQueryParameters } from 'api/files/types'
 import type { TUploadType } from 'uploaders/base/types'
-import type { TProcessQueryParameters } from '../types'
+import type { TWrappedQueryParameterProcessor } from '../types'
 
-import { processIncludeLabels } from './processIncludeLabels'
+import { processCommonQueryParameters } from './processCommonQueryParameters'
 
 type TQueryParameters = IFilesCreateQueryParameters & {
   uploadType?: TUploadType
 }
 
-type TProcessCreateQueryParameters = (
-  uploadType: TUploadType | undefined
-) => TProcessQueryParameters<TQueryParameters>
+export const processCreateQueryParameters: TWrappedQueryParameterProcessor<
+  TQueryParameters,
+  TUploadType | undefined
+> = uploadType => {
+  return queryParameters => {
+    processCommonQueryParameters(queryParameters)
 
-export const processCreateQueryParameters: TProcessCreateQueryParameters =
-  uploadType => {
-    return queryParameters => {
-      processIncludeLabels(queryParameters)
-
-      // Process `uploadType`.
-      if (uploadType) {
-        queryParameters.uploadType = uploadType
-      }
+    // uploadType
+    if (uploadType) {
+      queryParameters.uploadType = uploadType
     }
   }
+}

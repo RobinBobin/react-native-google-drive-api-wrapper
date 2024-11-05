@@ -101,8 +101,7 @@ export default typescriptEslintConfig(
         {
           allow: [
             { from: 'lib', name: 'ProgressEvent' },
-            { from: 'lib', name: 'Request' },
-            { from: 'package', name: 'JsonObject', package: 'type-fest' }
+            { from: 'lib', name: 'Request' }
           ],
           ignoreInferredTypes: true
         }

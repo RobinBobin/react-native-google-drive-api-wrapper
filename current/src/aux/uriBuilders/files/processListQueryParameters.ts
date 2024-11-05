@@ -2,21 +2,30 @@ import type {
   IFilesListQueryParameters,
   TFilesListSpace
 } from 'api/files/types'
-import type { TProcessQueryParameters } from '../types'
+import type { TQueryParameterProcessor } from '../types'
 
 import { ListQueryBuilder } from 'api/files/ListQueryBuilder'
 import { isArray } from 'radashi'
 
-import { processIncludeLabels } from './processIncludeLabels'
+import { processCommonQueryParameters } from './processCommonQueryParameters'
 
-export const processListQueryParameters: TProcessQueryParameters<
+export const processListQueryParameters: TQueryParameterProcessor<
   IFilesListQueryParameters
 > = queryParameters => {
-  processIncludeLabels(queryParameters)
+  processCommonQueryParameters(queryParameters)
 
   // orderBy
+  if (isArray(queryParameters.orderBy)) {
+    const orderByElements = queryParameters.orderBy.map(
+      ([property, sortOrder]) => {
+        return sortOrder ? [property, sortOrder].join(' ') : property
+      }
+    )
 
-  // `q`.
+    queryParameters.orderBy = orderByElements.join()
+  }
+
+  // q
   if (queryParameters.q instanceof ListQueryBuilder) {
     queryParameters.q = queryParameters.q.toString()
   }

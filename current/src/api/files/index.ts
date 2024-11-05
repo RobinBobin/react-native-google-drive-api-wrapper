@@ -4,7 +4,13 @@ import type { Uploader } from 'uploaders/base/Uploader'
 import type {
   ICreateGetFetcherParams,
   ICreateIfNotExistsResultType,
+  IFileInput,
   IFileOutput,
+  IFilesCopyQueryParameters,
+  IFilesExportQueryParameters,
+  IFilesGenerateIdsQueryParameters,
+  IFilesGenerateIdsResultType,
+  IFilesGetQueryParameters,
   IFilesListQueryParameters,
   IFilesListResultType
 } from './types'
@@ -12,8 +18,9 @@ import type {
 import { Fetcher, fetchJson, fetchText } from 'aux/Fetcher'
 import { isNonEmptyString } from 'aux/helpers/isNonEmptyString'
 import { FilesUriBuilder } from 'aux/uriBuilders/files/FilesUriBuilder'
+import { processCommonQueryParameters } from 'aux/uriBuilders/files/processCommonQueryParameters'
+import { processGetQueryParameters } from 'aux/uriBuilders/files/processGetQueryParameters'
 import { processListQueryParameters } from 'aux/uriBuilders/files/processListQueryParameters'
-import { isBoolean } from 'radashi'
 import { MIME_TYPE_JSON } from 'src/constants'
 import { MetadataOnlyUploader } from 'uploaders/implementations/MetadataOnlyUploader'
 import { MultipartUploader } from 'uploaders/implementations/MultipartUploader'
@@ -26,14 +33,16 @@ import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
 export class Files extends GDriveApi {
   copy(
     fileId: string,
-    queryParameters?: JsonObject,
-    requestBody: JsonObject = {}
-  ): Promise<JsonObject> {
+    queryParameters?: ReadonlyDeep<IFilesCopyQueryParameters>,
+    requestBody: IFileInput = {}
+  ): Promise<IFileOutput> {
     return new Fetcher(this)
       .setBody(JSON.stringify(requestBody), MIME_TYPE_JSON)
       .setMethod('POST')
       .fetchJson(
-        new FilesUriBuilder('copy').setFileId(fileId).build({ queryParameters })
+        new FilesUriBuilder('copy')
+          .setFileId(fileId)
+          .build({ process: processCommonQueryParameters, queryParameters })
       )
   }
 
@@ -79,14 +88,19 @@ export class Files extends GDriveApi {
       .fetchText(new FilesUriBuilder('trash').build())
   }
 
-  export(fileId: string, queryParameters: JsonObject): Promise<string> {
+  export(
+    fileId: string,
+    queryParameters: ReadonlyDeep<IFilesExportQueryParameters>
+  ): Promise<string> {
     return fetchText(
       this,
       new FilesUriBuilder('export').setFileId(fileId).build({ queryParameters })
     )
   }
 
-  generateIds(queryParameters?: JsonObject): Promise<JsonObject> {
+  generateIds(
+    queryParameters?: ReadonlyDeep<IFilesGenerateIdsQueryParameters>
+  ): Promise<IFilesGenerateIdsResultType> {
     return fetchJson(
       this,
       new FilesUriBuilder('generateIds').build({ queryParameters })
@@ -95,7 +109,7 @@ export class Files extends GDriveApi {
 
   get(
     fileId: string,
-    queryParameters?: JsonObject,
+    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>,
     range?: string
   ): Promise<Response> {
     return this.createGetFetcher({ fileId, queryParameters, range }).fetch()
@@ -103,7 +117,7 @@ export class Files extends GDriveApi {
 
   getBinary(
     fileId: string,
-    queryParameters?: JsonObject,
+    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>,
     range?: string
   ): Promise<TBlobToByteArrayResultType> {
     return this.createGetFetcher({
@@ -116,7 +130,7 @@ export class Files extends GDriveApi {
 
   getContent(
     fileId: string,
-    queryParameters?: JsonObject,
+    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>,
     range?: string
   ): Promise<Response> {
     return this.createGetFetcher({
@@ -129,7 +143,7 @@ export class Files extends GDriveApi {
 
   geJsonObject<T = JsonObject>(
     fileId: string,
-    queryParameters?: JsonObject
+    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>
   ): Promise<T> {
     return this.createGetFetcher({
       fileId,
@@ -140,8 +154,8 @@ export class Files extends GDriveApi {
 
   getMetadata(
     fileId: string,
-    queryParameters?: JsonObject
-  ): Promise<JsonObject> {
+    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>
+  ): Promise<IFileOutput> {
     return this.createGetFetcher({
       fileId,
       isContent: false,
@@ -151,7 +165,7 @@ export class Files extends GDriveApi {
 
   getText(
     fileId: string,
-    queryParameters?: JsonObject,
+    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>,
     range?: string
   ): Promise<string> {
     return this.createGetFetcher({
@@ -195,18 +209,12 @@ export class Files extends GDriveApi {
     isContent,
     queryParameters,
     range
-  }: Readonly<ICreateGetFetcherParams>): Fetcher {
-    const _queryParameters = { ...queryParameters }
-
-    // Process `alt`.
-    if (isBoolean(isContent)) {
-      // _queryParameters.alt = isContent ? 'media' : 'json'
-    }
-
+  }: ReadonlyDeep<ICreateGetFetcherParams>): Fetcher {
     const fetcher = new Fetcher(this).setResource(
-      new FilesUriBuilder()
-        .setFileId(fileId)
-        .build({ queryParameters: _queryParameters })
+      new FilesUriBuilder().setFileId(fileId).build({
+        process: processGetQueryParameters(isContent),
+        queryParameters
+      })
     )
 
     if (isNonEmptyString(range)) {

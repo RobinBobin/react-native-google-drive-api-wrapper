@@ -1,6 +1,6 @@
 import type { IStandardParameters } from 'api/types'
 import type { ReadonlyDeep } from 'type-fest'
-import type { IBuildParameters, TConvertQueryParameters } from './types'
+import type { IBuildParameters, TQueryParameterConverter } from './types'
 
 import { chain, cloneDeep, isObject } from 'radashi'
 
@@ -37,7 +37,7 @@ export class BaseUriBuilder {
       return url.toString()
     }
 
-    const convert: TConvertQueryParameters<
+    const convert: TQueryParameterConverter<
       unknown,
       TQueryParameters
     > = queryParameters => queryParameters as ReadonlyDeep<TQueryParameters>

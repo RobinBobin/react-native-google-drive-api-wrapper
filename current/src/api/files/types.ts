@@ -1,11 +1,13 @@
 import type { IPermissionOutput } from 'api/permissions/types'
 import type { IStandardParameters, IUser, TPublished } from 'api/types'
-import type { JsonObject, SetRequired } from 'type-fest'
+import type { Except, SetRequired } from 'type-fest'
 import type { IListQueryBuilder } from './ListQueryBuilder/types'
 
 type TFileKind = 'drive#file'
+type TFileGeneratedIdsKind = 'drive#generatedIds'
 type TFileListKind = 'drive#fileList'
-type TFilesIncludeLabels = string | string[]
+
+type TFileGeneratedIdType = 'files' | 'shortcuts'
 
 type TFileSpaceAppDataFolder = 'appDataFolder'
 type TFileSpaceDrive = 'drive'
@@ -17,6 +19,9 @@ type TFileOutputSpace =
   | TFileSpacePhotos
 
 type TFilesListSpace = TFileSpaceAppDataFolder | TFileSpaceDrive
+type TFilesGenerateIdsSpace = TFileSpaceAppDataFolder | TFileSpaceDrive
+
+type TFilesIncludeLabels = string | string[]
 
 type TFilesListCorpora = 'allDrives' | 'domain' | 'drive' | 'user'
 
@@ -37,38 +42,68 @@ type TFilesListSortOrder = 'desc'
 
 type TFilesListOrderBy =
   | string
-  | [TFilesListOrderByProperty, (TFilesListSortOrder | undefined)?]
-
-interface ICreateGetFetcherParams {
-  fileId: string
-  isContent?: boolean
-  queryParameters: JsonObject | undefined
-  range?: string | undefined
-}
+  | [TFilesListOrderByProperty, (TFilesListSortOrder | undefined)?][]
 
 interface ICreateIfNotExistsResultType<TResult> {
   alreadyExisted: boolean
   result: TResult
 }
 
-interface IIncludeLabels {
+interface IFilesCommonQueryParameters extends IStandardParameters {
   includeLabels?: TFilesIncludeLabels
-}
-interface IFilesCreateQueryParameters
-  extends IStandardParameters,
-    IIncludeLabels {
-  ignoreDefaultVisibility?: boolean
-  keepRevisionForever?: boolean
-  // ISO 639-1 code
-  ocrLanguage?: string
-  supportsAllDrives?: boolean
-  useContentAsIndexableText?: boolean
   includePermissionsForView?: TPublished
+  supportsAllDrives?: boolean
 }
 
-interface IFilesListQueryParameters
-  extends IStandardParameters,
-    IIncludeLabels {
+interface IFilesOcrLanguage extends IStandardParameters {
+  // ISO 639-1 code
+  ocrLanguage?: string
+}
+
+interface IFilesCopyQueryParameters
+  extends IFilesCommonQueryParameters,
+    IFilesOcrLanguage {
+  ignoreDefaultVisibility?: boolean
+  keepRevisionForever?: boolean
+}
+
+interface IFilesCreateQueryParameters
+  extends IFilesCommonQueryParameters,
+    IFilesOcrLanguage {
+  ignoreDefaultVisibility?: boolean
+  keepRevisionForever?: boolean
+  useContentAsIndexableText?: boolean
+}
+
+interface IFilesExportQueryParameters extends IStandardParameters {
+  mimeType: string
+}
+
+interface IFilesGenerateIdsQueryParameters extends IStandardParameters {
+  count?: number
+  space?: TFilesGenerateIdsSpace
+  type?: TFileGeneratedIdType
+}
+
+interface IFilesGenerateIdsResultType {
+  ids: string[]
+  space: TFilesGenerateIdsSpace
+  kind: TFileGeneratedIdsKind
+}
+
+interface IFilesGetQueryParameters
+  extends Except<IFilesCommonQueryParameters, 'alt'> {
+  acknowledgeAbuse?: boolean
+}
+
+interface ICreateGetFetcherParams {
+  fileId: string
+  isContent?: boolean
+  queryParameters: IFilesGetQueryParameters | undefined
+  range?: string | undefined
+}
+
+interface IFilesListQueryParameters extends IFilesCommonQueryParameters {
   corpora?: TFilesListCorpora
   driveId?: string
   includeItemsFromAllDrives?: boolean
@@ -77,8 +112,6 @@ interface IFilesListQueryParameters
   pageToken?: string
   q?: string | IListQueryBuilder
   spaces?: TFilesListSpace | TFilesListSpace[]
-  supportsAllDrives?: boolean
-  includePermissionsForView?: TPublished
 }
 
 interface IFileInputContentHintThumbnail {
@@ -159,12 +192,20 @@ export type {
   IFileInputContentHints,
   IFileInputContentHintThumbnail,
   IFileOutput,
+  IFilesCommonQueryParameters,
+  IFilesCopyQueryParameters,
   IFilesCreateQueryParameters,
+  IFilesExportQueryParameters,
+  IFilesGenerateIdsQueryParameters,
+  IFilesGenerateIdsResultType,
+  IFilesGetQueryParameters,
   IFilesListQueryParameters,
   IFilesListResultType,
-  IIncludeLabels,
+  TFileGeneratedIdsKind,
+  TFileGeneratedIdType,
   TFileKind,
   TFileOutputSpace,
+  TFilesGenerateIdsSpace,
   TFilesIncludeLabels,
   TFilesListCorpora,
   TFilesListOrderBy,
