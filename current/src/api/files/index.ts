@@ -13,6 +13,7 @@ import { Fetcher, fetchJson, fetchText } from 'aux/Fetcher'
 import { isNonEmptyString } from 'aux/helpers/isNonEmptyString'
 import { FilesUriBuilder } from 'aux/uriBuilders/files/FilesUriBuilder'
 import { processListQueryParameters } from 'aux/uriBuilders/files/processListQueryParameters'
+import { isBoolean } from 'radashi'
 import { MIME_TYPE_JSON } from 'src/constants'
 import { MetadataOnlyUploader } from 'uploaders/implementations/MetadataOnlyUploader'
 import { MultipartUploader } from 'uploaders/implementations/MultipartUploader'
@@ -198,7 +199,7 @@ export class Files extends GDriveApi {
     const _queryParameters = { ...queryParameters }
 
     // Process `alt`.
-    if (typeof isContent === 'boolean') {
+    if (isBoolean(isContent)) {
       // _queryParameters.alt = isContent ? 'media' : 'json'
     }
 

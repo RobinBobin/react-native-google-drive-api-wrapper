@@ -1,14 +1,12 @@
 import type { TAboutGetQueryParameters } from 'api/about/types'
-import type { IStandardParameters } from 'api/types'
 import type { TConvertQueryParameters } from '../types'
+
+import { isArray, isString } from 'radashi'
 
 export const convertGetQueryParameters: TConvertQueryParameters<
   TAboutGetQueryParameters
 > = queryParameters => {
-  const isTFields =
-    typeof queryParameters === 'string' || Array.isArray(queryParameters)
+  const isTFields = isString(queryParameters) || isArray(queryParameters)
 
-  return isTFields ?
-      { fields: queryParameters }
-    : ({ ...queryParameters } as IStandardParameters)
+  return isTFields ? { fields: queryParameters } : queryParameters
 }

@@ -1,6 +1,7 @@
 import type { TBlobToByteArrayResultType } from './types'
 
 import { toByteArray } from 'base64-js'
+import { isString } from 'radashi'
 
 import { BlobToByteArrayError } from './errors/BlobToByteArrayError'
 
@@ -20,7 +21,7 @@ export function blobToByteArray(
         return
       }
 
-      if (typeof reader.result !== 'string') {
+      if (!isString(reader.result)) {
         resolve(new Uint8Array(reader.result))
         return
       }
@@ -29,7 +30,7 @@ export function blobToByteArray(
         'data:application/octet-stream;base64,'
       )[1]
 
-      if (typeof b64 === 'string') {
+      if (isString(b64)) {
         resolve(toByteArray(b64))
       } else {
         reject(

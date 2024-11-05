@@ -1,8 +1,8 @@
 import type { IStandardParameters } from 'api/types'
+import type { ReadonlyDeep } from 'type-fest'
 import type { IBuildParameters, TConvertQueryParameters } from './types'
 
-import structuredClone from '@ungap/structured-clone'
-import { chain } from 'radash'
+import { chain, cloneDeep, isObject } from 'radashi'
 
 import { processStandardParameters } from './processStandardParameters'
 
@@ -33,35 +33,37 @@ export class BaseUriBuilder {
 
     const url = new URL(uri)
 
-    if (typeof parameters?.queryParameters !== 'undefined') {
-      const convert: TConvertQueryParameters<
-        unknown,
-        TQueryParameters
-      > = queryParameters => queryParameters as TQueryParameters
+    if (!isObject(parameters?.queryParameters)) {
+      return url.toString()
+    }
 
-      const process = (queryParameters: TQueryParameters): TQueryParameters => {
-        processStandardParameters(queryParameters)
+    const convert: TConvertQueryParameters<
+      unknown,
+      TQueryParameters
+    > = queryParameters => queryParameters as ReadonlyDeep<TQueryParameters>
 
-        parameters.process?.(queryParameters)
+    const process = (queryParameters: TQueryParameters): TQueryParameters => {
+      processStandardParameters(queryParameters)
 
-        return queryParameters
-      }
+      parameters.process?.(queryParameters)
 
-      const queryParameters = chain(
-        parameters.convert ?? convert,
-        structuredClone,
-        process
-      )(parameters.queryParameters)
+      return queryParameters
+    }
 
-      interface IValue {
-        toString: () => string
-      }
+    const queryParameters = chain(
+      parameters.convert ?? convert,
+      qq => cloneDeep(qq) as TQueryParameters,
+      process
+    )(parameters.queryParameters)
 
-      for (const [key, value] of Object.entries(queryParameters)) {
-        const typedValue = value as IValue
+    interface IValue {
+      toString: () => string
+    }
 
-        url.searchParams.append(key, typedValue.toString())
-      }
+    for (const [key, value] of Object.entries(queryParameters)) {
+      const typedValue = value as IValue
+
+      url.searchParams.append(key, typedValue.toString())
     }
 
     return url.toString()

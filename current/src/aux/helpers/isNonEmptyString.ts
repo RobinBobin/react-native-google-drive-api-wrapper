@@ -1,3 +1,5 @@
+import { isString } from 'radashi'
+
 export function isNonEmptyString(value: unknown): value is string {
-  return typeof value === 'string' && Boolean(value)
+  return isString(value) && Boolean(value)
 }

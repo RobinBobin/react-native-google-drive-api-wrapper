@@ -6,6 +6,8 @@ import type {
   TKeyOrValue
 } from './types'
 
+import { isString } from 'radashi'
+
 export class ListQueryBuilder {
   private readonly queryClauses: TKeyOrValue[] = []
 
@@ -46,8 +48,7 @@ export class ListQueryBuilder {
     const isIn = operator === 'in'
     const key = isIn ? keyOrValue2 : keyOrValue1
     const rawValue = isIn ? keyOrValue1 : keyOrValue2
-    const shouldQuotateValue =
-      typeof rawValue === 'string' && valueQuotationFlag
+    const shouldQuotateValue = isString(rawValue) && valueQuotationFlag
     const value = shouldQuotateValue ? `'${rawValue}'` : rawValue
 
     this.queryClauses.push(isIn ? value : key)

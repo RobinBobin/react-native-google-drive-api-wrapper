@@ -1,5 +1,7 @@
 import type { JsonObject, ReadonlyDeep } from 'type-fest'
 
+import { isError } from 'radashi'
+
 class FetchResponseError extends Error {
   constructor(
     readonly json: JsonObject | null,
@@ -38,12 +40,12 @@ class FetchResponseError extends Error {
       return await response.text()
     } catch (error) {
       let message =
-        "Something insane happened when trying to 'await response.text()'"
+        'Something insane happened when trying to `await response.text()`'
 
-      if (error instanceof Error) {
+      if (isError(error)) {
         message = error.message
-      } else if (typeof error === 'object') {
-        message = error?.toString() ?? message
+      } else {
+        message = error?.toString?.() ?? message
       }
 
       throw new FetchResponseError(null, message, response)

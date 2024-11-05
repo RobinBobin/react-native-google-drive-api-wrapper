@@ -2,6 +2,7 @@ import type { IFileOutput } from 'api/files/types'
 import type { Fetcher } from 'aux/Fetcher'
 import type { TBodyType } from 'aux/Fetcher/types'
 
+import { isString } from 'radashi'
 import { MIME_TYPE_JSON_UTF8 } from 'src/constants'
 import { encode } from 'utf8'
 
@@ -45,7 +46,7 @@ export class MultipartUploader extends UploaderWithSimpleData {
 
     body = body.join('')
 
-    if (typeof this.data === 'string') {
+    if (isString(this.data)) {
       body += `${this.data}${ending}`
     } else {
       const convertStringToNumberArray = (string: string): number[] => {

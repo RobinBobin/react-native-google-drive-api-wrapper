@@ -5,6 +5,7 @@ import type {
 import type { TProcessQueryParameters } from '../types'
 
 import { ListQueryBuilder } from 'api/files/ListQueryBuilder'
+import { isArray } from 'radashi'
 
 import { processIncludeLabels } from './processIncludeLabels'
 
@@ -21,7 +22,7 @@ export const processListQueryParameters: TProcessQueryParameters<
   }
 
   // spaces
-  if (Array.isArray(queryParameters.spaces)) {
+  if (isArray(queryParameters.spaces)) {
     queryParameters.spaces = queryParameters.spaces.join() as TFilesListSpace
   }
 }

@@ -4,7 +4,9 @@ import type { ReadonlyDeep } from 'type-fest'
 type TConvertQueryParameters<
   TRawQueryParameters,
   TQueryParameters extends IStandardParameters = IStandardParameters
-> = (queryParameters: ReadonlyDeep<TRawQueryParameters>) => TQueryParameters
+> = (
+  queryParameters: ReadonlyDeep<TRawQueryParameters>
+) => ReadonlyDeep<TQueryParameters>
 
 type TProcessQueryParameters<TQueryParameters extends IStandardParameters> = (
   queryParameters: TQueryParameters
