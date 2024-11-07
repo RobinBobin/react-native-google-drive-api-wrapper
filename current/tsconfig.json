@@ -1,22 +1,6 @@
 {
   "compilerOptions": {
-    // Type Checking
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "exactOptionalPropertyTypes": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strict": true,
-
-    // Modules
-    "module": "ES2022",
-    "moduleResolution": "Bundler",
-    "noUncheckedSideEffectImports": true,
+    "outDir": "js",
     "paths": {
       "api/*": ["./src/api/*"],
       "aux/*": ["./src/aux/*"],
@@ -24,29 +8,9 @@
       "uploaders/*": ["./src/aux/uploaders/*"],
       "uriBuilders/*": ["./src/aux/uriBuilders/*"]
     },
-    "rootDir": ".",
-
-    // Emit
-    "noEmitOnError": true,
-    "outDir": "js",
-
-    // JavaScript Support
-    "allowJs": true,
-    "checkJs": true,
-
-    // Interop Constraints
-    "esModuleInterop": true,
-    "verbatimModuleSyntax": true,
-
-    // Language and Environment
-    "target": "es2023",
-
-    // Output Formatting
-    "noErrorTruncation": true,
-
-    // Completeness
-    "skipLibCheck": true
+    "rootDir": "."
   },
-  "files": ["eslint.config.mjs", "namingConventionOptions.mjs"],
+  "extends": "@robinbobin/ts-eslint-prettier",
+  "files": [".prettierrc.mjs", "eslint.config.mjs"],
   "include": ["src/**/*.ts"]
 }

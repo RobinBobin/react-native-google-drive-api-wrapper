@@ -10,24 +10,12 @@
   },
   "description": "This wrapper facilitates the use of the Google Drive API in React Native projects.",
   "devDependencies": {
-    "@eslint/js": "^9.13.0",
-    "@stylistic/eslint-plugin-js": "^2.10.1",
-    "@types/eslint__js": "^8.42.3",
-    "@types/eslint-config-prettier": "^6.11.3",
+    "@robinbobin/ts-eslint-prettier": "^1.0.0",
     "@types/utf8": "^3.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.12.2",
-    "@typescript-eslint/parser": "^8.12.2",
-    "eslint": "^9.13.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-import-resolver-typescript": "^3.6.3",
-    "eslint-plugin-import-x": "^4.3.1",
-    "eslint-plugin-n": "^17.11.1",
-    "eslint-plugin-promise": "^7.1.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "3.3.3",
+    "eslint": "^9.14.0",
+    "prettier": "^3.3.3",
     "type-fest": "^4.26.1",
-    "typescript": "^5.6.3",
-    "typescript-eslint": "^8.11.0"
+    "typescript": "^5.6.3"
   },
   "homepage": "https://github.com/RobinBobin/react-native-google-drive-api-wrapper#readme",
   "keywords": [
