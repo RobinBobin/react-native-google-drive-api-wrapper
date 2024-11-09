@@ -1,7 +1,6 @@
-import type { IFileOutput } from 'api/files/types'
+import type { IFileOutput } from '../../../api/files/types'
 
-import { MIME_TYPE_JSON } from 'src/constants'
-
+import { MIME_TYPE_JSON } from '../../../constants'
 import { Uploader } from '../base/Uploader'
 
 export class MetadataOnlyUploader extends Uploader<IFileOutput> {

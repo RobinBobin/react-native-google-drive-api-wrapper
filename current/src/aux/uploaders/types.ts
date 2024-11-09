@@ -1,3 +1,3 @@
-import type { TBodyType } from 'aux/Fetcher/types'
+import type { TBodyType } from '../Fetcher/types'
 
 export type TSimpleData = TBodyType | number[]

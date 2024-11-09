@@ -1,16 +1,10 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "outDir": "js",
-    "paths": {
-      "api/*": ["./src/api/*"],
-      "aux/*": ["./src/aux/*"],
-      "src/*": ["./src/*"],
-      "uploaders/*": ["./src/aux/uploaders/*"],
-      "uriBuilders/*": ["./src/aux/uriBuilders/*"]
-    },
     "rootDir": "."
   },
   "extends": "@robinbobin/ts-eslint-prettier",
-  "files": [".prettierrc.mjs", "eslint.config.mjs"],
+  "files": ["prettier.config.mjs", "eslint.config.mjs"],
   "include": ["src/**/*.ts"]
 }

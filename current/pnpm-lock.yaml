@@ -19,8 +19,8 @@ importers:
         version: 3.0.0
     devDependencies:
       '@robinbobin/ts-eslint-prettier':
-        specifier: ^1.0.0
-        version: 1.0.0(eslint@9.14.0)(prettier@3.3.3)(typescript@5.6.3)
+        specifier: ^1.1.0
+        version: 1.1.0(eslint@9.14.0)(prettier@3.3.3)(typescript@5.6.3)
       '@types/utf8':
         specifier: ^3.0.3
         version: 3.0.3
@@ -109,8 +109,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@robinbobin/ts-eslint-prettier@1.0.0':
-    resolution: {integrity: sha512-bhG2KfQZmEJfZODjhZzgtOv4zuoxI9YtvTMXNfaIgVb/sodDd6bLEQPPBI04OSyhFm8z6+PU2WP2zLC/WlCWCg==}
+  '@robinbobin/ts-eslint-prettier@1.1.0':
+    resolution: {integrity: sha512-O4vWXFeDwmna3wFuNn8HoUDVSWiPLbyFX6CLYCBWPLjeRhpWe6kTwUc70jSWqzbGFqdhnfVWHUknDcsuUiTazQ==}
     peerDependencies:
       eslint: '>= 9'
       prettier: ^3.3.3
@@ -786,7 +786,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@robinbobin/ts-eslint-prettier@1.0.0(eslint@9.14.0)(prettier@3.3.3)(typescript@5.6.3)':
+  '@robinbobin/ts-eslint-prettier@1.1.0(eslint@9.14.0)(prettier@3.3.3)(typescript@5.6.3)':
     dependencies:
       '@eslint/js': 9.14.0
       '@stylistic/eslint-plugin-js': 2.10.1(eslint@9.14.0)

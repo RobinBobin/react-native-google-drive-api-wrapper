@@ -1,4 +1,4 @@
-import type { IFilesCommonQueryParameters } from 'api/files/types'
+import type { IFilesCommonQueryParameters } from '../../../api/files/types'
 import type { TQueryParameterProcessor } from '../types'
 
 import { isArray } from 'radashi'

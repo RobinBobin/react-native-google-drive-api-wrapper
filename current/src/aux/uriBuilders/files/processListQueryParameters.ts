@@ -1,12 +1,12 @@
 import type {
   IFilesListQueryParameters,
   TFilesListSpace
-} from 'api/files/types'
+} from '../../../api/files/types'
 import type { TQueryParameterProcessor } from '../types'
 
-import { ListQueryBuilder } from 'api/files/ListQueryBuilder'
 import { isArray } from 'radashi'
 
+import { ListQueryBuilder } from '../../../api/files/ListQueryBuilder'
 import { processCommonQueryParameters } from './processCommonQueryParameters'
 
 export const processListQueryParameters: TQueryParameterProcessor<

@@ -1,5 +1,5 @@
-import type { IFilesCreateQueryParameters } from 'api/files/types'
-import type { TUploadType } from 'uploaders/base/types'
+import type { IFilesCreateQueryParameters } from '../../../api/files/types'
+import type { TUploadType } from '../../uploaders/base/types'
 import type { TWrappedQueryParameterProcessor } from '../types'
 
 import { processCommonQueryParameters } from './processCommonQueryParameters'

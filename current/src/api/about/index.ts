@@ -1,10 +1,10 @@
 import type { ReadonlyDeep } from 'type-fest'
 import type { IAbout, TAboutGetQueryParameters } from './types'
 
-import { GDriveApi } from 'api/GDriveApi'
-import { fetchJson } from 'aux/Fetcher'
-import { AboutUriBuilder } from 'aux/uriBuilders/about/AboutUriBuilder'
-import { convertGetQueryParameters } from 'uriBuilders/about/convertGetQueryParameters'
+import { fetchJson } from '../../aux/Fetcher'
+import { AboutUriBuilder } from '../../aux/uriBuilders/about/AboutUriBuilder'
+import { convertGetQueryParameters } from '../../aux/uriBuilders/about/convertGetQueryParameters'
+import { GDriveApi } from '../GDriveApi'
 
 export class About extends GDriveApi {
   get(

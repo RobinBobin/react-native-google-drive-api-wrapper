@@ -1,8 +1,8 @@
-import type { IGDriveAccessParameters } from 'api/types'
+import type { IGDriveAccessParameters } from './api/types'
 
-import { About } from 'api/about'
-import { Files } from 'api/files'
-import { PermissionApi } from 'api/permissions'
+import { About } from './api/about'
+import { Files } from './api/files'
+import { PermissionApi } from './api/permissions'
 
 export class GDrive implements IGDriveAccessParameters {
   // GDrive apis.

@@ -1,4 +1,4 @@
-import type { IStandardParameters, TPublished } from 'api/types'
+import type { IStandardParameters, TPublished } from '../types'
 
 type TPermissionKind = 'drive#permission'
 type TPermissionType = 'anyone' | 'domain' | 'group' | 'user'

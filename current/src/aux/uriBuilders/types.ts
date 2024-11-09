@@ -1,5 +1,5 @@
-import type { IStandardParameters } from 'api/types'
 import type { ReadonlyDeep } from 'type-fest'
+import type { IStandardParameters } from '../../api/types'
 
 type TQueryParameterConverter<
   TRawQueryParameters,

@@ -1,5 +1,5 @@
-import type { IFileOutput } from 'api/files/types'
-import type { Fetcher } from 'aux/Fetcher'
+import type { IFileOutput } from '../../../api/files/types'
+import type { Fetcher } from '../../Fetcher'
 
 import { UploaderWithSimpleData } from '../base/UploaderWithSimpleData'
 import { convertReadonlyDeepTSimpleDataToTBodyType } from './helpers/convertReadonlyDeepTSimpleDataToTBodyType'

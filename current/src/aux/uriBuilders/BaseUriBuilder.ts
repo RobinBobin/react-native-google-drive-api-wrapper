@@ -1,8 +1,8 @@
-import type { IStandardParameters } from 'api/types'
 import type { ReadonlyDeep } from 'type-fest'
+import type { IStandardParameters } from '../../api/types'
 import type { IBuildParameters, TQueryParameterConverter } from './types'
 
-import { chain, cloneDeep, isObject } from 'radashi'
+import { chain, cloneDeep } from 'radashi'
 
 import { processStandardParameters } from './processStandardParameters'
 
@@ -12,7 +12,7 @@ export class BaseUriBuilder {
   private preDrivePath?: string | undefined
 
   constructor(private readonly api: string) {
-    // Nothing to do
+    // Nothing to do.
   }
 
   build<TRawQueryParameters, TQueryParameters extends IStandardParameters>(
@@ -33,28 +33,34 @@ export class BaseUriBuilder {
 
     const url = new URL(uri)
 
-    if (!isObject(parameters?.queryParameters)) {
+    const {
+      convert,
+      process,
+      queryParameters: rawQueryParameters
+    } = parameters ?? {}
+
+    if (!process && typeof rawQueryParameters === 'undefined') {
       return url.toString()
     }
 
-    const convert: TQueryParameterConverter<
+    const _convert: TQueryParameterConverter<
       unknown,
       TQueryParameters
     > = queryParameters => queryParameters as ReadonlyDeep<TQueryParameters>
 
-    const process = (queryParameters: TQueryParameters): TQueryParameters => {
+    const _process = (queryParameters: TQueryParameters): TQueryParameters => {
       processStandardParameters(queryParameters)
 
-      parameters.process?.(queryParameters)
+      process?.(queryParameters)
 
       return queryParameters
     }
 
     const queryParameters = chain(
-      parameters.convert ?? convert,
+      convert ?? _convert,
       qq => cloneDeep(qq) as TQueryParameters,
-      process
-    )(parameters.queryParameters)
+      _process
+    )(rawQueryParameters ?? ({} as ReadonlyDeep<TRawQueryParameters>))
 
     interface IValue {
       toString: () => string

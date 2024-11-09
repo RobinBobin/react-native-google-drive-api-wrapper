@@ -10,7 +10,7 @@
   },
   "description": "This wrapper facilitates the use of the Google Drive API in React Native projects.",
   "devDependencies": {
-    "@robinbobin/ts-eslint-prettier": "^1.0.0",
+    "@robinbobin/ts-eslint-prettier": "^1.1.0",
     "@types/utf8": "^3.0.3",
     "eslint": "^9.14.0",
     "prettier": "^3.3.3",
@@ -23,16 +23,11 @@
     "React Native"
   ],
   "license": "MIT",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "name": "@robinbobin/react-native-google-drive-api-wrapper",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/RobinBobin/react-native-google-drive-api-wrapper.git"
-  },
+  "repository": "github:RobinBobin/react-native-google-drive-api-wrapper.git",
   "scripts": {
-    "build": "tsc && eslint . && prettier . --check",
-    "buildOr": "tsc; eslint . ; prettier . --check",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepack": "./prepack.sh"
   },
   "version": "2.0.0",
   "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"

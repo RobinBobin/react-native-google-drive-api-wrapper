@@ -1,5 +1,5 @@
-import type { TBodyType } from 'aux/Fetcher/types'
 import type { ReadonlyDeep } from 'type-fest'
+import type { TBodyType } from '../../../Fetcher/types'
 import type { TSimpleData } from '../../types'
 
 import { isArray } from 'radashi'

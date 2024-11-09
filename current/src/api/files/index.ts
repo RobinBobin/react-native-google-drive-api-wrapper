@@ -1,48 +1,47 @@
-import type { TBlobToByteArrayResultType } from 'aux/Fetcher/types'
 import type { JsonObject, ReadonlyDeep } from 'type-fest'
-import type { Uploader } from 'uploaders/base/Uploader'
+import type { TBlobToByteArrayResultType } from '../../aux/Fetcher/types'
+import type { Uploader } from '../../aux/uploaders/base/Uploader'
 import type {
   ICreateGetFetcherParams,
   ICreateIfNotExistsResultType,
-  IFileInput,
   IFileOutput,
-  IFilesCopyQueryParameters,
+  IFilesCopyParameters,
   IFilesExportQueryParameters,
   IFilesGenerateIdsQueryParameters,
   IFilesGenerateIdsResultType,
+  IFilesGetParameters,
   IFilesGetQueryParameters,
   IFilesListQueryParameters,
   IFilesListResultType
 } from './types'
 
-import { Fetcher, fetchJson, fetchText } from 'aux/Fetcher'
-import { isNonEmptyString } from 'aux/helpers/isNonEmptyString'
-import { FilesUriBuilder } from 'aux/uriBuilders/files/FilesUriBuilder'
-import { processCommonQueryParameters } from 'aux/uriBuilders/files/processCommonQueryParameters'
-import { processGetQueryParameters } from 'aux/uriBuilders/files/processGetQueryParameters'
-import { processListQueryParameters } from 'aux/uriBuilders/files/processListQueryParameters'
-import { MIME_TYPE_JSON } from 'src/constants'
-import { MetadataOnlyUploader } from 'uploaders/implementations/MetadataOnlyUploader'
-import { MultipartUploader } from 'uploaders/implementations/MultipartUploader'
-import { ResumableUploader } from 'uploaders/implementations/ResumableUploader'
-import { SimpleUploader } from 'uploaders/implementations/SimpleUploader'
-
+import { Fetcher, fetchJson, fetchText } from '../../aux/Fetcher'
+import { isNonEmptyString } from '../../aux/helpers/isNonEmptyString'
+import { MetadataOnlyUploader } from '../../aux/uploaders/implementations/MetadataOnlyUploader'
+import { MultipartUploader } from '../../aux/uploaders/implementations/MultipartUploader'
+import { ResumableUploader } from '../../aux/uploaders/implementations/ResumableUploader'
+import { SimpleUploader } from '../../aux/uploaders/implementations/SimpleUploader'
+import { FilesUriBuilder } from '../../aux/uriBuilders/files/FilesUriBuilder'
+import { processCommonQueryParameters } from '../../aux/uriBuilders/files/processCommonQueryParameters'
+import { processGetQueryParameters } from '../../aux/uriBuilders/files/processGetQueryParameters'
+import { processListQueryParameters } from '../../aux/uriBuilders/files/processListQueryParameters'
+import { MIME_TYPE_JSON } from '../../constants'
 import { GDriveApi } from '../GDriveApi'
 import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
 
 export class Files extends GDriveApi {
   copy(
     fileId: string,
-    queryParameters?: ReadonlyDeep<IFilesCopyQueryParameters>,
-    requestBody: IFileInput = {}
+    parameters?: ReadonlyDeep<IFilesCopyParameters>
   ): Promise<IFileOutput> {
     return new Fetcher(this)
-      .setBody(JSON.stringify(requestBody), MIME_TYPE_JSON)
+      .setBody(JSON.stringify(parameters?.requestBody ?? {}), MIME_TYPE_JSON)
       .setMethod('POST')
       .fetchJson(
-        new FilesUriBuilder('copy')
-          .setFileId(fileId)
-          .build({ process: processCommonQueryParameters, queryParameters })
+        new FilesUriBuilder('copy').setFileId(fileId).build({
+          process: processCommonQueryParameters,
+          queryParameters: parameters?.queryParameters
+        })
       )
   }
 
@@ -109,39 +108,37 @@ export class Files extends GDriveApi {
 
   get(
     fileId: string,
-    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>,
-    range?: string
+    parameters?: ReadonlyDeep<IFilesGetParameters>
   ): Promise<Response> {
-    return this.createGetFetcher({ fileId, queryParameters, range }).fetch()
+    return this.createGetFetcher({
+      ...(parameters as Required<IFilesGetParameters>),
+      fileId
+    }).fetch()
   }
 
   getBinary(
     fileId: string,
-    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>,
-    range?: string
+    parameters?: ReadonlyDeep<IFilesGetParameters>
   ): Promise<TBlobToByteArrayResultType> {
     return this.createGetFetcher({
+      ...(parameters as Required<IFilesGetParameters>),
       fileId,
-      isContent: true,
-      queryParameters,
-      range
+      isContent: true
     }).fetchBlob()
   }
 
   getContent(
     fileId: string,
-    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>,
-    range?: string
+    parameters?: ReadonlyDeep<IFilesGetParameters>
   ): Promise<Response> {
     return this.createGetFetcher({
+      ...(parameters as Required<IFilesGetParameters>),
       fileId,
-      isContent: true,
-      queryParameters,
-      range
+      isContent: true
     }).fetch()
   }
 
-  geJsonObject<T = JsonObject>(
+  getJson<T = JsonObject>(
     fileId: string,
     queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>
   ): Promise<T> {
@@ -165,14 +162,12 @@ export class Files extends GDriveApi {
 
   getText(
     fileId: string,
-    queryParameters?: ReadonlyDeep<IFilesGetQueryParameters>,
-    range?: string
+    parameters?: ReadonlyDeep<IFilesGetParameters>
   ): Promise<string> {
     return this.createGetFetcher({
+      ...(parameters as Required<IFilesGetParameters>),
       fileId,
-      isContent: true,
-      queryParameters,
-      range
+      isContent: true
     }).fetchText()
   }
 

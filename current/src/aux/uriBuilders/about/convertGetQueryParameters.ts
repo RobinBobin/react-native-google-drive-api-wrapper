@@ -1,4 +1,4 @@
-import type { TAboutGetQueryParameters } from 'api/about/types'
+import type { TAboutGetQueryParameters } from '../../../api/about/types'
 import type { TQueryParameterConverter } from '../types'
 
 import { isArray, isString } from 'radashi'

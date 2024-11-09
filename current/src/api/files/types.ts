@@ -1,6 +1,6 @@
-import type { IPermissionOutput } from 'api/permissions/types'
-import type { IStandardParameters, IUser, TPublished } from 'api/types'
 import type { Except, SetRequired } from 'type-fest'
+import type { IPermissionOutput } from '../permissions/types'
+import type { IStandardParameters, IUser, TPublished } from '../types'
 import type { IListQueryBuilder } from './ListQueryBuilder/types'
 
 type TFileKind = 'drive#file'
@@ -96,10 +96,15 @@ interface IFilesGetQueryParameters
   acknowledgeAbuse?: boolean
 }
 
+interface IFilesGetParameters {
+  queryParameters?: IFilesGetQueryParameters
+  range?: string
+}
+
 interface ICreateGetFetcherParams {
   fileId: string
   isContent?: boolean
-  queryParameters: IFilesGetQueryParameters | undefined
+  queryParameters?: IFilesGetQueryParameters | undefined
   range?: string | undefined
 }
 
@@ -178,6 +183,11 @@ interface IFileOutput extends TFileOutputBase {
   ownedByMe?: boolean
 }
 
+interface IFilesCopyParameters {
+  queryParameters?: IFilesCopyQueryParameters
+  requestBody?: IFileInput
+}
+
 interface IFilesListResultType {
   nextPageToken: string
   kind: TFileListKind
@@ -193,11 +203,13 @@ export type {
   IFileInputContentHintThumbnail,
   IFileOutput,
   IFilesCommonQueryParameters,
+  IFilesCopyParameters,
   IFilesCopyQueryParameters,
   IFilesCreateQueryParameters,
   IFilesExportQueryParameters,
   IFilesGenerateIdsQueryParameters,
   IFilesGenerateIdsResultType,
+  IFilesGetParameters,
   IFilesGetQueryParameters,
   IFilesListQueryParameters,
   IFilesListResultType,

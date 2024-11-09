@@ -1,5 +1,5 @@
-import type { IStandardParameters, IUser, TFields } from 'api/types'
 import type { JsonValue, SetRequired } from 'type-fest'
+import type { IStandardParameters, IUser, TFields } from '../types'
 
 type TAboutGetQueryParameters =
   | SetRequired<IStandardParameters, 'fields'>

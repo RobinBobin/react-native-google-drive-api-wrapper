@@ -1,37 +1,37 @@
-import type { IFileOutput } from 'api/files/types'
-import type { GDriveApi } from 'api/GDriveApi'
 import type { ReadonlyDeep } from 'type-fest'
-import type { TSimpleData } from 'uploaders/types'
+import type { IFileOutput } from '../../../../../api/files/types'
+import type { GDriveApi } from '../../../../../api/GDriveApi'
+import type { TSimpleData } from '../../../types'
 import type {
   IRequestUploadStatusResultType,
   IUploadChunkResultType
 } from './types'
 
-import { Fetcher } from 'aux/Fetcher'
-import { FetchResponseError } from 'aux/Fetcher/errors/FetchResponseError'
+import { isNumber } from 'radashi'
 
+import { Fetcher } from '../../../../Fetcher'
+import { FetchResponseError } from '../../../../Fetcher/errors/FetchResponseError'
 import { convertReadonlyDeepTSimpleDataToTBodyType } from '../../helpers/convertReadonlyDeepTSimpleDataToTBodyType'
 import { ResumableUploaderError } from '../errors/ResumableUploaderError'
 
 const HTTP_RESUME_INCOMPLETE = 308
 
 export class ResumableUploadRequest {
-  private contentLength: number
   private _transferredByteCount = 0
 
   // eslint-disable-next-line @typescript-eslint/max-params
   constructor(
-    contentLength: number,
+    private contentLength: number | undefined,
     private readonly dataMimeType: string,
     private readonly gDriveApi: GDriveApi,
     private readonly location: string,
-    private readonly shouldUseMultipleRequests: boolean
+    private readonly shouldUseMultipleRequests: boolean | undefined
   ) {
-    this.contentLength = contentLength
+    // Nothing to do.
   }
 
   async requestUploadStatus(): Promise<IRequestUploadStatusResultType> {
-    const contentLength = this.contentLength || '*'
+    const contentLength = this.contentLength ?? '*'
     const contentRange = `bytes */${contentLength}`
 
     try {
@@ -56,14 +56,28 @@ export class ResumableUploadRequest {
         throw error
       }
 
+      const transferredByteCount = ResumableUploadRequest.processRange(response)
+
+      if (this.transferredByteCount !== transferredByteCount) {
+        throw new TypeError(
+          `this.transferredByteCount (${this.transferredByteCount}) !== transferredByteCount ${transferredByteCount}`
+        )
+      }
+
       return {
         isComplete: false,
-        transferredByteCount: ResumableUploadRequest.processRange(response)
+        transferredByteCount
       }
     }
   }
 
   setContentLength(contentLength: number): this {
+    if (contentLength < this.transferredByteCount) {
+      throw new TypeError(
+        `\`ResumableUploadRequest.setContentLength()\`: \`contentLength\` can't be less than the number of bytes already transferred (${this.transferredByteCount})`
+      )
+    }
+
     this.contentLength = contentLength
 
     return this
@@ -84,11 +98,11 @@ export class ResumableUploadRequest {
       )
       .setResource(this.location)
 
-    if (this.shouldUseMultipleRequests) {
+    if (this.shouldUseMultipleRequests ?? false) {
       const from = this.transferredByteCount
       // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const to = from + chunk.length - 1
-      const total = this.contentLength || '*'
+      const total = this.contentLength ?? '*'
 
       fetcher.appendHeader('Content-Range', `bytes ${from}-${to}/${total}`)
     }
@@ -114,13 +128,11 @@ export class ResumableUploadRequest {
         throw error
       }
 
-      const transferredByteCount = ResumableUploadRequest.processRange(response)
-
-      this._transferredByteCount += transferredByteCount
+      this._transferredByteCount = ResumableUploadRequest.processRange(response)
 
       return {
         isComplete: false,
-        transferredByteCount
+        transferredByteCount: this._transferredByteCount
       }
     }
   }
@@ -134,19 +146,16 @@ export class ResumableUploadRequest {
 
     const rightExpression = range.split('=')[1] ?? ''
 
-    if (!rightExpression) {
+    const [from, to] = rightExpression.split('-').map(Number)
+
+    if (!rightExpression || !isNumber(from) || !isNumber(to)) {
       throw new ResumableUploaderError(
-        "'!rightExpression', examine the 'Range' header",
+        "`!rightExpression || !isNumber(from) || !isNumber(to)`, examine the 'Range' header",
         response
       )
     }
 
-    return rightExpression
-      .split('-')
-      .map(Number)
-      .reduce(
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        (previousValue, currentValue) => currentValue - previousValue + 1
-      )
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return to - from + 1
   }
 }

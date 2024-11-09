@@ -1,10 +1,10 @@
 import eslintConfig from '@robinbobin/ts-eslint-prettier/eslint.config.mjs'
+import { js } from '@robinbobin/ts-eslint-prettier/eslintRuleOptions/index.mjs'
 
 export default [
   ...eslintConfig,
   {
     rules: {
-      // typescript-eslint
       '@typescript-eslint/prefer-readonly-parameter-types': [
         'error',
         {
@@ -15,15 +15,7 @@ export default [
           ignoreInferredTypes: true
         }
       ],
-      // '@typescript-eslint/switch-exhaustiveness-check': [
-      //   'error',
-      //   {
-      //     requireDefaultForNonUnion: true
-      //   }
-      // ],
-
-      // @eslint/js
-      'id-length': ['error', { exceptions: ['q'], max: 30, min: 2 }]
+      'id-length': ['error', { ...js.idLength, exceptions: ['q'] }]
     }
   }
 ]

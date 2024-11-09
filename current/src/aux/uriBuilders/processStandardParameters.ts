@@ -1,4 +1,4 @@
-import type { IStandardParameters } from 'api/types'
+import type { IStandardParameters } from '../../api/types'
 import type { TQueryParameterProcessor } from './types'
 
 import { isArray } from 'radashi'

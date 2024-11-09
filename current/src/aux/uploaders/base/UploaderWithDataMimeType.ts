@@ -1,5 +1,4 @@
-import { MIME_TYPE_OCTET_STREAM } from 'src/constants'
-
+import { MIME_TYPE_OCTET_STREAM } from '../../../constants'
 import { Uploader } from './Uploader'
 
 export abstract class UploaderWithDataMimeType<

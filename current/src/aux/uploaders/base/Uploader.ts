@@ -1,11 +1,14 @@
-import type { IFileInput, IFilesCreateQueryParameters } from 'api/files/types'
-import type { Fetcher } from 'aux/Fetcher'
 import type { ReadonlyDeep } from 'type-fest'
+import type {
+  IFileInput,
+  IFilesCreateQueryParameters
+} from '../../../api/files/types'
+import type { Fetcher } from '../../Fetcher'
 import type { TUploadType } from './types'
 
-import { isNonEmptyString } from 'aux/helpers/isNonEmptyString'
-import { FilesUriBuilder } from 'aux/uriBuilders/files/FilesUriBuilder'
-import { processCreateQueryParameters } from 'uriBuilders/files/processCreateQueryParameters'
+import { isNonEmptyString } from '../../helpers/isNonEmptyString'
+import { FilesUriBuilder } from '../../uriBuilders/files/FilesUriBuilder'
+import { processCreateQueryParameters } from '../../uriBuilders/files/processCreateQueryParameters'
 
 export abstract class Uploader<ExecuteResultType> {
   private idOfFileToUpdate?: string

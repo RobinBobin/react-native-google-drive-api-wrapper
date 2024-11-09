@@ -1,11 +1,11 @@
-import type { IFileOutput } from 'api/files/types'
-import type { Fetcher } from 'aux/Fetcher'
-import type { TBodyType } from 'aux/Fetcher/types'
+import type { IFileOutput } from '../../../api/files/types'
+import type { Fetcher } from '../../Fetcher'
+import type { TBodyType } from '../../Fetcher/types'
 
 import { isString } from 'radashi'
-import { MIME_TYPE_JSON_UTF8 } from 'src/constants'
 import { encode } from 'utf8'
 
+import { MIME_TYPE_JSON_UTF8 } from '../../../constants'
 import { UploaderWithSimpleData } from '../base/UploaderWithSimpleData'
 
 export class MultipartUploader extends UploaderWithSimpleData {
@@ -50,9 +50,11 @@ export class MultipartUploader extends UploaderWithSimpleData {
       body += `${this.data}${ending}`
     } else {
       const convertStringToNumberArray = (string: string): number[] => {
+        const index = 0
+
         return encode(string)
           .split('')
-          .map((char, index) => char.charCodeAt(index))
+          .map(char => char.charCodeAt(index))
       }
 
       body = new Uint8Array(

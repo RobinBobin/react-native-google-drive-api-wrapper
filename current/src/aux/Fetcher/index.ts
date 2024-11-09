@@ -1,11 +1,19 @@
 import type { JsonObject, ReadonlyDeep } from 'type-fest'
 import type { TBlobToByteArrayResultType, TBodyType } from './types'
 
-import { GDriveApi } from 'api/GDriveApi'
-import { isNonEmptyString } from 'aux/helpers/isNonEmptyString'
-
+import { GDriveApi } from '../../api/GDriveApi'
+import { isNonEmptyString } from '../helpers/isNonEmptyString'
 import { blobToByteArray } from './blobToByteArray'
 import { FetchResponseError } from './errors/FetchResponseError'
+
+/*
+ * A weird workaround of an equally weird bug (Node 16):
+ *
+ * Require cycle: node_modules/react-native/Libraries/Network/fetch.js -> node_modules/whatwg-fetch/dist/fetch.umd.js -> node_modules/react-native/Libraries/Network/fetch.js
+ */
+
+// eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
+fetch
 
 class Fetcher {
   private readonly abortController = new AbortController()
