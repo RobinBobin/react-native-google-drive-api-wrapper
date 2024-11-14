@@ -17,7 +17,7 @@ import type {
 
 import { mimeTypes } from '@robinbobin/mimetype-constants'
 
-import { Fetcher, fetchJson, fetchText } from '../../aux/Fetcher'
+import { fetchBlob, Fetcher, fetchJson } from '../../aux/Fetcher'
 import { isNonEmptyString } from '../../aux/helpers/isNonEmptyString'
 import { MetadataOnlyUploader } from '../../aux/uploaders/implementations/MetadataOnlyUploader'
 import { MultipartUploader } from '../../aux/uploaders/implementations/MultipartUploader'
@@ -94,8 +94,8 @@ export class Files extends GDriveApi {
   export(
     fileId: string,
     queryParameters: ReadonlyDeep<IFilesExportQueryParameters>
-  ): Promise<string> {
-    return fetchText(
+  ): Promise<TBlobToByteArrayResultType> {
+    return fetchBlob(
       this,
       new FilesUriBuilder('export').setFileId(fileId).build({ queryParameters })
     )
