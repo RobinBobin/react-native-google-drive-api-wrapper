@@ -15,6 +15,8 @@ import type {
   IFilesListResultType
 } from './types'
 
+import { mimeTypes } from '@robinbobin/mimetype-constants'
+
 import { Fetcher, fetchJson, fetchText } from '../../aux/Fetcher'
 import { isNonEmptyString } from '../../aux/helpers/isNonEmptyString'
 import { MetadataOnlyUploader } from '../../aux/uploaders/implementations/MetadataOnlyUploader'
@@ -25,7 +27,6 @@ import { FilesUriBuilder } from '../../aux/uriBuilders/files/FilesUriBuilder'
 import { processCommonQueryParameters } from '../../aux/uriBuilders/files/processCommonQueryParameters'
 import { processGetQueryParameters } from '../../aux/uriBuilders/files/processGetQueryParameters'
 import { processListQueryParameters } from '../../aux/uriBuilders/files/processListQueryParameters'
-import { MIME_TYPE_JSON } from '../../constants'
 import { GDriveApi } from '../GDriveApi'
 import { UnexpectedFileCountError } from './errors/UnexpectedFileCountError'
 
@@ -35,7 +36,10 @@ export class Files extends GDriveApi {
     parameters?: ReadonlyDeep<IFilesCopyParameters>
   ): Promise<IFileOutput> {
     return new Fetcher(this)
-      .setBody(JSON.stringify(parameters?.requestBody ?? {}), MIME_TYPE_JSON)
+      .setBody(
+        JSON.stringify(parameters?.requestBody ?? {}),
+        mimeTypes.application.json
+      )
       .setMethod('POST')
       .fetchJson(
         new FilesUriBuilder('copy').setFileId(fileId).build({

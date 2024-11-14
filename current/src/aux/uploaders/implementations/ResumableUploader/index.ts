@@ -1,8 +1,8 @@
 import type { Fetcher } from '../../../Fetcher'
 
+import { mimeTypes } from '@robinbobin/mimetype-constants'
 import { isBoolean, isNumber } from 'radashi'
 
-import { MIME_TYPE_JSON_UTF8 } from '../../../../constants'
 import { UploaderWithDataMimeType } from '../../base/UploaderWithDataMimeType'
 import { ResumableUploaderError } from './errors/ResumableUploaderError'
 import { ResumableUploadRequest } from './ResumableUploadRequest'
@@ -58,7 +58,7 @@ export class ResumableUploader extends UploaderWithDataMimeType<ResumableUploadR
     this.fetcher.appendHeader('X-Upload-Content-Type', this.dataMimeType)
 
     if (this.requestBody) {
-      this.fetcher.setBody(this.requestBody, MIME_TYPE_JSON_UTF8)
+      this.fetcher.setBody(this.requestBody, mimeTypes.application.json)
     }
 
     const response = await this.fetcher.fetch()

@@ -2,10 +2,10 @@ import type { IFileOutput } from '../../../api/files/types'
 import type { Fetcher } from '../../Fetcher'
 import type { TBodyType } from '../../Fetcher/types'
 
+import { mimeTypes } from '@robinbobin/mimetype-constants'
 import { isString } from 'radashi'
 import { encode } from 'utf8'
 
-import { MIME_TYPE_JSON_UTF8 } from '../../../constants'
 import { UploaderWithSimpleData } from '../base/UploaderWithSimpleData'
 
 export class MultipartUploader extends UploaderWithSimpleData {
@@ -34,7 +34,7 @@ export class MultipartUploader extends UploaderWithSimpleData {
 
     let body: TBodyType | string[] = [
       `\n${dashDashBoundary}\n`,
-      `Content-Type: ${MIME_TYPE_JSON_UTF8}\n\n`,
+      `Content-Type: ${mimeTypes.application.json}\n\n`,
       `${this.requestBody}\n\n${dashDashBoundary}\n`
     ]
 

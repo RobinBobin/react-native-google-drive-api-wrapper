@@ -6,9 +6,10 @@ import type {
   IPermissionsDeleteQueryParameters
 } from './types'
 
+import { mimeTypes } from '@robinbobin/mimetype-constants'
+
 import { Fetcher } from '../../aux/Fetcher'
 import { PermissionsUriBuilder } from '../../aux/uriBuilders/permissions/PermissionsUriBuilder'
-import { MIME_TYPE_JSON } from '../../constants'
 import { GDriveApi } from '../GDriveApi'
 
 export class PermissionApi extends GDriveApi {
@@ -18,7 +19,7 @@ export class PermissionApi extends GDriveApi {
     queryParameters?: ReadonlyDeep<IPermissionsCreateQueryParameters>
   ): Promise<IPermissionOutput> {
     return new Fetcher(this)
-      .setBody(JSON.stringify(requestBody), MIME_TYPE_JSON)
+      .setBody(JSON.stringify(requestBody), mimeTypes.application.json)
       .setMethod('POST')
       .fetchJson(new PermissionsUriBuilder(fileId).build({ queryParameters }))
   }

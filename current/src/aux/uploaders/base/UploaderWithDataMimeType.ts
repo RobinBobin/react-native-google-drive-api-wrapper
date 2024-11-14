@@ -1,10 +1,11 @@
-import { MIME_TYPE_OCTET_STREAM } from '../../../constants'
+import { mimeTypes } from '@robinbobin/mimetype-constants'
+
 import { Uploader } from './Uploader'
 
 export abstract class UploaderWithDataMimeType<
   ExecuteResultType
 > extends Uploader<ExecuteResultType> {
-  protected dataMimeType: string = MIME_TYPE_OCTET_STREAM
+  protected dataMimeType: string = mimeTypes.application.octetStream
 
   setDataMimeType(dataMimeType: string): this {
     this.dataMimeType = dataMimeType
