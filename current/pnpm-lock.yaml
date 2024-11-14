@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@robinbobin/mimetype-constants':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.1.0
+        version: 1.1.0
       base64-js:
         specifier: ^1.5.1
         version: 1.5.1
@@ -112,8 +112,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@robinbobin/mimetype-constants@1.0.0':
-    resolution: {integrity: sha512-mwjRghbQoXw/ZKVSw9kgMbIBWQxla2HDEwLQivywW5PFVUg5j2BsaCBybS39lrP8tEfN9TlK/2A5YFdnstjCJw==}
+  '@robinbobin/mimetype-constants@1.1.0':
+    resolution: {integrity: sha512-HedFH8/k7mXyOvvMC+mZZ8bNtG0dzy4f+dr70NddX4fMoBbX+NhHPn0x1epZTUxRPnqyITU9mxRZBR8rb2cqXA==}
 
   '@robinbobin/ts-eslint-prettier@1.1.0':
     resolution: {integrity: sha512-O4vWXFeDwmna3wFuNn8HoUDVSWiPLbyFX6CLYCBWPLjeRhpWe6kTwUc70jSWqzbGFqdhnfVWHUknDcsuUiTazQ==}
@@ -792,19 +792,9 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@robinbobin/mimetype-constants@1.0.0':
+  '@robinbobin/mimetype-constants@1.1.0':
     dependencies:
-      '@robinbobin/ts-eslint-prettier': 1.1.0(eslint@9.14.0)(prettier@3.3.3)(typescript@5.6.3)
-      eslint: 9.14.0
-      prettier: 3.3.3
       radashi: 12.2.3
-      typescript: 5.6.3
-    transitivePeerDependencies:
-      - eslint-import-resolver-node
-      - eslint-import-resolver-webpack
-      - eslint-plugin-import
-      - jiti
-      - supports-color
 
   '@robinbobin/ts-eslint-prettier@1.1.0(eslint@9.14.0)(prettier@3.3.3)(typescript@5.6.3)':
     dependencies:

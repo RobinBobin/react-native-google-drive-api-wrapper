@@ -4,7 +4,7 @@
     "url": "https://github.com/RobinBobin/react-native-google-drive-api-wrapper/issues"
   },
   "dependencies": {
-    "@robinbobin/mimetype-constants": "^1.0.0",
+    "@robinbobin/mimetype-constants": "^1.1.0",
     "base64-js": "^1.5.1",
     "radashi": "^12.2.3",
     "utf8": "^3.0.0"
@@ -35,6 +35,6 @@
   "scripts": {
     "prepack": "./prepack.sh"
   },
-  "version": "2.1.0",
+  "version": "2.2.0",
   "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"
 }
