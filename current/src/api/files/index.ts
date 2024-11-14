@@ -79,14 +79,14 @@ export class Files extends GDriveApi {
     throw new UnexpectedFileCountError(files.length)
   }
 
-  delete(fileId: string): Promise<string> {
-    return new Fetcher(this)
+  async delete(fileId: string): Promise<void> {
+    await new Fetcher(this)
       .setMethod('DELETE')
       .fetchText(new FilesUriBuilder().setFileId(fileId).build())
   }
 
-  emptyTrash(): Promise<string> {
-    return new Fetcher(this)
+  async emptyTrash(): Promise<void> {
+    await new Fetcher(this)
       .setMethod('DELETE')
       .fetchText(new FilesUriBuilder('trash').build())
   }
