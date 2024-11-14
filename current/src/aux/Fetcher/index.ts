@@ -1,7 +1,8 @@
 import type { JsonObject, ReadonlyDeep } from 'type-fest'
+import type { GDriveApi } from '../../api/GDriveApi'
 import type { TBlobToByteArrayResultType, TBodyType } from './types'
 
-import { GDriveApi } from '../../api/GDriveApi'
+import { INFINITE_TIMEOUT } from '../../constants'
 import { isNonEmptyString } from '../helpers/isNonEmptyString'
 import { blobToByteArray } from './blobToByteArray'
 import { FetchResponseError } from './errors/FetchResponseError'
@@ -43,10 +44,7 @@ class Fetcher {
       this.setResource(resource)
     }
 
-    if (
-      this.gDriveApi.accessParameters.fetchTimeout !==
-      GDriveApi.INFINITE_TIMEOUT
-    ) {
+    if (this.gDriveApi.accessParameters.fetchTimeout !== INFINITE_TIMEOUT) {
       setTimeout(
         () => this.abortController.abort(),
         this.gDriveApi.accessParameters.fetchTimeout
