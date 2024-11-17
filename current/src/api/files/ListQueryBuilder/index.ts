@@ -48,8 +48,8 @@ export class ListQueryBuilder {
     const isIn = operator === 'in'
     const key = isIn ? keyOrValue2 : keyOrValue1
     const rawValue = isIn ? keyOrValue1 : keyOrValue2
-    const shouldQuotateValue = isString(rawValue) && valueQuotationFlag
-    const value = shouldQuotateValue ? `'${rawValue}'` : rawValue
+    const shouldQuoteValue = isString(rawValue) && valueQuotationFlag
+    const value = shouldQuoteValue ? `'${rawValue}'` : rawValue
 
     this.queryClauses.push(isIn ? value : key)
     this.queryClauses.push(operator)

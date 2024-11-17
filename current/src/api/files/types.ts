@@ -1,7 +1,7 @@
 import type { Except, SetRequired } from 'type-fest'
 import type { IPermissionOutput } from '../permissions/types'
 import type { IStandardParameters, IUser, TPublished } from '../types'
-import type { IListQueryBuilder } from './ListQueryBuilder/types'
+import type { ListQueryBuilder } from './ListQueryBuilder'
 
 type TFileKind = 'drive#file'
 type TFileGeneratedIdsKind = 'drive#generatedIds'
@@ -44,9 +44,9 @@ type TFilesListOrderBy =
   | string
   | [TFilesListOrderByProperty, (TFilesListSortOrder | undefined)?][]
 
-interface ICreateIfNotExistsResultType<TResult> {
+interface ICreateIfNotExistsResultType<ExecuteResultType> {
   alreadyExisted: boolean
-  result: TResult
+  result: ExecuteResultType
 }
 
 interface IFilesCommonQueryParameters extends IStandardParameters {
@@ -115,7 +115,7 @@ interface IFilesListQueryParameters extends IFilesCommonQueryParameters {
   orderBy?: TFilesListOrderBy
   pageSize?: number
   pageToken?: string
-  q?: string | IListQueryBuilder
+  q?: string | ListQueryBuilder
   spaces?: TFilesListSpace | TFilesListSpace[]
 }
 

@@ -1,6 +1,6 @@
 class UnexpectedFileCountError extends Error {
   constructor(readonly realCount: number) {
-    super(`expected zero or one file, got ${realCount}`)
+    super(`Zero or one file was expected, got ${realCount}`)
   }
 }
 

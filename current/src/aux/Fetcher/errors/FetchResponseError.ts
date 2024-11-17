@@ -5,7 +5,7 @@ import { isError } from 'radashi'
 class FetchResponseError extends Error {
   constructor(
     // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-    readonly json: JsonObject | null,
+    readonly json: Readonly<JsonObject> | null,
     message: string,
     readonly response: ReadonlyDeep<Response>
   ) {
@@ -40,13 +40,14 @@ class FetchResponseError extends Error {
     try {
       return await response.text()
     } catch (error) {
-      let message =
-        'Something insane happened when trying to `await response.text()`'
+      let message: string
 
       if (isError(error)) {
         message = error.message
       } else {
-        message = error?.toString?.() ?? message
+        message =
+          error?.toString?.() ??
+          'Something insane happened when trying to `await response.text()`'
       }
 
       throw new FetchResponseError(null, message, response)

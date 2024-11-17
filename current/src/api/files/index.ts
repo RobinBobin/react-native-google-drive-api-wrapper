@@ -52,7 +52,7 @@ export class Files extends GDriveApi {
   async createIfNotExists<ExecuteResultType>(
     queryParameters: ReadonlyDeep<IFilesListQueryParameters>,
     uploader: ReadonlyDeep<Uploader<ExecuteResultType>>
-  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType | IFileOutput>> {
+  ): Promise<ICreateIfNotExistsResultType<ExecuteResultType>> {
     const { files } = await this.list(queryParameters)
 
     if (!files.length) {
@@ -72,7 +72,7 @@ export class Files extends GDriveApi {
 
       return {
         alreadyExisted: true,
-        result: files[0]
+        result: files[0] as ExecuteResultType
       }
     }
 
