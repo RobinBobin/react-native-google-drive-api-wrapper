@@ -16,13 +16,13 @@ export class MultipartUploader extends UploaderWithSimpleData {
     super(fetcher, 'multipart')
   }
 
-  setIsBase64(isBase64: boolean): UploaderWithSimpleData {
+  setIsBase64(isBase64: boolean): this {
     this.isBase64 = isBase64
 
     return this
   }
 
-  setMultipartBoundary(multipartBoundary: string): UploaderWithSimpleData {
+  setMultipartBoundary(multipartBoundary: string): this {
     this.multipartBoundary = multipartBoundary
 
     return this
