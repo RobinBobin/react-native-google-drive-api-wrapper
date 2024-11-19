@@ -1,7 +1,7 @@
 import type { Fetcher } from '../../../Fetcher'
 
 import { mimeTypes } from '@robinbobin/mimetype-constants'
-import { isBoolean, isNumber } from 'radashi'
+import { isNumber } from 'radashi'
 
 import { UploaderWithDataMimeType } from '../../base/UploaderWithDataMimeType'
 import { ResumableUploaderError } from './errors/ResumableUploaderError'
@@ -24,24 +24,12 @@ export class ResumableUploader extends UploaderWithDataMimeType<ResumableUploadR
       )
     }
 
-    if (isNumber(this.contentLength)) {
-      throw new TypeError(
-        '`ResumableUploader.contentLength` has already been set for this instance'
-      )
-    }
-
     this.contentLength = contentLength
 
     return this
   }
 
   setShouldUseMultipleRequests(shouldUseMultipleRequests: boolean): this {
-    if (isBoolean(this.shouldUseMultipleRequests)) {
-      throw new TypeError(
-        '`ResumableUploader.shouldUseMultipleRequests` has already been set for this instance'
-      )
-    }
-
     this.shouldUseMultipleRequests = shouldUseMultipleRequests
 
     return this

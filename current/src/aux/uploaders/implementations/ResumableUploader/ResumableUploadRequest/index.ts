@@ -43,7 +43,7 @@ export class ResumableUploadRequest {
 
       return {
         isComplete: true,
-        transferredByteCount: this._transferredByteCount
+        transferredByteCount: this.transferredByteCount
       }
     } catch (error) {
       if (!(error instanceof FetchResponseError)) {
@@ -108,13 +108,13 @@ export class ResumableUploadRequest {
     }
 
     try {
-      const response = await fetcher.fetch()
+      const json = await fetcher.fetchJson<IFileOutput>()
 
       this._transferredByteCount += chunk.length
 
       return {
         isComplete: true,
-        json: (await response.json()) as IFileOutput,
+        json,
         transferredByteCount: chunk.length
       }
     } catch (error) {

@@ -182,17 +182,12 @@ An [`UploaderWithSimpleData`](#uploader_with_simple_data) descendant, this class
 
 ### <a id="resumable_uploader"></a>[ResumableUploader](#c_resumable_uploader)
 
-An [`Uploader`](#uploader) descendant, this class handles [resumable](#files_new_resumable_uploader) uploads.
+An [`UploaderWithDataMimeType`](#uploader_with_data_mime_type) descendant, this class handles [resumable](#files_new_resumable_uploader) uploads. [`ExecuteResultType`](#execute_result_type) is set to [`ResumableUploadRequest`](#resumable_upload_request).
 
-| Name                                                                                                                                                 | Type                                                                                                                                                              | Description                                                                                                                             |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `execute()`                                                                                                                                          | Method.<br>Returns `Promise<`[`UploadChunkResultType`](#upload_chunk_result_type)`>` if data was [set](#uploader_set_data).<br>Returns `Promise<this>` otherwise. | This method sends the [initial upload request](https://developers.google.com/drive/api/guides/manage-uploads#send_the_initial_request). |
-| <a name="resumable_uploader_request_upload_status"></a>`requestUploadStatus()`                                                                       | Returns `Promise<`[`RequestUploadStatusResultType`](#request_upload_status_result_type)`>`                                                                        | Returns the current upload status.                                                                                                      |
-| `setContentLength(`<br>&nbsp;`  contentLength: number`<br>`)`                                                                                        | Returns `this`                                                                                                                                                    | This method must be invoked to set the content length.                                                                                  |
-| `setMimeType(`<br>&nbsp;`  mimeType:`&nbsp;&nbsp;[`string`](#mime_type)<br>`)`                                                                       | Returns `this`                                                                                                                                                    | Sets the data MIME type when using [multiple requests](#resumable_uploader_should_use_multiple_requests).                               |
-| <a name="resumable_uploader_should_use_multiple_requests"></a>`setShouldUseMultipleRequests(`<br>&nbsp;`  shouldUseMultipleRequests: boolean`<br>`)` | Returns `this`                                                                                                                                                    | Specifies whether multiple requests will be used to upload the data.                                                                    |
-| transferredByteCount                                                                                                                                 | Read property (Number)                                                                                                                                            | The current transferred byte count.                                                                                                     |
-| <a name="resumable_uploader_upload_chunk"></a>uploadChunk(chunk: [DataType](#data_type))                                                             | Method                                                                                                                                                            | Uploads a chunk of data, returning [`UploadChunkResultType`](#upload_chunk_result_type), wrapped in a `Promise`.                        |
+| Name                                                                   | Description                                                                                                                                                                                                                                                        |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <a id="resumable_uploader_set_content_length"></a>`setContentLength()` | Can be invoked to set the content length if it's known beforehand.<br><br>Parameters:<ul><li>`contentLength: number`</li></ul>Returns:<ul style="list-style-type:none;"><li>`this`</li></ul>                                                                       |
+| `setShouldUseMultipleRequests()`                                       | Specifies whether multiple requests will be used to upload the data. The default behaviour is not to use multiple requests.<br><br>Parameters:<ul><li>`shouldUseMultipleRequests: boolean`</li></ul>Returns:<ul style="list-style-type:none;"><li>`this`</li></ul> |
 
 ### <a id="simple_uploader"></a>[SimpleUploader](#c_simple_uploader)
 
@@ -200,7 +195,9 @@ An [`UploaderWithSimpleData`](#uploader_with_simple_data) descendant, this class
 
 ### <a id="uploader"></a>[Uploader](#c_uploader)
 
-Descendants of this abstract class handle [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests. `Uploader` has one template parameter, <a id="execute_result_type"></a>`ExecuteResultType`, set by descendants.
+Descendants of this abstract class handle [create](https://developers.google.com/drive/api/v3/reference/files/create) and [update](https://developers.google.com/drive/api/v3/reference/files/update) requests.
+
+`Uploader` has one template parameter, <a id="execute_result_type"></a>`ExecuteResultType`, set by descendants.
 
 | Name                                     | Description                                                                                                                                                                                                                                                                                                                                     |
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -231,13 +228,14 @@ This abstract descendant of [`UploaderWithDataMimeType`](#uploader_with_data_mim
 1. <a id="c_i_create_if_not_exists_result_type"></a>[ICreateIfNotExistsResultType](#i_create_if_not_exists_result_type)
 1. <a id ="c_i_files_copy_parameters"></a>[IFilesCopyParameters](#i_files_copy_parameters)
 1. <a id="c_i_files_get_parameters"></a>[IFilesGetParameters](#i_files_get_parameters)
+1. <a id="c_i_request_upload_status_result_type"></a>[IRequestUploadStatusResultType](#i_request_upload_status_result_type)
+1. <a id="c_i_upload_chunk_result_type"></a>[IUploadChunkResultType](#i_upload_chunk_result_type)
 1. <a id="c_list_query_builder"></a>[ListQueryBuilder](#list_query_builder)
-1. <a id="c_request_upload_status_result_type"></a>[RequestUploadStatusResultType](#request_upload_status_result_type)
+1. <a id ="c_resumable_upload_request"></a>[ResumableUploadRequest](#resumable_upload_request)
 1. <a id="c_t_about_get_query_parameters"></a>[TAboutGetQueryParameters](#t_about_get_query_parameters)
 1. <a id ="c_t_blob_to_byte_array_result_type"></a>[TBlobToByteArrayResultType](#t_blob_to_byte_array_result_type)
 1. <a id="c_t_simple_data"></a>[TSimpleData](#t_simple_data)
 1. <a id="c_unexpected_file_count_error"></a>[UnexpectedFileCountError](#unexpected_file_count_error)
-1. <a id="c_upload_chunk_result_type"></a>[UploadChunkResultType](#upload_chunk_result_type)
 
 ### <a id="fetch_response_error"></a>[FetchResponseError](#c_fetch_response_error)
 
@@ -252,10 +250,10 @@ An instance of this class is thrown when a [response](https://developer.mozilla.
 
 This interface describes the result type of [`Files.createIfNotExists()`](#files_create_if_not_exists).
 
-| Name             | Description                                                                                                                                                                                                                                                                                      |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `alreadyExisted` | This `boolean` property will be `true` if the file already existed before the method invocation, `false` otherwise.                                                                                                                                                                              |
-| `result`         | This property will contain a [file resource](https://developers.google.com/drive/api/v3/reference/files#resource), describing the existing file, if `alreadyExisted` is `true`. It will contain the result of invoking [`Uploader.execute()`](#uploader_execute) if `alreadyExisted` is `false`. |
+| Name             | Description                                                                                                                                                                                                                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `alreadyExisted` | Will be `true` if the file already existed before the method invocation, `false` otherwise.                                                                                                                                                                                        |
+| `result`         | Will contain a [file resource](https://developers.google.com/drive/api/v3/reference/files#resource), describing the existing file, if `alreadyExisted` is `true`. It will contain the result of invoking [`Uploader.execute()`](#uploader_execute) if `alreadyExisted` is `false`. |
 
 ### <a id="i_files_copy_parameters"></a>[IFilesCopyParameters](#c_i_files_copy_parameters)
 
@@ -275,6 +273,23 @@ This interface describes the `parameters` type for [`Files.get()`](#files_get) a
 | `queryParameters?` | [query parameters](https://developers.google.com/drive/api/reference/rest/v3/files/get#query-parameters) |
 | `range?`           | Data [range](#files_get_range) to get                                                                    |
 
+### <a id="i_request_upload_status_result_type"></a>[IRequestUploadStatusResultType](#c_i_request_upload_status_result_type)
+
+This interface describes the result type of [ResumableUploadRequest.requestUploadStatus()](#resumable_upload_request_upload_status).
+
+| Name                                                                     | Description                                                   |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| <a id="i_request_upload_status_result_type_is_complete"></a>`isComplete` | Will be `true` if the upload is completed, `false` otherwise. |
+| `transferredByteCount`                                                   | Will hold the number of bytes currently transferred.          |
+
+### <a id="i_upload_chunk_result_type"></a>[IUploadChunkResultType](#c_i_upload_chunk_result_type)
+
+Extending [IRequestUploadStatusResultType](#i_request_upload_status_result_type), this interface describes the result type of [ResumableUploadRequest.uploadChunk()](#resumable_upload_request_upload_chunk).
+
+| Name    | Description                                                                                                                                                                                              |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `json?` | Will contain a [file resource](https://developers.google.com/drive/api/v3/reference/files#resource), describing the file, if [`isComplete`](#i_request_upload_status_result_type_is_complete) is `true`. |
+
 ### <a id="list_query_builder"></a>[ListQueryBuilder](#c_list_query_builder)
 
 A helper class for building [`Files.list()`](#files_list) [queries](https://developers.google.com/drive/api/guides/search-files). It uses the following type aliases:
@@ -291,7 +306,7 @@ A helper class for building [`Files.list()`](#files_list) [queries](https://deve
       | [TValue, TValueKeyOperator, TKey, TValueQuotationFlag?]
 
 - `JsonValue` matches any valid JSON value.
-- `TValueQuotationFlag` determines whether string values will be quoted (the default).
+- `TValueQuotationFlag` determines whether string values will be quoted. The default is `true`, meaning they will be quoted.
 
 | Name            | Description                                                                                                                                                        |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -302,14 +317,16 @@ A helper class for building [`Files.list()`](#files_list) [queries](https://deve
 | `push()`        | Adds `(`.<br><br>Parameters:<ul><li>`...clause: TClause` _optional_</li></ul>Returns:<ul style="list-style-type:none;"><li>`this`</li></ul>                        |
 | `toString()`    | Stringifies the query.<br><br>Returns:<ul style="list-style-type:none;"><li>`string`</li></ul>                                                                     |
 
-### <a id="request_upload_status_result_type"></a>[RequestUploadStatusResultType](#c_request_upload_status_result_type)
+### <a id="resumable_upload_request"></a>[ResumableUploadRequest](#c_resumable_upload_request)
 
-This interface describes the result type of [ResumableUploader.requestUploadStatus()](#resumable_uploader_request_upload_status).
+This class serves as [`ExecuteResultType`](#execute_result_type) for [`ResumableUploader`](#resumable_uploader).
 
-| Name                   | Type      | Description                                           |
-| ---------------------- | --------- | ----------------------------------------------------- |
-| `isComplete`           | `boolean` | `true` if the upload is completed, `false` otherwise. |
-| `transferredByteCount` | `number`  | The number of bytes currently transferred.            |
+| Name                                                                       | Description                                                                                                                                                                                                                                                                          |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <a id="resumable_upload_request_upload_status"></a>`requestUploadStatus()` | Requests the current upload status.<br><br>Returns:<ul style="list-style-type:none;"><li>`Promise<`[`IRequestUploadStatusResultType`](#i_request_upload_status_result_type)`>`</li></ul>                                                                                             |
+| `setContentLength()`                                                       | Must be invoked when the content length is determined, if [`ResumableUploader.setContentLength()`](#resumable_uploader_set_content_length) wasn't invoked.<br><br>Parameters:<ul><li>`contentLength: number`</li></ul>Returns:<ul style="list-style-type:none;"><li>`this`</li></ul> |
+| `transferredByteCount`                                                     | This read-only property will contain the current transferred byte count.                                                                                                                                                                                                             |
+| <a id="resumable_upload_request_upload_chunk"></a>`uploadChunk()`          | Uploads a chunk of data.<br><br>Parameters:<ul><li>`chunk:` [`TSimpleData`](#t_simple_data)</li></ul>Returns:<ul style="list-style-type:none;"><li>`Promise<`[`IUploadChunkResultType`](#i_upload_chunk_result_type)`>`</li></ul>                                                    |
 
 ### <a id="t_about_get_query_parameters"></a>[TAboutGetQueryParameters](#c_t_about_get_query_parameters)
 
@@ -327,7 +344,7 @@ This type alias describes the type of binary data returned from different api me
 
 ### <a id="t_simple_data"></a>[TSimpleData](#c_t_simple_data)
 
-This type alias describes the type of data set with [`setData()`](#uploader_with_simple_data_set_data):
+This type alias describes the type of data for [`uploaders`](#usage_uploaders):
 
     Uint8Array | string | number[]
 
@@ -335,14 +352,6 @@ This type alias describes the type of data set with [`setData()`](#uploader_with
 
 An instance of this class is thrown by [`Files.createIfNotExists()`](#files_create_if_not_exists) if the number of matching files is not zero or one.
 
-| Name        | Description                                                        |
-| ----------- | ------------------------------------------------------------------ |
-| `realCount` | This read-only property will contain the number of matching files. |
-
-### <a id="upload_chunk_result_type"></a>[UploadChunkResultType](#c_upload_chunk_result_type)
-
-Extending [RequestUploadStatusResultType](#request_upload_status_result_type), this interface describes the result type of [ResumableUploader.uploadChunk()](#resumable_uploader_upload_chunk).
-
-| Name   | Type   | Description                                                                                                                                                        |
-| ------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `json` | `any?` | This property will contain a [file resource](https://developers.google.com/drive/api/v3/reference/files#resource), describing the file, if `isComplete` is `true`. |
+| Name        | Description                                |
+| ----------- | ------------------------------------------ |
+| `realCount` | Will contain the number of matching files. |
