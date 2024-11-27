@@ -1,9 +1,3 @@
-import { extend } from '@robinbobin/mimetype-constants'
-
-export const mimeTypes = extend('application', {
-  vndGoogleAppsFolder: 'vnd.google-apps.folder'
-})
-
 export * from './api/constants'
 export * from './api/files/constants'
 export { UnexpectedFileCountError } from './api/files/errors/UnexpectedFileCountError'

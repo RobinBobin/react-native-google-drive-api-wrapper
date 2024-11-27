@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@robinbobin/mimetype-constants':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^2.0.1
+        version: 2.0.1
       base64-js:
         specifier: ^1.5.1
         version: 1.5.1
@@ -112,8 +112,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@robinbobin/mimetype-constants@1.1.0':
-    resolution: {integrity: sha512-HedFH8/k7mXyOvvMC+mZZ8bNtG0dzy4f+dr70NddX4fMoBbX+NhHPn0x1epZTUxRPnqyITU9mxRZBR8rb2cqXA==}
+  '@robinbobin/mimetype-constants@2.0.1':
+    resolution: {integrity: sha512-5ZYQrtTmnMyD9J7OKYfxE314rUjEYTb6o4ldy7MyDwmBi3EeV6mBZptP0ACSewSqjEcY5n+A5o7qhvG3iMemqw==}
 
   '@robinbobin/ts-eslint-prettier@2.0.0':
     resolution: {integrity: sha512-wBnqzzL/NhRhZIbJRZpGxsXjNi/ey/CmC2AV1+vkKY08HjqucLnNyfh+RfAMX1lSS0jDi1j1CPLTQoJToWLS3g==}
@@ -802,7 +802,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@robinbobin/mimetype-constants@1.1.0':
+  '@robinbobin/mimetype-constants@2.0.1':
     dependencies:
       radashi: 12.2.3
 
