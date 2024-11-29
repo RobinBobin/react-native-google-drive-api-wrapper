@@ -334,7 +334,7 @@ This type alias describes the `queryParameters` type for [`About.get()`](#about_
 
     type TAboutGetQueryParameters = IStandardParameters | string | string[]
 
-, where `IStandardParameters` are defined as [here](https://cloud.google.com/apis/docs/system-parameters).
+, where `IStandardParameters` are defined as [here](https://cloud.google.com/apis/docs/system-parameters) and `string` or `string[]` determines the value of `fields`.
 
 ### <a id="t_blob_to_byte_array_result_type"></a>[TBlobToByteArrayResultType](#c_t_blob_to_byte_array_result_type)
 
