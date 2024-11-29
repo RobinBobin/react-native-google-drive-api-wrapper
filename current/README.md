@@ -60,13 +60,13 @@ If something doesn't work as expected, please do have a look at an example [proj
 
     // Create a binary file and read it
 
-    import { mimeTypes } from '@robinbobin/react-native-google-drive-api-wrapper'
+    import { MIME_TYPES } from '@robinbobin/react-native-google-drive-api-wrapper'
 
     ...
 
     const file = await gdrive.files.newMultipartUploader()
       .setData([1, 2, 3, 4, 5])
-      .setDataMimeType(mimeTypes.application.octetStream)
+      .setDataMimeType(MIME_TYPES.application.octetStream)
       .setRequestBody({ name: "multipart_bin" })
       .execute()
 
@@ -210,9 +210,9 @@ Descendants of this abstract class handle [create](https://developers.google.com
 
 This abstract descendant of [`Uploader`](#uploader) makes it possible to set the data mime type.
 
-| Name                | Description                                                                                                                                                                                                                                                |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `setDataMimeType()` | Sets the data mime type.<br><br>Parameters:<ul><li>`dataMimeType: string`</li></ul><br>`mimeTypes` can be used as an easy to use source of MIME constants:<br><br><pre>import { mimeTypes } from '@robinbobin/react-native-google-drive-api-wrapper'</pre> |
+| Name                | Description                                                                                                                                                                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `setDataMimeType()` | Sets the data mime type.<br><br>Parameters:<ul><li>`dataMimeType: string`</li></ul><br>`MIME_TYPES` can be used as an easy to use source of MIME constants:<br><br><pre>import { MIME_TYPES } from '@robinbobin/react-native-google-drive-api-wrapper'</pre> |
 
 ### <a id="uploader_with_simple_data"></a>[UploaderWithSimpleData](#c_uploader_with_simple_data)
 
