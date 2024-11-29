@@ -1,4 +1,0 @@
-# Ignore everything except all the ts-files.
-*
-!*.ts
-!*/

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "js",
+    "rootDir": "."
+  },
+  "extends": "@robinbobin/ts-eslint-prettier/tsconfig.base",
+  "files": ["prettier.config.mjs", "eslint.config.mjs"],
+  "include": ["src/**/*.ts"]
+}
