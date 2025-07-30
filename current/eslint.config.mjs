@@ -1,7 +1,8 @@
 import eslintConfig from '@robinbobin/ts-eslint-prettier/eslint.config.mjs'
 import { js } from '@robinbobin/ts-eslint-prettier/eslintRuleOptions/index.mjs'
 
-export default [
+/** @type unknown[] */
+const array = [
   ...eslintConfig,
   {
     rules: {
@@ -19,3 +20,5 @@ export default [
     }
   }
 ]
+
+export default array
