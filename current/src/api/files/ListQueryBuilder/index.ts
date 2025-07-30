@@ -34,6 +34,7 @@ export class ListQueryBuilder {
   }
 
   toString(): string {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     return this.queryClauses.join(' ')
   }
 
