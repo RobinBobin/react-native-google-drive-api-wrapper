@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@robinbobin/mimetype-constants':
-        specifier: ^2.0.1
-        version: 2.0.1
+        specifier: ^2.0.2
+        version: 2.0.2
       base64-js:
         specifier: ^1.5.1
         version: 1.5.1
@@ -132,8 +132,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@robinbobin/mimetype-constants@2.0.1':
-    resolution: {integrity: sha512-5ZYQrtTmnMyD9J7OKYfxE314rUjEYTb6o4ldy7MyDwmBi3EeV6mBZptP0ACSewSqjEcY5n+A5o7qhvG3iMemqw==}
+  '@robinbobin/mimetype-constants@2.0.2':
+    resolution: {integrity: sha512-mNxTnhDo4OPKC0YmRQM7gka82+5uNq/Wa5hnZS+f+QK7GeqRT9lb5ppzuL7O0cQsncodJwF/XnWwDwe8P7VX5g==}
 
   '@robinbobin/ts-eslint-prettier@3.1.0':
     resolution: {integrity: sha512-RaT8JvaB15Ikbl8zSWtxrHiSVbPiU0BHUs7LybQ39v2G5uBHggvUH7C81TC2MEROzVGYtuYmujGzOlzA8ae9MQ==}
@@ -936,7 +936,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@robinbobin/mimetype-constants@2.0.1':
+  '@robinbobin/mimetype-constants@2.0.2':
     dependencies:
       radashi: 12.6.0
 

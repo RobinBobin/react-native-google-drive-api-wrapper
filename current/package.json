@@ -4,7 +4,7 @@
     "url": "https://github.com/RobinBobin/react-native-google-drive-api-wrapper/issues"
   },
   "dependencies": {
-    "@robinbobin/mimetype-constants": "^2.0.1",
+    "@robinbobin/mimetype-constants": "^2.0.2",
     "base64-js": "^1.5.1",
     "radashi": "^12.6.0",
     "utf8": "^3.0.0"
