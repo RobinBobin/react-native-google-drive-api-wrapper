@@ -2,7 +2,7 @@ import type { ReadonlyDeep } from 'type-fest'
 import type {
   IFileInput,
   IFilesCreateQueryParameters
-} from '../../../api/files/types'
+} from '../../../api/files'
 import type { Fetcher } from '../../Fetcher'
 import type { TUploadType } from './types'
 

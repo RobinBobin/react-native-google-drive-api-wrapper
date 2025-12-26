@@ -1,5 +1,5 @@
 import type { ReadonlyDeep } from 'type-fest'
-import type { IFileOutput } from '../../../api/files/types'
+import type { IFileOutput } from '../../../api/files'
 import type { TSimpleData } from '../types'
 
 import { UploaderWithDataMimeType } from './UploaderWithDataMimeType'

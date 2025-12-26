@@ -1,4 +1,4 @@
-import type { IFileOutput } from '../../../../../api/files/types'
+import type { IFileOutput } from '../../../../../api/files'
 
 interface IRequestUploadStatusResultType {
   isComplete: boolean

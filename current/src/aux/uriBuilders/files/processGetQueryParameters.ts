@@ -1,4 +1,4 @@
-import type { IFilesGetQueryParameters } from '../../../api/files/types'
+import type { IFilesGetQueryParameters } from '../../../api/files'
 import type { IStandardParameters } from '../../../api/types'
 import type { TWrappedQueryParameterProcessor } from '../types'
 

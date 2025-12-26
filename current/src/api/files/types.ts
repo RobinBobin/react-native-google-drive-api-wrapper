@@ -18,8 +18,8 @@ type TFileOutputSpace =
   | TFileSpaceDrive
   | TFileSpacePhotos
 
-type TFilesListSpace = TFileSpaceAppDataFolder | TFileSpaceDrive
 type TFilesGenerateIdsSpace = TFileSpaceAppDataFolder | TFileSpaceDrive
+type TFilesListSpace = TFileSpaceAppDataFolder | TFileSpaceDrive
 
 type TFilesIncludeLabels = string | string[]
 
@@ -216,6 +216,7 @@ export type {
   TFileGeneratedIdsKind,
   TFileGeneratedIdType,
   TFileKind,
+  TFileListKind,
   TFileOutputSpace,
   TFilesGenerateIdsSpace,
   TFilesIncludeLabels,
@@ -223,5 +224,8 @@ export type {
   TFilesListOrderBy,
   TFilesListOrderByProperty,
   TFilesListSortOrder,
-  TFilesListSpace
+  TFilesListSpace,
+  TFileSpaceAppDataFolder,
+  TFileSpaceDrive,
+  TFileSpacePhotos
 }

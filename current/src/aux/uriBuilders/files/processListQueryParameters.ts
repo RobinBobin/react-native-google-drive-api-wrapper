@@ -1,7 +1,7 @@
 import type {
   IFilesListQueryParameters,
   TFilesListSpace
-} from '../../../api/files/types'
+} from '../../../api/files'
 import type { TQueryParameterProcessor } from '../types'
 
 import { isArray } from 'radashi'

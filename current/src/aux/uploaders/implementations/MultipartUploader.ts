@@ -1,4 +1,4 @@
-import type { IFileOutput } from '../../../api/files/types'
+import type { IFileOutput } from '../../../api/files'
 import type { Fetcher } from '../../Fetcher'
 import type { TBodyType } from '../../Fetcher/types'
 

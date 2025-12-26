@@ -1,4 +1,4 @@
-import type { IFileOutput } from '../../../api/files/types'
+import type { IFileOutput } from '../../../api/files'
 
 import { mimeTypes } from '@robinbobin/mimetype-constants'
 
