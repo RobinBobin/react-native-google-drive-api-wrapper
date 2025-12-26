@@ -12,7 +12,7 @@ import { Fetcher } from '../../aux/Fetcher'
 import { PermissionsUriBuilder } from '../../aux/uriBuilders/permissions/PermissionsUriBuilder'
 import { GDriveApi } from '../GDriveApi'
 
-export class PermissionApi extends GDriveApi {
+export class Permissions extends GDriveApi {
   create(
     fileId: string,
     requestBody: Readonly<IPermissionInput>,

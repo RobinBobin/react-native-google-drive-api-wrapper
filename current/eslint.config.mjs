@@ -6,6 +6,12 @@ const array = [
   ...eslintConfig,
   {
     rules: {
+      '@typescript-eslint/no-shadow': [
+        'error',
+        {
+          allow: ['Permissions']
+        }
+      ],
       '@typescript-eslint/prefer-readonly-parameter-types': [
         'error',
         {
