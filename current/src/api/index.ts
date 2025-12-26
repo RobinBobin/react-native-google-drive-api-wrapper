@@ -45,3 +45,15 @@ export {
   ROOT_FOLDER_ID,
   UnexpectedFileCountError
 } from './files'
+export type {
+  IPermissionDetail,
+  IPermissionInput,
+  IPermissionOutput,
+  IPermissionsCreateQueryParameters,
+  IPermissionsDeleteQueryParameters,
+  TPermissionDetailPermissionType,
+  TPermissionDetailRole,
+  TPermissionKind,
+  TPermissionRole,
+  TPermissionType
+} from './permissions'

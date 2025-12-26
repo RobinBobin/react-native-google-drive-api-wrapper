@@ -1,5 +1,5 @@
 import type { Except, SetRequired } from 'type-fest'
-import type { IPermissionOutput } from '../permissions/types'
+import type { IPermissionOutput } from '../permissions'
 import type { IStandardParameters, IUser, TPublished } from '../types'
 import type { ListQueryBuilder } from './ListQueryBuilder'
 
