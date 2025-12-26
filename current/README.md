@@ -2,7 +2,7 @@
 
 It doesn't provide any authorization mechanism, so another package has to be used. I use [@react-native-google-signin/google-signin](https://www.npmjs.com/package/@react-native-google-signin/google-signin) (thanks for the great work, [vonovak](https://www.npmjs.com/~vonovak)!).
 
-If something doesn't work as expected, please do have a look at an example [project](https://github.com/RobinBobin/gdrivetest) before opening an issue.
+If something doesn't work as expected, please do have a look at these example projects before opening an issue: [for React Native](https://github.com/RobinBobin/gdrivetest), [for Expo](https://github.com/RobinBobin/gdrivetest-expo).
 
 # Table of contents
 
